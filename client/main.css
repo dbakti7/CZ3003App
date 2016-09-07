@@ -1,1 +1,16 @@
 /* CSS declarations go here */
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#buttonReset {
+    background-color: red;
+    display: 
+}
+    
