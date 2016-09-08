@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 class Home extends Component {
   render() {
-    return <div>Home page goes here</div>
+    return (
+      <h2>Home Page</h2>)
   }
 }
 
