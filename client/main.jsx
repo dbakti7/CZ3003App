@@ -5,12 +5,11 @@ import { render } from 'react-dom';
 
 import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 
-import Home from './home.jsx'; // home page
-import User from './user.jsx'; // user profile page, for create, edit and view
-import Map from './map.jsx'; // map view
-import Category from './category.jsx'; // to list out type of crisis, to subscribe
-import Report from './report.jsx'; // crisis report page, for create, edit and view
-
+import Home from '../imports/ui/home.jsx'; // home page
+import User from '../imports/ui/user.jsx'; // user profile page, for create, edit and view
+import Map from '../imports/ui/map.jsx'; // map view
+import Category from '../imports/ui/category.jsx'; // to list out type of crisis, to subscribe
+import Report from '../imports/ui/reports.jsx'; // crisis report page, for create, edit and view
 Meteor.startup(() => {
   render((
   <Router history={browserHistory}>
