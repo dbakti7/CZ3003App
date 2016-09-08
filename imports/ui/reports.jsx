@@ -4,6 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import {Reports_db} from '../api/report.js';
 import Report from './report.jsx';
 import { Meteor } from 'meteor/meteor';
+import {IndexLink, Link } from 'react-router'
 
 class Reports extends Component {
   handleSubmit(event) {
@@ -33,7 +34,12 @@ class Reports extends Component {
           </form>
           <ul>
           {this.renderReports()}
-          </ul></div>)
+          </ul>
+          <ul>
+          <li><Link to =  "/" activeClassName="active">Index</Link></li>
+          <li><Link to = "/map" activeClassName="active">Map</Link></li>
+          </ul>
+          </div>)
           
   }
 }
