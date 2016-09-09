@@ -22,4 +22,7 @@ Meteor.methods({
    'reports.remove'(reportId) {
      Reports_db.remove(reportId);
    },
+   'reports.update'(reportId, newTitle, newLocation, newDescription) {
+     Reports_db.update(reportId, {$set: {title: newTitle, location: newLocation, description: newDescription}});
+   },
   });

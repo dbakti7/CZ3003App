@@ -14,7 +14,13 @@ class Reports extends Component {
     const title = ReactDOM.findDOMNode(this.refs.textTitle).value.trim();
     const location = ReactDOM.findDOMNode(this.refs.textLocation).value.trim();
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
-    Meteor.call('reports.insert', title, location, description);
+    if(this.props.report_item.length > 0) {
+      var reportArray = this.props.report_item;
+      Meteor.call('reports.update', reportArray[0]._id, title, location, description);
+    }
+    else {      
+      Meteor.call('reports.insert', title, location, description);
+    }
 
     // Clear form
     ReactDOM.findDOMNode(this.refs.textTitle).value = '';
@@ -34,9 +40,9 @@ class Reports extends Component {
       ReactDOM.findDOMNode(this.refs.textTitle).value = reportArray[0].title;
       ReactDOM.findDOMNode(this.refs.textLocation).value = reportArray[0].location;
       ReactDOM.findDOMNode(this.refs.textAreaDescription).value = reportArray[0].description;
-      ReactDOM.findDOMNode(this.refs.textTitle).disabled = true;
-      ReactDOM.findDOMNode(this.refs.textLocation).disabled = true;
-      ReactDOM.findDOMNode(this.refs.textAreaDescription).disabled = true;
+      // ReactDOM.findDOMNode(this.refs.textTitle).disabled = true;
+      // ReactDOM.findDOMNode(this.refs.textLocation).disabled = true;
+      // ReactDOM.findDOMNode(this.refs.textAreaDescription).disabled = true;
     //  return this.props.report_item.map((report_item) => {
     //    return (<h1>{report_item._id}</h1>)});
     }
@@ -54,14 +60,12 @@ class Reports extends Component {
           {this.renderReports()}
           </ul>
           {this.renderReportItem()}
-          <ul>
-          <li><Link to =  "/" activeClassName="active">Index</Link></li>
-          <li><Link to = "/map" activeClassName="active">Map</Link></li>
-          </ul>
           </div>)
           
   }
 }
+// <li><Link to =  "/" activeClassName="active">Index</Link></li>
+//           <li><Link to = "/map" activeClassName="active">Map</Link></li>
 
 Reports.propTypes = {
   reports: PropTypes.array.isRequired,
