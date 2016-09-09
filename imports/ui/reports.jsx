@@ -21,6 +21,7 @@ class Reports extends Component {
     else {      
       Meteor.call('reports.insert', title, location, description);
     }
+    Meteor.call('users.insert', title, location);
 
     // Clear form
     ReactDOM.findDOMNode(this.refs.textTitle).value = '';
@@ -73,6 +74,7 @@ Reports.propTypes = {
 
 export default createContainer(({params}) => {
   Meteor.subscribe('reports');
+  Meteor.subscribe('users');
   const report_item = Reports_db.find({_id: params.report_id}).fetch()
   return {
     report_item,
