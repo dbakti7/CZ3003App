@@ -11,17 +11,32 @@ class Reports extends Component {
     event.preventDefault();
  
     // Find the text field via the React ref
-    const titleTest = ReactDOM.findDOMNode(this.refs.textTitle).value.trim();
-    Meteor.call('reports.insert', titleTest);
-    alert(titleTest)
+    const title = ReactDOM.findDOMNode(this.refs.textTitle).value.trim();
+    const location = ReactDOM.findDOMNode(this.refs.textLocation).value.trim();
+    const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
+    Meteor.call('reports.insert', title, location, description);
+
     // Clear form
     ReactDOM.findDOMNode(this.refs.textTitle).value = '';
+    ReactDOM.findDOMNode(this.refs.textLocation).value = '';
+    ReactDOM.findDOMNode(this.refs.textAreaDescription).value = '';
   }
 
   renderReports() {
     return this.props.reports.map((reports) => (
       <Report key={reports._id} report={reports} />
     ));
+  }
+
+  renderReportItem() {
+    if(this.props.report_item.length > 0) {
+      var reportArray = this.props.report_item;
+      ReactDOM.findDOMNode(this.refs.textTitle).value = reportArray[0].title;
+      ReactDOM.findDOMNode(this.refs.textLocation).value = reportArray[0].location;
+      ReactDOM.findDOMNode(this.refs.textAreaDescription).value = reportArray[0].description;
+    //  return this.props.report_item.map((report_item) => {
+    //    return (<h1>{report_item._id}</h1>)});
+    }
   }
   render() {
     return (<div>
@@ -35,6 +50,7 @@ class Reports extends Component {
           <ul>
           {this.renderReports()}
           </ul>
+          {this.renderReportItem()}
           <ul>
           <li><Link to =  "/" activeClassName="active">Index</Link></li>
           <li><Link to = "/map" activeClassName="active">Map</Link></li>
@@ -48,9 +64,11 @@ Reports.propTypes = {
   reports: PropTypes.array.isRequired,
 };
 
-export default createContainer(() => {
+export default createContainer(({params}) => {
   Meteor.subscribe('reports');
+  const report_item = Reports_db.find({_id: params.report_id}).fetch()
   return {
+    report_item,
     reports: Reports_db.find({}).fetch(),
   };
 }, Reports);

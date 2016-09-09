@@ -5,7 +5,7 @@ export default class Report extends Component {
   
   render() {
     return (
-      <li><Link to = {`/report/${this.props.report._id}/0`} activeClassName="active">sf</Link></li>
+      <li><Link to = {`/report/${this.props.report._id}/0`} activeClassName="active">{this.props.report.title}</Link></li>
     );
   }
 }

@@ -10,10 +10,12 @@ if (Meteor.isServer) {
 }
  
 Meteor.methods({
-  'reports.insert'(text) {
-    check(text, String);
+  'reports.insert'(title, location, description) {
+    check(title, String);
     Reports_db.insert({
-       text,
+       title,
+       location,
+       description,
        createdAt: new Date(),
      });
    },});
