@@ -9,8 +9,20 @@ button {
     border-radius: 5px;
 }
 
-#buttonReset {
-    background-color: red;
-    display: 
+button.delete {
+    background: #ECECEC;
+    border-radius: 15px;
+    font-family: arial;
+    font-weight: bold;
+    margin-left: 20px;
+    font-size: 10px;
+    padding: 0px 8px;
+    color:#7f7f7f;
+    text-shadow:0px 1px 0px #fff;
+    border:1px solid #a7a7a7;
+    width: auto;
+    height: 25px;
+    box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+    -webkit-transition:box-shadow 0.5s;
 }
     

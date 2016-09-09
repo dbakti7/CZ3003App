@@ -18,4 +18,8 @@ Meteor.methods({
        description,
        createdAt: new Date(),
      });
-   },});
+   },
+   'reports.remove'(reportId) {
+     Reports_db.remove(reportId);
+   },
+  });

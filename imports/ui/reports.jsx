@@ -34,6 +34,9 @@ class Reports extends Component {
       ReactDOM.findDOMNode(this.refs.textTitle).value = reportArray[0].title;
       ReactDOM.findDOMNode(this.refs.textLocation).value = reportArray[0].location;
       ReactDOM.findDOMNode(this.refs.textAreaDescription).value = reportArray[0].description;
+      ReactDOM.findDOMNode(this.refs.textTitle).disabled = true;
+      ReactDOM.findDOMNode(this.refs.textLocation).disabled = true;
+      ReactDOM.findDOMNode(this.refs.textAreaDescription).disabled = true;
     //  return this.props.report_item.map((report_item) => {
     //    return (<h1>{report_item._id}</h1>)});
     }
