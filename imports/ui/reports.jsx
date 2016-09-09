@@ -21,7 +21,6 @@ class Reports extends Component {
     else {      
       Meteor.call('reports.insert', title, location, description);
     }
-    Meteor.call('users.insert', title, location);
 
     // Clear form
     ReactDOM.findDOMNode(this.refs.textTitle).value = '';
