@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import {Reports_db} from './report.js';
-import {Users_db} from './user.js';
+// import {Users_db} from './user.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 Meteor.methods({
@@ -22,21 +22,21 @@ Meteor.methods({
    },
 
    // database methods for user object
-   'users.insert'(userName, fullName) {
-       Users_db.insert({
-           userName,
-           fullName,
-           createdAt: new Date(),
-       })
-   },
+  //  'users.insert'(userName, fullName) {
+  //      Users_db.insert({
+  //          userName,
+  //          fullName,
+  //          createdAt: new Date(),
+  //      })
+  //  },
 
-   'users.remove'(userId) {
-       Users_db.remove(userId);
-   },
+  //  'users.remove'(userId) {
+  //      Users_db.remove(userId);
+  //  },
 
-   'users.update'(userId, newUserName, newFullName) {
-     Users_db.update(userId, {$set: {userName: newUserName, fullName: newFullName}});
-   },
+  //  'users.update'(userId, newUserName, newFullName) {
+  //    Users_db.update(userId, {$set: {userName: newUserName, fullName: newFullName}});
+  //  },
 
 
    // database methods for category object
