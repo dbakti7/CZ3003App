@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import {Reports_db} from './report.js';
-// import {Users_db} from './user.js';
+import {UserData_db} from './userData.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 Meteor.methods({
@@ -21,22 +21,23 @@ Meteor.methods({
      Reports_db.update(reportId, {$set: {title: newTitle, location: newLocation, description: newDescription}});
    },
 
-   // database methods for user object
-  //  'users.insert'(userName, fullName) {
-  //      Users_db.insert({
-  //          userName,
-  //          fullName,
-  //          createdAt: new Date(),
-  //      })
-  //  },
+   //atabase methods for user object
+   'userData.remove'(userId) {
+       UserData_db.remove(userId);
+   },
 
-  //  'users.remove'(userId) {
-  //      Users_db.remove(userId);
-  //  },
-
-  //  'users.update'(userId, newUserName, newFullName) {
-  //    Users_db.update(userId, {$set: {userName: newUserName, fullName: newFullName}});
-  //  },
+   'userData.update'(userId, newFullName) {
+     if(UserData_db.find({originalUserId: userId}).count() == 0) {
+        UserData_db.insert({
+          originalUserId: userId,
+          fullName : newFullName,
+          createdAt: new Date(),
+       })
+     }
+     else {
+      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName}});
+     }
+   },
 
 
    // database methods for category object
