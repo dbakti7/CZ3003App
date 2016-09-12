@@ -5,10 +5,11 @@ import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 Meteor.methods({
     // database methods for report object
-  'reports.insert'(title, location, description) {
+  'reports.insert'(title, reportedBy, location, description) {
     check(title, String);
     Reports_db.insert({
        title,
+       reportedBy,
        location,
        description,
        createdAt: new Date(),

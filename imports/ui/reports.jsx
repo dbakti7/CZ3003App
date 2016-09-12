@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes, componentWillReceiveProps, componentDidMount } from 'react';
 import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import {Reports_db} from '../api/report.js';
@@ -19,7 +19,7 @@ class Reports extends Component {
       Meteor.call('reports.update', reportArray[0]._id, title, location, description);
     }
     else {      
-      Meteor.call('reports.insert', title, location, description);
+      Meteor.call('reports.insert', title, Meteor.userId(), location, description);
     }
 
     // Clear form
@@ -37,7 +37,9 @@ class Reports extends Component {
   renderReportItem() {
     if(this.props.report_item.length > 0) {
       var reportArray = this.props.report_item;
+      var reportedByUser = Meteor.users.find({_id: reportArray[0].reportedBy}).fetch();
       ReactDOM.findDOMNode(this.refs.textTitle).value = reportArray[0].title;
+      ReactDOM.findDOMNode(this.refs.textReportedBy).value = reportedByUser[0].username;
       ReactDOM.findDOMNode(this.refs.textLocation).value = reportArray[0].location;
       ReactDOM.findDOMNode(this.refs.textAreaDescription).value = reportArray[0].description;
       // ReactDOM.findDOMNode(this.refs.textTitle).disabled = true;
@@ -47,11 +49,16 @@ class Reports extends Component {
     //    return (<h1>{report_item._id}</h1>)});
     }
   }
+
+  componentWillReceiveProps() {
+      ReactDOM.findDOMNode(this.refs.textReportedBy).value = Meteor.user().username;
+  }
   render() {
     return (<div>
       <h2>Report Page</h2>
     <form name="reportCase" onSubmit={this.handleSubmit.bind(this)} >
             Title: <input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/>
+            Reported By: <input type="text" ref="textReportedBy"/><br/>
             Location: <input type="text" ref="textLocation" placeholder="Location"/><br/>
             Description: <textarea ref="textAreaDescription" placeholder="Description"/><br/>
             <input width="50%" type="submit" value="Report"/>

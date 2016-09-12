@@ -11,8 +11,9 @@ class User extends Component {
     // Find the text field via the React ref
     const userName = ReactDOM.findDOMNode(this.refs.textUserName).value.trim();
     const fullName = ReactDOM.findDOMNode(this.refs.textFullName).value.trim();
+    
     Meteor.call('userData.update', Meteor.userId(), fullName);     
-
+    alert("User data has been updated!");
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
     // ReactDOM.findDOMNode(this.refs.textLocation).value = '';
@@ -23,6 +24,7 @@ class User extends Component {
     var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
 
     ReactDOM.findDOMNode(this.refs.textUserName).value = Meteor.user().username;
+    ReactDOM.findDOMNode(this.refs.textUserName).disabled = true;
     if(users_data.length > 0) { 
       ReactDOM.findDOMNode(this.refs.textFullName).value = users_data[0].fullName;
     }
@@ -39,7 +41,7 @@ class User extends Component {
     <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
             UserName: <input type="text" ref="textUserName" placeholder="User Name"/><br/>
             FullName: <input type="text" ref="textFullName" placeholder="Full Name"/><br/>
-            <input width="50%" type="submit" value="Report"/>
+            <input width="50%" type="submit" value="Update"/>
           </form>
     </div>);
   }

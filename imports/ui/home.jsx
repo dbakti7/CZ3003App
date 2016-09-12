@@ -17,6 +17,7 @@ class Home extends Component {
   renderUser() {
     return (<li>
     <Link to = {`/user/${Meteor.userId()}/0`} activeClassName="active">{Meteor.userId()}</Link>
+    <Link to =  "/report/0/1" activeClassName="active">Report</Link>
     </li>);
   }
 }
