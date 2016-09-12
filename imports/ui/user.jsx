@@ -1,4 +1,4 @@
-import React, { Component, PropTypes, componentDidMount} from 'react';
+import React, { Component, PropTypes, componentDidMount, componentWillReceiveProps} from 'react';
 import {UserData_db} from '../api/userData.js';
 import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
@@ -19,13 +19,9 @@ class User extends Component {
     // ReactDOM.findDOMNode(this.refs.textAreaDescription).value = '';
   }
 
-  componentDidMount() {
-    while((Session.get('postsReady')) == false);
-    console.log("DID MOUNT");
-    console.log(Meteor.userId())
-    var users_data = this.props.user_data;
+  componentWillReceiveProps() {
+    var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
 
-    // console.log(users_data.length)
     ReactDOM.findDOMNode(this.refs.textUserName).value = Meteor.user().username;
     if(users_data.length > 0) { 
       ReactDOM.findDOMNode(this.refs.textFullName).value = users_data[0].fullName;
@@ -54,12 +50,7 @@ User.propTypes = {
 };
 
 export default createContainer(({params}) => {
-  Meteor.subscribe('userData', function() {
-    console.log(UserData_db.find({originalUserId: Meteor.userId()}).fetch().length)
-    Session.set('postsReady', true);
-      
-  });
-  while((Session.get('postsReady')) == false);
+  Meteor.subscribe('userData');
   return {
         //report_item,
         user_data: UserData_db.find({originalUserId: Meteor.userId()}).fetch(),
