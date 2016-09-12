@@ -36,12 +36,12 @@ class Reports extends Component {
 
   renderReportItem() {
     if(this.props.report_item.length > 0) {
-      var reportArray = this.props.report_item;
-      var reportedByUser = Meteor.users.find({_id: reportArray[0].reportedBy}).fetch();
-      ReactDOM.findDOMNode(this.refs.textTitle).value = reportArray[0].title;
-      ReactDOM.findDOMNode(this.refs.textReportedBy).value = reportedByUser[0].username;
-      ReactDOM.findDOMNode(this.refs.textLocation).value = reportArray[0].location;
-      ReactDOM.findDOMNode(this.refs.textAreaDescription).value = reportArray[0].description;
+      var report = this.props.report_item[0];
+      var RBU = this.props.reportedByUser[0];
+      ReactDOM.findDOMNode(this.refs.textTitle).value = report.title;
+      ReactDOM.findDOMNode(this.refs.textReportedBy).value = RBU.username;
+      ReactDOM.findDOMNode(this.refs.textLocation).value = report.location;
+      ReactDOM.findDOMNode(this.refs.textAreaDescription).value = report.description;
       // ReactDOM.findDOMNode(this.refs.textTitle).disabled = true;
       // ReactDOM.findDOMNode(this.refs.textLocation).disabled = true;
       // ReactDOM.findDOMNode(this.refs.textAreaDescription).disabled = true;
@@ -50,23 +50,34 @@ class Reports extends Component {
     }
   }
 
-  componentWillReceiveProps() {
-      ReactDOM.findDOMNode(this.refs.textReportedBy).value = Meteor.user().username;
-  }
+  // componentWillReceiveProps() {
+  //     ReactDOM.findDOMNode(this.refs.textReportedBy).value = Meteor.user().username;
+  // }
   render() {
+    var userDataAvailable = true;
+    var currentUser = this.props.currentUser;
+    var reportedByUser = this.props.reportedByUser;
+    var report_item = this.props.report_item;
+    if(currentUser == undefined || (report_item.length > 0 && reportedByUser.length == 0) || report_item == undefined) {
+      userDataAvailable = false;      
+    }
+    var loggedOut = (!currentUser && userDataAvailable);
+    var loggedIn = (currentUser && userDataAvailable);
     return (<div>
       <h2>Report Page</h2>
+      {loggedIn ? 
     <form name="reportCase" onSubmit={this.handleSubmit.bind(this)} >
             Title: <input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/>
-            Reported By: <input type="text" ref="textReportedBy"/><br/>
+            Reported By: <input type="text" ref="textReportedBy" disabled = "true"/><br/>
             Location: <input type="text" ref="textLocation" placeholder="Location"/><br/>
             Description: <textarea ref="textAreaDescription" placeholder="Description"/><br/>
             <input width="50%" type="submit" value="Report"/>
-          </form>
+          </form> : null}
           <ul>
-          {this.renderReports()}
+          {loggedIn ?
+          this.renderReports() : null} 
           </ul>
-          {this.renderReportItem()}
+          {loggedIn ? this.renderReportItem() : null}
           </div>)
           
   }
@@ -81,9 +92,16 @@ Reports.propTypes = {
 export default createContainer(({params}) => {
   Meteor.subscribe('reports');
   Meteor.subscribe('users');
+
   const report_item = Reports_db.find({_id: params.report_id}).fetch()
+  const reportedByUser = report_item.length > 0 ? Meteor.users.find({_id: report_item[0].reportedBy}).fetch() : []
+  const user_list = Meteor.users.find({}).fetch();
+  const currentUser = Meteor.user();
   return {
     report_item,
+    reportedByUser,
+    user_list,
+    currentUser,
     reports: Reports_db.find({}).fetch(),
   };
 }, Reports);

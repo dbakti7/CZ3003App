@@ -36,13 +36,21 @@ class User extends Component {
 
   
   render() {
+    var userDataAvailable = true;
+    var currentUser = this.props.currentUser;
+    if(currentUser == undefined) {
+      userDataAvailable = false;      
+    }
+    var loggedOut = (!currentUser && userDataAvailable);
+    var loggedIn = (currentUser && userDataAvailable);
     return (<div>User ID: {this.props.params.user_id} <br/> Edit (True/False): 
     {this.props.params.edit}
-    <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
-            UserName: <input type="text" ref="textUserName" placeholder="User Name"/><br/>
+    {loggedIn ? <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
+            UserName: <input type="text" ref="textUserName" value={currentUser.username}/><br/>
             FullName: <input type="text" ref="textFullName" placeholder="Full Name"/><br/>
             <input width="50%" type="submit" value="Update"/>
-          </form>
+          </form> : null}
+    
     </div>);
   }
 }
@@ -53,8 +61,11 @@ User.propTypes = {
 
 export default createContainer(({params}) => {
   Meteor.subscribe('userData');
+  const user_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
+  const currentUser = Meteor.user();
   return {
         //report_item,
-        user_data: UserData_db.find({originalUserId: Meteor.userId()}).fetch(),
+        user_data,
+        currentUser,
       };
 }, User);
