@@ -6,46 +6,9 @@
   {{> Header}}
   <div id="wrapper">
         <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
-                        Start Bootstrap
-                    </a>
-                </li>
-                <li>
-                    <a href="#">Dashboard</a>
-                </li>
-                <li>
-                    <a href="#">Shortcuts</a>
-                </li>
-                <li>
-                    <a href="#">Overview</a>
-                </li>
-                <li>
-                    <a href="#">Events</a>
-                </li>
-                <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-              <div id="container"></div>
-        </div>
-        <!-- /#page-content-wrapper -->
-
-    </div>
+        {{> content}}
     <!-- /#wrapper -->
+     </div>
 
   <!-- {{> Footer}} -->
 </body>
@@ -57,4 +20,35 @@
 
 <template name="Footer">
   <h1>Footer template goes here</h1>
+</template>
+
+<template name="content">
+	<div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="/">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="/user/">User</a>
+                </li>
+                <li>
+                    <a href="/map">Map</a>
+                </li>
+                <li>
+                    <a href="/category">Category</a>
+                </li>
+                <li>
+                    <a href="/report/0/1">Report</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+              <div id="container"></div>
+        </div>
+        <!-- /#page-content-wrapper -->
 </template>

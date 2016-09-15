@@ -22,5 +22,7 @@ Meteor.startup(() => {
     <Route path="/report/:report_id/:edit" component={Report}/>
   </Router>
 ), document.getElementById('container'));
+
 });
+
 
