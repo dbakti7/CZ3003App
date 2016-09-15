@@ -5,33 +5,21 @@
 <body>
   {{> Header}}
   <div id="wrapper">
+  	<script>
+  		function userPage() {
+  			var userId = Meteor.userId();
+  			var url = '/user/'+userId+'/0';
+  			window.location.href = url;	
+  		}
+	</script>
         <!-- Sidebar -->
-        {{> content}}
-    <!-- /#wrapper -->
-     </div>
-
-  <!-- {{> Footer}} -->
-</body>
-
-
-<template name="Header">
-  <h1>Header template goes here</h1>
-</template>
-
-<template name="Footer">
-  <h1>Footer template goes here</h1>
-</template>
-
-<template name="content">
-	<div id="sidebar-wrapper">
+       <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="/">
-                        Home
-                    </a>
+                    <a href="/">Home</a>
                 </li>
                 <li>
-                    <a href="/user/">User</a>
+                    <a onclick="userPage()">User</a>
                 </li>
                 <li>
                     <a href="/map">Map</a>
@@ -51,4 +39,17 @@
               <div id="container"></div>
         </div>
         <!-- /#page-content-wrapper -->
+    <!-- /#wrapper -->
+     </div>
+
+  <!-- {{> Footer}} -->
+</body>
+
+
+<template name="Header">
+  <h1>Header template goes here</h1>
+</template>
+
+<template name="Footer">
+  <h1>Footer template goes here</h1>
 </template>
