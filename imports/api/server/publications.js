@@ -1,6 +1,7 @@
 import {Meteor} from 'meteor/meteor'
 import {Reports_db} from '../report.js'
 import {UserData_db} from '../userData.js'
+import {IncidentType_db} from '../incidentType.js'
 // import {Users_db} from '../user.js'
 
 if (Meteor.isServer) {
@@ -11,6 +12,10 @@ if (Meteor.isServer) {
 
   Meteor.publish('userData', function userDataPublication() {
     return UserData_db.find();
+  });
+
+  Meteor.publish('incidentType', function incidentTypePublication() {
+    return IncidentType_db.find();
   });
   // Meteor.publish('users', function usersPublication() {
   //   return Users_db.find();

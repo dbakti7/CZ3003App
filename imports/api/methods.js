@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import {Reports_db} from './report.js';
 import {UserData_db} from './userData.js';
+import {IncidentType_db} from './incidentType.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 Meteor.methods({
@@ -42,4 +43,18 @@ Meteor.methods({
 
 
    // database methods for category object
+   'incidentType.insert'(name, description) {
+    check(name, String);
+    IncidentType_db.insert({
+       name,
+       description,
+       createdAt: new Date(),
+     });
+   },
+   'incidentType.remove'(incidentTypeId) {
+     IncidentType_db.remove(incidentTypeId);
+   },
+   'incidentType.update'(incidentTypeId, newName, newDescription) {
+     IncidentType_db.update(incidentTypeId, {$set: {name: newName, description: newDescription}});
+   },
   });

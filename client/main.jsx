@@ -18,7 +18,7 @@ Meteor.startup(() => {
     <Route path="/" component={Home}/> 
     <Route path="/user/:user_id/:edit" component={User}/>
     <Route path="/map" component={Map}/>
-    <Route path="/category" component={Category}/>
+    <Route path="/category/:incidentType_id/:edit" component={Category}/>
     <Route path="/report/:report_id/:edit" component={Report}/>
   </Router>
 ), document.getElementById('container'));
