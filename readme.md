@@ -10,6 +10,7 @@ the following commands on command prompt.
 `meteor add accounts-ui accounts-password`
 `meteor remove autopublish`
 `meteor add twbs:bootstrap`
+`meteor add ultimatejs:tracker-react`
 
 ## to access mongo db
 `meteor mongo`
