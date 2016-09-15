@@ -23,6 +23,11 @@ Meteor.methods({
      Reports_db.update(reportId, {$set: {title: newTitle, location: newLocation, description: newDescription}});
    },
 
+   // aux methods
+   'userAux.find'(userId) {
+     return Meteor.users.find(userId).fetch();
+   },
+
    //atabase methods for user object
    'userData.remove'(userId) {
        UserData_db.remove(userId);

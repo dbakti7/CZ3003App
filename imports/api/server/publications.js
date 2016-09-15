@@ -17,6 +17,10 @@ if (Meteor.isServer) {
   Meteor.publish('incidentType', function incidentTypePublication() {
     return IncidentType_db.find();
   });
+
+  Meteor.publish('userAux', function userAuxPublication() {
+    return Meteor.users.find();
+  });
   // Meteor.publish('users', function usersPublication() {
   //   return Users_db.find();
   // });
