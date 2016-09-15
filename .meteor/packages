@@ -24,3 +24,4 @@ accounts-ui
 accounts-password
 session
 meteorhacks:fast-render
+twbs:bootstrap
