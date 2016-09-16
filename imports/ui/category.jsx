@@ -11,7 +11,12 @@ class Category extends TrackerReact(React.Component) {
 
   constructor() {
     super();
-    const subscription = Meteor.subscribe('incidentType');
+    const subscription = Meteor.subscribe('incidentType', {onReady: function() {
+      this.setState({
+        ready: subscription.ready()
+      })
+    }.bind(this)});
+
     this.state = {
       ready: subscription.ready(),
       subscription: subscription
@@ -26,7 +31,12 @@ class Category extends TrackerReact(React.Component) {
     const name = ReactDOM.findDOMNode(this.refs.textName).value.trim();
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
     
-    Meteor.call('incidentType.insert', name, description);     
+    if(this.props.category_id == 0) {
+      Meteor.call('incidentType.insert', name, description);
+    }
+    else {
+      Meteor.call('incidentType.update', this.props.category_id, name, description);
+    }     
     alert("Incident type has been updated!");
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
@@ -39,63 +49,40 @@ class Category extends TrackerReact(React.Component) {
       <IncidentType key={incidentType_data._id} incidentType={incidentType_data} />
     ));
   }
+  renderIncidentTypeData() {
+
+    if(this.props.category_data.length > 0) {
+      ReactDOM.findDOMNode(this.refs.textName).value = this.props.category_data[0].name;
+      ReactDOM.findDOMNode(this.refs.textAreaDescription).value = this.props.category_data[0].description;
+    }
+  }
 
   componentWillUnmount() {
     this.state.subscription.stop();
   }
 
-  render() {
-    var dataAvailable = true;
-    if(this.props.incidentType_data == undefined) {
-      dataAvailable = false;      
-    }
+  render() {     
     return (<div>
-    {dataAvailable ? <form name="incidentTypeForm" onSubmit={this.handleSubmit.bind(this)} >
+    <form name="incidentTypeForm" onSubmit={this.handleSubmit.bind(this)} >
             Name: <input type="text" ref="textName" placeholder="Name"/><br/>
             Description: <textarea ref="textAreaDescription" placeholder="Description"/><br/>
             <input width="50%" type="submit" value="Update"/>
-          </form> : null}
-          {dataAvailable ? this.renderIncidentTypes() : null}
-    
+          </form>
+          {this.state.ready ? this.renderIncidentTypes() : null}
+          {this.state.ready ? this.renderIncidentTypeData() : null}
     </div>);
   }
 };
 
-// class sdf extends Component {
-//   handleSubmit(event) {
-//     event.preventDefault();
- 
-//     // Find the text field via the React ref
-//     const name = ReactDOM.findDOMNode(this.refs.textName).value.trim();
-//     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
-    
-//     Meteor.call('incidentType.insert', name, description);     
-//     alert("Incident type has been updated!");
-//     // Clear form
-//     // ReactDOM.findDOMNode(this.refs.).value = '';
-//     // ReactDOM.findDOMNode(this.refs.textLocation).value = '';
-//     // ReactDOM.findDOMNode(this.refs.textAreaDescription).value = '';
-//   }
-
-//   renderIncidentTypes() {
-//     return this.props.incidentType_data.map((incidentType_data) => (
-//       <IncidentType key={incidentType_data._id} incidentType={incidentType_data} />
-//     ));
-//   }
-  
-//   render() {
-    
-//   }
-// }
-
-// Category.propTypes = {
-//   incidentType_data: PropTypes.array.isRequired,
-// };
 
 export default createContainer(({params}) => {
-  // Meteor.subscribe('incidentType');
   const incidentType_data = IncidentType_db.find({}).fetch();
+  const category_id = params.incidentType_id;
+  const category_data = IncidentType_db.find({_id: params.incidentType_id}).fetch();
+  console.log(category_data)
   return {        
          incidentType_data,
+         category_id,
+         category_data,
        };
 }, Category);
