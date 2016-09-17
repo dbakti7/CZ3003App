@@ -33,16 +33,19 @@ Meteor.methods({
        UserData_db.remove(userId);
    },
 
-   'userData.update'(userId, newFullName) {
+   'userData.update'(userId, newFullName, newEmail, newType, newAgencyID) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
         UserData_db.insert({
           originalUserId: userId,
           fullName : newFullName,
+          email: newEmail,
+          type: newType,
+          agencyID: newAgencyID,
           createdAt: new Date(),
        })
      }
      else {
-      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName}});
+      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyID: newAgencyID}});
      }
    },
 
