@@ -6,6 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import IncidentType from './incidentType.jsx';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import {IndexLink, Link } from 'react-router'
 
 class Category extends TrackerReact(React.Component) {
 
