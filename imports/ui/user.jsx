@@ -13,9 +13,14 @@ class User extends Component {
     const fullName = ReactDOM.findDOMNode(this.refs.textFullName).value.trim();
     const email = ReactDOM.findDOMNode(this.refs.textEmail).value.trim();
     const type = ReactDOM.findDOMNode(this.refs.textType).value;
-    const agencyID = ReactDOM.findDOMNode(this.refs.AgencyID).value.trim();
-    
-    Meteor.call('userData.update', Meteor.userId(), fullName, email, type, agencyID);     
+    const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
+
+    if(type == "Admin" || type == "Operator")
+      ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = true;
+    else
+      ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
+
+    Meteor.call('userData.update', Meteor.userId(), fullName, email, type, agencyName);     
     alert("User data has been updated!");
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
@@ -70,7 +75,7 @@ class User extends Component {
                     <option value="Operator">Operator</option>
                     <option value="Agency">Agency</option>
                   </select><br/>
-            <div ref="AgencyDiv" hidden>Agency ID: <input type="text" ref="AgencyID" placeholder="Agency ID"/><br/></div>
+            <div ref="AgencyDiv" hidden>Agency Name: <input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></div>
             <input width="50%" type="submit" value="Update"/><br/>
           </form> : null}
     
