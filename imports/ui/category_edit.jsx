@@ -44,11 +44,6 @@ class Category extends TrackerReact(React.Component) {
     // ReactDOM.findDOMNode(this.refs.textAreaDescription).value = '';
   }
 
-  renderIncidentTypes() {
-    return this.props.incidentType_data.map((incidentType_data) => (
-      <IncidentType key={incidentType_data._id} incidentType={incidentType_data} />
-    ));
-  }
   renderIncidentTypeData() {
 
     if(this.props.category_data.length > 0) {
@@ -68,7 +63,7 @@ class Category extends TrackerReact(React.Component) {
             Description: <textarea ref="textAreaDescription" placeholder="Description"/><br/>
             <input width="50%" type="submit" value="Update"/>
           </form>
-          {this.state.ready ? this.renderIncidentTypes() : null}
+          <Link to =  "/category/view" activeClassName="active">Back to list of Incident Types</Link>
           {this.state.ready ? this.renderIncidentTypeData() : null}
     </div>);
   }
@@ -76,12 +71,10 @@ class Category extends TrackerReact(React.Component) {
 
 
 export default createContainer(({params}) => {
-  const incidentType_data = IncidentType_db.find({}).fetch();
   const category_id = params.incidentType_id;
   const category_data = IncidentType_db.find({_id: params.incidentType_id}).fetch();
   console.log(category_data)
   return {        
-         incidentType_data,
          category_id,
          category_data,
        };

@@ -6,21 +6,26 @@ import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 Meteor.methods({
     // database methods for report object
-  'reports.insert'(title, reportedBy, location, description) {
+  'reports.insert'(title, reportedBy, location, description, incidentType_id, locationName, lat, long) {
     check(title, String);
     Reports_db.insert({
        title,
        reportedBy,
        location,
        description,
+       incidentType_id,
+       locationName,
+       lat,
+       long,
        createdAt: new Date(),
      });
    },
    'reports.remove'(reportId) {
      Reports_db.remove(reportId);
    },
-   'reports.update'(reportId, newTitle, newLocation, newDescription) {
-     Reports_db.update(reportId, {$set: {title: newTitle, location: newLocation, description: newDescription}});
+   'reports.update'(reportId, newTitle, newLocation, newDescription, newIncidentType_id, newLocationName, newLat, newLong) {
+     Reports_db.update(reportId, {$set: {title: newTitle, location: newLocation, description: newDescription, 
+       incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong}});
    },
 
    // aux methods
