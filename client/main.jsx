@@ -7,6 +7,7 @@ import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 
 import Home from '../imports/ui/home.jsx'; // home page
 import User from '../imports/ui/user.jsx'; // user profile page, for create, edit and view
+import User_New from '../imports/ui/user_new.jsx'; // user profile page, for create, edit and view
 import Map from '../imports/ui/map.jsx'; // map view
 import Category_Edit from '../imports/ui/category_edit.jsx'; // to list out type of crisis, to subscribe
 import Category_View from '../imports/ui/category_view.jsx'; // to list out type of crisis, to subscribe
@@ -19,6 +20,7 @@ Meteor.startup(() => {
   <Router history={browserHistory}>
     <Route path="/" component={Home}/> 
     <Route path="/user/:user_id/:edit" component={User}/>
+    <Route path="/user/new" component={User_New}/>
     <Route path="/map" component={Map}/>
     <Route path="/category/:incidentType_id/:edit" component={Category_Edit}/>
     <Route path="/category/view" component={Category_View}/>
