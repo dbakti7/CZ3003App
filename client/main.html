@@ -10,12 +10,14 @@
         window.onload = function() {
             var profileDisplay;
             var profileDropdown = document.getElementById("profileDropdown");
-            var dropdownList = document.createElement("li");
+            var dropdownListLogout = document.createElement("li");
+            var logoutButton = document.createTextNode("LOGOUT BRO");
             
             if (Meteor.user()) {
                 profileDisplay = "Hi, " + Meteor.user().username + " ▼";
-                dropdownList.appendChild(document.createTextNode("LOGOUT BRO"));
-                profileDropdown.appendChild(dropdownList);
+                dropdownListLogout.appendChild(logoutButton);
+                dropdownListLogout.onclick = function() { Meteor.logout(); };
+                profileDropdown.appendChild(dropdownListLogout);
             } else {
                 profileDisplay = "Hi There! ▼";
             }
@@ -71,11 +73,11 @@
 <template name="Header">
     <table width="100%">
         <tr>
-            <th align= "left">Brand</th>
+            <th align= "left"><a href="/">Logo</a></th>
             <th class="th_right">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a  id="profileButton" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span>test </a>
+                        <a  id="profileButton" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi There! <span class="caret"></span></a>
               <ul id="profileDropdown" class="dropdown-menu">
                 <li><a onclick="userPage()">View Profile</a></li>
                 <!--<li><a href="#">Another action</a></li>
