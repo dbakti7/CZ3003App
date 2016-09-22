@@ -10,13 +10,14 @@
         window.onload = function() {
             var profileDisplay;
             var profileDropdown = document.getElementById("profileDropdown");
-            var dropdownListLogout = document.createElement("li");
-            var logoutButton = document.createTextNode("LOGOUT BRO");
+            var dropdownListLogout = document.createElement("a");
+            var logoutButton = document.createTextNode("Sign Out");
             
             if (Meteor.user()) {
                 profileDisplay = "Hi, " + Meteor.user().username + " ▼";
+                //dropdownListLogout.className = "dropdown-menu";
                 dropdownListLogout.appendChild(logoutButton);
-                dropdownListLogout.onclick = function() { Meteor.logout(); };
+                dropdownListLogout.onclick = function() { logout    (); };
                 profileDropdown.appendChild(dropdownListLogout);
             } else {
                 profileDisplay = "Hi There! ▼";
@@ -27,6 +28,15 @@
             //Show the dropdown list
             
                                      
+        }
+        
+        function logout() {
+            Meteor.logout();
+            setTimeout(function() { redirect(); }, 1000);
+        }
+        
+        function redirect() {
+            window.location = "/";   
         }
         
         //Redirect to user profile
@@ -83,9 +93,9 @@
                 <!--<li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Separated link</a></li>
+                <li><a href="#">Separated link</a></li>-->
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Sign Out</a></li>-->
+                <!--<li><a href="#">Sign Out</a></li>-->
               </ul>
             </li>
                 </ul>
