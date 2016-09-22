@@ -6,7 +6,7 @@ import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 Meteor.methods({
     // database methods for report object
-  'reports.insert'(title, reportedBy, location, description, incidentType_id) {
+  'reports.insert'(title, reportedBy, location, description, incidentType_id, locationName, lat, long) {
     check(title, String);
     Reports_db.insert({
        title,
@@ -14,15 +14,18 @@ Meteor.methods({
        location,
        description,
        incidentType_id,
+       locationName,
+       lat,
+       long,
        createdAt: new Date(),
      });
    },
    'reports.remove'(reportId) {
      Reports_db.remove(reportId);
    },
-   'reports.update'(reportId, newTitle, newLocation, newDescription, newIncidentType_id) {
+   'reports.update'(reportId, newTitle, newLocation, newDescription, newIncidentType_id, newLocationName, newLat, newLong) {
      Reports_db.update(reportId, {$set: {title: newTitle, location: newLocation, description: newDescription, 
-       incidentType_id: newIncidentType_id}});
+       incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong}});
    },
 
    // aux methods
@@ -35,16 +38,19 @@ Meteor.methods({
        UserData_db.remove(userId);
    },
 
-   'userData.update'(userId, newFullName) {
+   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
         UserData_db.insert({
           originalUserId: userId,
           fullName : newFullName,
+          email: newEmail,
+          type: newType,
+          agencyName: newAgencyName,
           createdAt: new Date(),
        })
      }
      else {
-      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName}});
+      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName}});
      }
    },
 

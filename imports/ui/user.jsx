@@ -11,8 +11,16 @@ class User extends Component {
     // Find the text field via the React ref
     const userName = ReactDOM.findDOMNode(this.refs.textUserName).value.trim();
     const fullName = ReactDOM.findDOMNode(this.refs.textFullName).value.trim();
-    
-    Meteor.call('userData.update', Meteor.userId(), fullName);     
+    const email = ReactDOM.findDOMNode(this.refs.textEmail).value.trim();
+    const type = ReactDOM.findDOMNode(this.refs.textType).value;
+    const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
+
+    if(type == "Admin" || type == "Operator")
+      ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = true;
+    else
+      ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
+
+    Meteor.call('userData.update', Meteor.userId(), fullName, email, type, agencyName);     
     alert("User data has been updated!");
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
@@ -25,13 +33,25 @@ class User extends Component {
 
     ReactDOM.findDOMNode(this.refs.textUserName).value = Meteor.user().username;
     ReactDOM.findDOMNode(this.refs.textUserName).disabled = true;
-    if(users_data.length > 0) { 
-      ReactDOM.findDOMNode(this.refs.textFullName).value = users_data[0].fullName;
+    if (users_data.length > 0) { 
+      if (users_data[0].email != undefined)
+        ReactDOM.findDOMNode(this.refs.textEmail).value = users_data[0].email;
+      if (users_data[0].fullName != undefined)
+        ReactDOM.findDOMNode(this.refs.textFullName).value = users_data[0].fullName;
+      if (users_data[0].type != "Select Type")
+        ReactDOM.findDOMNode(this.refs.textType).value = users_data[0].type;
     }
     else {
+      ReactDOM.findDOMNode(this.refs.textEmail).value = "";
       ReactDOM.findDOMNode(this.refs.textFullName).value = "";
+      ReactDOM.findDOMNode(this.refs.textType).value = "Select Type";
     }
-    //Meteor.users.findOne({ _id: Meteor.userId() }).username
+
+    if (ReactDOM.findDOMNode(this.refs.textType).value == "Agency") {
+      ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
+      ReactDOM.findDOMNode(this.refs.AgencyID).value = users_data[0].agencyID;
+    }
+    
   }
 
   
@@ -48,7 +68,15 @@ class User extends Component {
     {loggedIn ? <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
             UserName: <input type="text" ref="textUserName" value={currentUser.username}/><br/>
             FullName: <input type="text" ref="textFullName" placeholder="Full Name"/><br/>
-            <input width="50%" type="submit" value="Update"/>
+            Email: <input type="text" ref="textEmail" placeholder="Email Address"/><br/>
+            Type: <select name="UserType" ref="textType">
+                    <option value="Select Type" selected disabled>Select Type</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Operator">Operator</option>
+                    <option value="Agency">Agency</option>
+                  </select><br/>
+            <div ref="AgencyDiv" hidden>Agency Name: <input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></div>
+            <input width="50%" type="submit" value="Update"/><br/>
           </form> : null}
     
     </div>);

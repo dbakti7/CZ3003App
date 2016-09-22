@@ -52,12 +52,17 @@ class Reports_Edit extends TrackerReact(React.Component) {
     const location = ReactDOM.findDOMNode(this.refs.textLocation).value.trim();
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
     const incidentType_id = ReactDOM.findDOMNode(this.refs.incidentType).value.trim();
+    
+    // TODO: retrieve these data from UI
+    const locationName = "default location";
+    const lat = 0.0;
+    const long = 10.0;
     if(this.props.report_item.length > 0) {
       var reportArray = this.props.report_item;
-      Meteor.call('reports.update', reportArray[0]._id, title, location, description, incidentType_id);
+      Meteor.call('reports.update', reportArray[0]._id, title, location, description, incidentType_id, locationName, lat, long);
     }
     else {      
-      Meteor.call('reports.insert', title, Meteor.userId(), location, description, incidentType_id);
+      Meteor.call('reports.insert', title, Meteor.userId(), location, description, incidentType_id, locationName, lat, long);
     }
 
     // Clear form
