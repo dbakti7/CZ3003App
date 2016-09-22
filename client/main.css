@@ -159,3 +159,15 @@ button.delete {
         margin-right: 0;
     }
 }
+
+.th_right {
+    text-align: right;
+}
+
+tr, th{
+    padding: 15px;  
+}
+
+a {
+    cursor: pointer;
+}

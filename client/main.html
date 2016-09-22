@@ -6,20 +6,39 @@
   {{> Header}}
   <div id="wrapper">
   	<script>
+        //Check whether user is logged in -> determine the button display on the top right corner
+        window.onload = function() {
+            var profileDisplay;
+            var profileDropdown = document.getElementById("profileDropdown");
+            var dropdownList = document.createElement("li");
+            
+            if (Meteor.user()) {
+                profileDisplay = "Hi, " + Meteor.user().username + " ▼";
+                dropdownList.appendChild(document.createTextNode("LOGOUT BRO"));
+                profileDropdown.appendChild(dropdownList);
+            } else {
+                profileDisplay = "Hi There! ▼";
+            }
+            //Show username greeting or default button display
+            document.getElementById("profileButton").innerHTML = profileDisplay;
+            
+            //Show the dropdown list
+            
+                                     
+        }
+        
+        //Redirect to user profile
   		function userPage() {
   			var userId = Meteor.userId();
   			var url = '/user/'+userId+'/0';
   			window.location.href = url;	
   		}
-	</script>
+    </script>
         <!-- Sidebar -->
        <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="/">Home</a>
-                </li>
-                <li>
-                    <a onclick="userPage()">User</a>
                 </li>
                 <li>
                     <a href="/map">Map</a>
@@ -50,7 +69,27 @@
 
 
 <template name="Header">
-  <h1>Header template goes here</h1>
+    <table width="100%">
+        <tr>
+            <th align= "left">Brand</th>
+            <th class="th_right">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a  id="profileButton" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span>test </a>
+              <ul id="profileDropdown" class="dropdown-menu">
+                <li><a onclick="userPage()">View Profile</a></li>
+                <!--<li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Sign Out</a></li>-->
+              </ul>
+            </li>
+                </ul>
+            </th> 
+        </tr>
+    </table>
 </template>
 
 <template name="Footer">
