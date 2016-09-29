@@ -162,12 +162,21 @@ button.delete {
 
 .th_right {
     text-align: right;
+    width:100%;
 }
 
 tr, th{
-    padding: 15px;  
+    padding: 15px;
+    color: white;
 }
 
 a {
     cursor: pointer;
 }
+
+table {
+    background-color: black;
+    color: white;
+}
+
+stack{display:block;margin:0;padding:0;border:0;}

@@ -17,7 +17,7 @@
                 profileDisplay = "Hi, " + Meteor.user().username + " ▼";
                 //dropdownListLogout.className = "dropdown-menu";
                 dropdownListLogout.appendChild(logoutButton);
-                dropdownListLogout.onclick = function() { logout    (); };
+                dropdownListLogout.onclick = function() { logout(); };
                 profileDropdown.appendChild(dropdownListLogout);
             } else {
                 profileDisplay = "Hi There! ▼";
@@ -83,8 +83,8 @@
 <template name="Header">
     <table width="100%">
         <tr>
-            <th align= "left"><a href="/">Logo</a></th>
-            <th class="th_right">
+            <th width="88%" align= "left"><img src="images/MDPLogo.jpg" height="50" width="50px"/></th>
+            <th width="12%" class="th_right" style="text-align: right;">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a  id="profileButton" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi There! <span class="caret"></span></a>
