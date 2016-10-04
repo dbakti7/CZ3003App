@@ -13,20 +13,35 @@ class Category extends TrackerReact(React.Component) {
     super();
     const subscription = Meteor.subscribe('incidentType', {onReady: function() {
       this.setState({
-        ready: subscription.ready()
+        ready: userSubscription.ready() && userAuxSubscription.ready() && subscription.ready()
       })
     }.bind(this)});
 
+    const userSubscription = Meteor.subscribe('userData',{onReady: function() {
+        this.setState({
+          ready : userSubscription.ready() && userAuxSubscription.ready() && subscription.ready()
+        });
+      }.bind(this)});
+
+      const userAuxSubscription = Meteor.subscribe('userAux', {onReady: function() {
+        this.setState({
+          ready : userSubscription.ready() && userAuxSubscription.ready() && subscription.ready()
+        })
+      }.bind(this)})
+
     this.state = {
-      ready: subscription.ready(),
+      userID : Meteor.userId(),
+      ready : userSubscription.ready() && userAuxSubscription.ready() && subscription.ready(),
       subscription: subscription
     }
   }
 
   renderIncidentTypes() {
-    return this.props.incidentType_data.map((incidentType_data) => (
-      <IncidentType key={incidentType_data._id} incidentType={incidentType_data} />
-    ));
+    if(this.state.ready && !!this.state.userID) {
+      return this.props.incidentType_data.map((incidentType_data) => (
+        <IncidentType key={incidentType_data._id} incidentType={incidentType_data} userID={this.state.userID}/>
+      ));
+    }
   }
 
   componentWillUnmount() {

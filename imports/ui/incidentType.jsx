@@ -8,11 +8,17 @@ export default class IncidentType extends Component {
   deleteIncidentType() {
     IncidentType_db.remove(this.props.incidentType._id);
   }
+  subscribeIncidentType() {
+    Meteor.call('incidentType.addSubscriber', this.props.incidentType._id, this.props.userID)
+  }
   render() {
     return (
       <li><Link to = {`/category/${this.props.incidentType._id}/0`} activeClassName="active">{this.props.incidentType.name}</Link>
       <button className="delete" onClick={this.deleteIncidentType.bind(this)}>
           Delete
+        </button>
+        <button className="subscribe" onClick={this.subscribeIncidentType.bind(this)}>
+          Subscribe
         </button>
       </li>
     );

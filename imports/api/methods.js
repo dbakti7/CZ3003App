@@ -61,6 +61,7 @@ Meteor.methods({
     IncidentType_db.insert({
        name,
        description,
+       subscribers: [],
        createdAt: new Date(),
      });
    },
@@ -70,4 +71,7 @@ Meteor.methods({
    'incidentType.update'(incidentTypeId, newName, newDescription) {
      IncidentType_db.update(incidentTypeId, {$set: {name: newName, description: newDescription}});
    },
+   'incidentType.addSubscriber'(incidentType_id, userId) {
+     IncidentType_db.update(incidentType_id, {$addToSet: {subscribers: userId}})
+   }
   });
