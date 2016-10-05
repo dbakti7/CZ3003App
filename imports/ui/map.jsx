@@ -80,14 +80,16 @@ class GoogleMap extends React.Component {
       options: this.props.options
     });
 
-    var markerlist = [
-    [1.352083, 103.819836,'Fire'],
-    [1.347582, 103.680699,'Tornado'],
-    [1.297051,103.776402,'Flood']];
     // var markerlist = [
-    // [1.352083, 103.819836,'Fire','Bishan Fire Station','114 Windsor Park Rd, Singapore 574178'],
-    // [1.347582, 103.680699,'Tornado','Singapore Civil Defence Forces','Lee Wee Nam Library'],
-    // [1.297051,103.776402,'Flood','Singapore Civil Defence Forces','National University of Singapore']];
+    // [1.352083, 103.819836,'Fire','a','a'],
+    // [1.347582, 103.680699,'Tornado','b','b'],
+    // [1.297051,103.776402,'Flood','c','c']];
+
+    //DUMMY DATAAAA
+    var markerlist = [
+    [1.352083, 103.819836,'Fire','Bishan Fire Station','114 Windsor Park Rd, Singapore 574178','https://www.google.com.sg/'],//dummylink
+    [1.347582, 103.680699,'Tornado','Singapore Civil Defence Forces','Lee Wee Nam Library','https://www.google.com.sg/'],
+    [1.297051,103.776402,'Flood','Singapore Civil Defence Forces','National University of Singapore','https://www.google.com.sg/']];
     var icons = {
       Fire: {//fire
         icon: {
@@ -123,22 +125,25 @@ class GoogleMap extends React.Component {
       //   position: map.options.center,
       //   map: map.instance
     //   // });
+
     // var i,marker;
     var i;
+    var arrayofMarkers =[];
+    infowindow = new google.maps.InfoWindow({
+content: "holding..."
+});
     for(i = 0; i<markerlist.length; i++){
-      // var contentString = '<div id="content">'+
-      //       '<div id="siteNotice">'+
-      //       '</div>'+
-      //       '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][4] +'</h1>'+
-      //       '<div id="bodyContent">'+
-      //       '<p> Accident :'+ markerlist[i][2] +'</p>'+
-      //       '<p> Handle By:'+ markerlist[i][3]+
-      //       '</div>'+
-      //       '</div>';
-
-      // var infowindow= new google.maps.InfoWindow({
-      //   content: contentString
-      // });
+      var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][4] +'</h1>'+
+            '<div id="bodyContent">'+
+            '<p> Accident :'+ markerlist[i][2] +'</p>'+
+            '<p> Handle By:'+ markerlist[i][3]+ '</p>'+
+            '<a href="' +markerlist[i][5]+ '" target ="_blank"> Detail here </a>'+
+            '</div>'+
+            '</div>';
+      
       var x = Math.floor((Math.random()*3)+1);
       var  marker = new google.maps.Marker({
           position: new google.maps.LatLng(markerlist[i][0],markerlist[i][1]),
@@ -146,13 +151,27 @@ class GoogleMap extends React.Component {
           animation: google.maps.Animation.DROP,
           icon: icons[markerlist[i][2]].icon,
           title: markerlist[i][2],
-
+          detail: contentString,
         });
-      // marker.addListener('click', function() {
-      //     infowindow.open(map, marker);
-      //   });
+      arrayofMarkers.push(marker);
+      // google.maps.event.addListener(arrayofMarkers[i],'click',function(i){
+      //     var k=0;
+      //     infowindow.setContent(arrayofMarkers[k].detail);
+      //     infowindow.open(map,arrayofMarkers[k]);
+      //   })
+      arrayofMarkers[i].addListener('click', function() {
+        var marker = this;
+          infowindow.setContent(marker.detail);
+          infowindow.open(map, marker);
+        });
 
       };
+      // for(i = 0; i<markerlist.length; i++){
+      //   var k=i;
+      //   console.log(k);
+        
+      // };
+
     });
   };
   componentWillUnmount() {
