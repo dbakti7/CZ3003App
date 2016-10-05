@@ -25,7 +25,10 @@ class MyTestMap extends React.Component {
   //   });
   // }
   componentDidMount() {
-    GoogleMaps.load();
+    GoogleMaps.load({
+      key: 'AIzaSyAv9ob20h8bWZxSS_Hvxv9OwkYyjW7SMOo',
+      libraries: 'places'
+    });
   };
   getMeteorData() {
     return {

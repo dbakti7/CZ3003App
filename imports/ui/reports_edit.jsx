@@ -103,17 +103,26 @@ class Reports_Edit extends TrackerReact(React.Component) {
     }
   }
 
+  autocomplete(x) {
+    if (GoogleMaps.loaded()) {
+      var input = document.getElementById("location");
+      var autocomplete = new google.maps.places.Autocomplete(input);
+    }
+  }
+
   render() {
     var currentUser = this.props.currentUser;
     var reportedByUser = this.props.reportedByUser;
     var report_item = this.props.report_item;
+
+    
     
     return (<div>
       <h2>Report Page</h2> 
-    <form name="reportCase" onSubmit={this.handleSubmit.bind(this)} >
+      <form name="reportCase" onSubmit={this.handleSubmit.bind(this)} >
             Title: <input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/>
             Reported By: <input type="text" ref="textReportedBy" disabled = "true"/><br/>
-            Location: <input type="text" ref="textLocation" placeholder="Location"/><br/>
+            Location: <input type="text" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete.bind(this)} /><br/>
             Description: <textarea ref="textAreaDescription" placeholder="Description"/><br/>
             <select ref="incidentType" defaultValue="" required>
             <option value="" disabled>Incident Type</option>
@@ -128,7 +137,8 @@ class Reports_Edit extends TrackerReact(React.Component) {
           </form>
           {this.state.ready ? this.renderReportItem() : null}
           <Link to =  "/reports/view" activeClassName="active">Back to list of reports</Link>
-          </div>)
+      </div>
+    )
           
   }
 }
