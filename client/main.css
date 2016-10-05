@@ -183,18 +183,18 @@ button.subscribe {
     width:100%;
 }
 
-tr, th{
-    padding: 15px;
-    color: white;
-}
 
 a {
     cursor: pointer;
 }
 
-table {
+.header {
     background-color: black;
     color: white;
 }
 
+.header tr, .header th {
+    padding: 15px;
+    color: white;
+}
 stack{display:block;margin:0;padding:0;border:0;}

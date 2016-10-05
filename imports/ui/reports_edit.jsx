@@ -112,7 +112,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
     }
   }
 
-  autocomplete(x) {
+  autocomplete() {
     if (GoogleMaps.loaded()) {
       var input = document.getElementById("location");
       var autocomplete = new google.maps.places.Autocomplete(input);
@@ -129,21 +129,42 @@ class Reports_Edit extends TrackerReact(React.Component) {
     return (<div>
       <h2>Report Page</h2> 
       <form name="reportCase" onSubmit={this.handleSubmit.bind(this)} >
-            Title: <input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/>
-            Reported By: <input type="text" ref="textReportedBy" disabled = "true"/><br/>
-            Location: <input type="text" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete.bind(this)} /><br/>
-            Description: <textarea ref="textAreaDescription" placeholder="Description"/><br/>
-            <select ref="incidentType" defaultValue="" required>
-            <option value="" disabled>Incident Type</option>
-            {
-              this.props.incidentTypeList.map(function(incidentType) {
-                return <option key={incidentType._id}
-                  value={incidentType._id}>{incidentType.name}</option>;
-              })
-            }
-          </select><br/>
-            <input width="50%" type="submit" value="Report"/>
-          </form>
+            <table border="0">
+            <tr>
+                <td>Title:</td> 
+                <td><input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/></td>
+            </tr>
+            <tr>
+                <td>Reported By:</td>
+                <td><input type="text" ref="textReportedBy" disabled = "true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Location:</td> 
+                <td><input type="text" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} /><br/></td>
+            </tr>
+            <tr>
+                <td>Description:</td> 
+                <td><textarea ref="textAreaDescription" placeholder="Description"/><br/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <select ref="incidentType" defaultValue="" required>
+                        <option value="" disabled>Incident Type</option>
+                        {
+                        this.props.incidentTypeList.map(function(incidentType) {
+                            return <option key={incidentType._id}
+                            value={incidentType._id}>{incidentType.name}</option>;
+                        })
+                        }
+                    </select><br/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input width="50%" type="submit" value="Report"/></td>
+            </tr>
+            </table>
+      </form>
           {this.state.ready ? this.renderReportItem() : null}
           <Link to =  "/reports/view" activeClassName="active">Back to list of reports</Link>
       </div>
