@@ -10,6 +10,7 @@ export default class IncidentType extends Component {
   }
   subscribeIncidentType() {
     Meteor.call('incidentType.addSubscriber', this.props.incidentType._id, this.props.userID)
+    alert("Subscribed!")
   }
   render() {
     return (
