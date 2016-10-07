@@ -65,18 +65,38 @@ class User extends Component {
     var loggedIn = (currentUser && userDataAvailable);
     return (<div>User ID: {this.props.params.user_id} <br/> Edit (True/False): 
     {this.props.params.edit}
-    {loggedIn ? <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
-            UserName: <input type="text" ref="textUserName" value={currentUser.username}/><br/>
-            FullName: <input type="text" ref="textFullName" placeholder="Full Name"/><br/>
-            Email: <input type="text" ref="textEmail" placeholder="Email Address"/><br/>
-            Type: <select name="UserType" ref="textType">
-                    <option value="Select Type" selected disabled>Select Type</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Operator">Operator</option>
-                    <option value="Agency">Agency</option>
-                  </select><br/>
-            <div ref="AgencyDiv" hidden>Agency Name: <input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></div>
-            <input width="50%" type="submit" value="Update"/><br/>
+    {loggedIn ? 
+              <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
+                <table width="100%">
+                  <tr>
+                    <td width="30%">UserName:</td>
+                    <td><input type="text" ref="textUserName" value={currentUser.username}/><br/></td>
+                  </tr>
+                  <tr>
+                    <td>FullName:</td>
+                    <td><input type="text" ref="textFullName" placeholder="Full Name"/><br/></td>
+                  </tr>
+                  <tr>
+                    <td>Email:</td> 
+                    <td><input type="text" ref="textEmail" placeholder="Email Address"/><br/></td>
+                  </tr>
+                  <tr>
+                    <td>Type:</td> 
+                    <td>
+                      <select name="UserType" ref="textType">
+                        <option value="Select Type" selected disabled>Select Type</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Operator">Operator</option>
+                        <option value="Agency">Agency</option>
+                  </select><br/></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><div ref="AgencyDiv" hidden>Agency Name: <input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></div></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><input width="50%" type="submit" value="Update"/><br/></td>
+                  </tr>
+                </table>
           </form> : null}
     
     </div>);
