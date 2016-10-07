@@ -129,9 +129,9 @@ class Reports_Edit extends TrackerReact(React.Component) {
     return (<div>
       <h2>Report Page</h2> 
       <form name="reportCase" onSubmit={this.handleSubmit.bind(this)} >
-            <table border="0">
+            <table width="100%" border="0">
             <tr>
-                <td>Title:</td> 
+                <td width="30%">Title:</td> 
                 <td><input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/></td>
             </tr>
             <tr>
