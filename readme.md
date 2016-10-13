@@ -11,6 +11,7 @@ the following commands on command prompt.
 `meteor remove autopublish`
 `meteor add twbs:bootstrap`
 `meteor add ultimatejs:tracker-react`
+'meteor add themeteorchef:bert'
 
 ## to access mongo db
 `meteor mongo`
