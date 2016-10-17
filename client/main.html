@@ -1,5 +1,6 @@
 <head>
   <title>CZ3003App</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
 <body>
@@ -136,17 +137,18 @@
         <!-- Sidebar -->
        <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="/">Home</a>
+                <li><br></li>
+                <li>
+                    <a href="/">HOME</a>
                 </li>
                 <li>
-                    <a href="/map">Map</a>
+                    <a href="/map">MAP</a>
                 </li>
                 <li>
-                    <a href="/category/view">Category</a>
+                    <a href="/category/view">CATEGORIES</a>
                 </li>
                 <li>
-                    <a href="/reports/view">Report</a>
+                    <a href="/reports/view">REPORTS</a>
                 </li>
             </ul>
         </div>
@@ -156,7 +158,10 @@
          <div id="root"></div>
         <!-- Page Content -->
         <div id="page-content-wrapper">
-              <div id="container"></div>
+            <input id="loginButton" type="button" value="Login To Facebook" onclick="facebookLogin();"/>
+            <input id="postToWallWithFBApiPrompt" type="button" value="Post To Wall" onclick="postToWallUsingFBApi();"/>
+            <div id="txtEcho"><b></b></div>
+            <div id="container"></div>
 
         </div>
         <!-- /#page-content-wrapper -->
@@ -170,7 +175,7 @@
 <template name="Header">
     <table width="100%" class="header">
         <tr>
-            <th width="88%" align= "left"><img src="images/MDPLogo.jpg" height="50" width="50px"/></th>
+            <th width="88%" align= "left"><img src="images/logo.png" height="50" width="50px"/></th>
             <th width="12%" class="th_right" style="text-align: right;">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
@@ -192,7 +197,5 @@
 </template>
 
 <template name="Footer">
-  <input id="loginButton" type="button" value="Login To Facebook" onclick="facebookLogin();">
-    <input id="postToWallWithFBApiPrompt" type="button" value="Post To Wall" onclick="postToWallUsingFBApi();">
-    <div id="txtEcho"><b></b></div>
+
 </template>
