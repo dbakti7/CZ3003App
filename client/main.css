@@ -1,19 +1,54 @@
 /* CSS declarations go here */
 body {
     font-family: 'Roboto', sans-serif;
+    font-size: 1.5rem;
     letter-spacing: 0.5px;
+    background-color: #F5F5F5;
 }
 
-button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    display: inline-block;
-    font-size: 16px;
+input[type=submit] {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border: 3px solid #056571;
+    background-color: #056571;
+    color: #ffffff;
+    border-radius: 5px;
+    letter-spacing:0.5px;
+}
+
+input[type=submit]:hover {
+    background-color: #ffffff; /* Green */
+    color: #414141;
+    border: 3px solid #056571;
     border-radius: 5px;
 }
 
+button {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border: 3px solid #056571;
+    background-color: #056571;
+    margin-left: 15px;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #ffffff; /* Green */
+    border: 3px solid #056571;
+    border-radius: 5px;
+    color: #414141;
+}
+
+a {
+    color:#414141;
+}
+
+a:hover {
+    color:#056571;
+    text-decoration:none;
+}
+/*
 button.delete {
     background: #ECECEC;
     border-radius: 15px;
@@ -46,8 +81,7 @@ button.subscribe {
     height: 25px;
     box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
     -webkit-transition:box-shadow 0.5s;
-}
-
+}*/
   .map-container {
   width: 100%;
   max-width: 100%;
@@ -134,7 +168,7 @@ button.subscribe {
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #FFFFFF;
-    background: #FF6A5C;
+    background: #056571;
 }
 
 .sidebar-nav li a:active,
@@ -215,7 +249,7 @@ a {
 }
 
 .header li a:hover {
-    background: #FF6A5C;
+    background: #056571;
     color: #fff;
 
 }

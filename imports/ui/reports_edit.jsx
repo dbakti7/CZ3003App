@@ -167,12 +167,13 @@ class Reports_Edit extends TrackerReact(React.Component) {
                 </td>
             </tr>
             <tr>
-                <td colspan="2"><input width="50%" type="submit" value="Report"/></td>
+                <td colspan="2"><input width="50%"type="submit" value="Report"/></td>
             </tr>
             </table>
       </form>
           {this.state.ready ? this.renderReportItem() : null}
-          <Link to =  "/reports/view" activeClassName="active">Back to list of reports</Link>
+          <br/>
+          <Link to =  "/reports/view" activeClassName="active">← Back to list of reports</Link>
       </div>
     )
           
