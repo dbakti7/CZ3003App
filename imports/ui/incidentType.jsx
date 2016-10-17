@@ -14,14 +14,16 @@ export default class IncidentType extends Component {
   }
   render() {
     return (
-      <li><Link to = {`/category/${this.props.incidentType._id}/0`} activeClassName="active">{this.props.incidentType.name}</Link>
-      <button className="delete" onClick={this.deleteIncidentType.bind(this)}>
-          Delete
-        </button>
-        <button className="subscribe" onClick={this.subscribeIncidentType.bind(this)}>
-          Subscribe
-        </button>
-      </li>
+      <tbody>
+        <tr>
+          <td><li></li></td>
+          <td><Link to = {`/category/${this.props.incidentType._id}/0`} activeClassName="active">{this.props.incidentType.name}</Link></td>
+          <td>
+            <button className="subscribe" onClick={this.subscribeIncidentType.bind(this)}>SUBSCRIBE</button>
+            <button className="delete" onClick={this.deleteIncidentType.bind(this)}>DELETE</button>
+          </td>
+        </tr>
+      </tbody>
     );
   }
 }
