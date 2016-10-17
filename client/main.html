@@ -3,11 +3,8 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
-<body>
-  {{> Header}}
-    {{> Footer}}
-  <div id="wrapper">
-  	<script>
+<body> 
+    <script>
         if(Meteor.isClient) {
             window.fbAsyncInit = function() {
                 FB.init({
@@ -16,7 +13,7 @@
                     xfbml      : true
                 });
               };  
-            Bert.alert( 'YOW!', 'danger', 'growl-top-right' );
+            //Bert.alert( 'YOW!', 'danger', 'growl-top-right' );
             FB.getLoginStatus(onFacebookLoginStatus);
         }
         
@@ -134,6 +131,11 @@
   			window.location.href = url;	
   		}
     </script>
+    {{> Header}}
+    {{> Footer}}
+
+    <div id="wrapper">
+    
         <!-- Sidebar -->
        <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -154,13 +156,15 @@
         </div>
         <!-- /#sidebar-wrapper -->
 
+                     
 
-         <div id="root"></div>
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <input id="loginButton" type="button" value="Login To Facebook" onclick="facebookLogin();"/>
             <input id="postToWallWithFBApiPrompt" type="button" value="Post To Wall" onclick="postToWallUsingFBApi();"/>
             <div id="txtEcho"><b></b></div>
+            <br>
+            <div id="root"></div>
             <div id="container"></div>
 
         </div>
@@ -175,7 +179,7 @@
 <template name="Header">
     <table width="100%" class="header">
         <tr>
-            <th width="88%" align= "left"><img src="images/logo.png" height="50" width="50px"/></th>
+            <th width="88%" align= "left"><a href="#menu-toggle" id="#menu-toggle"><img src="/images/logo.png" height="50" width="50px"/></a></th>
             <th width="12%" class="th_right" style="text-align: right;">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
