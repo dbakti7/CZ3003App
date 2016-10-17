@@ -14,6 +14,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
       super();
       var lat;
       var lng;
+      var locationName;
       const reportSubscription = Meteor.subscribe('reports', {onReady: function() {
         this.setState({
           ready : reportSubscription.ready() && userSubscription.ready() && userAuxSubscription.ready() && incidentTypeSubscription.ready()
@@ -51,19 +52,17 @@ class Reports_Edit extends TrackerReact(React.Component) {
  
     // Find the text field via the React ref
     const title = ReactDOM.findDOMNode(this.refs.textTitle).value.trim();
-    const location = ReactDOM.findDOMNode(this.refs.textLocation).value.trim();
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
     const incidentType_id = ReactDOM.findDOMNode(this.refs.incidentType).value.trim();
-    
-    // TODO: retrieve these data from UI
-    const locationName = "default location";
+    const status = ReactDOM.findDOMNode(this.refs.status).value.trim();
     if(this.props.report_item.length > 0) {
       var reportArray = this.props.report_item;
-      Meteor.call('reports.update', reportArray[0]._id, title, location, description, incidentType_id, locationName, lat, lng);
+      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status);
     }
     else {      
-      Meteor.call('reports.insert', title, Meteor.userId(), location, description, incidentType_id, locationName, lat, lng);
+      Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status);
     }
+
     incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
     for(i=0;i<incidentType.subscribers.length;++i) {
       // skip null data
@@ -71,13 +70,9 @@ class Reports_Edit extends TrackerReact(React.Component) {
         continue;
       }
       subUser = UserData_db.find({originalUserId: incidentType.subscribers[i]}).fetch()[0]
+      // TODO: send notification to subscribers
       // Meteor.call('sendEmail', subUser.email, title, description)
     }
-    
-    // Clear form
-    ReactDOM.findDOMNode(this.refs.textTitle).value = '';
-    ReactDOM.findDOMNode(this.refs.textLocation).value = '';
-    ReactDOM.findDOMNode(this.refs.textAreaDescription).value = '';
   }
 
   renderReports() {
@@ -97,10 +92,14 @@ class Reports_Edit extends TrackerReact(React.Component) {
           textRB.value = RBU.username;
         });
       }
+      lat = report.lat;
+      lng = report.long;
+      locationName = report.locationName;
       ReactDOM.findDOMNode(this.refs.textTitle).value = report.title;
       ReactDOM.findDOMNode(this.refs.textLocation).value = report.location;
       ReactDOM.findDOMNode(this.refs.textAreaDescription).value = report.description;
       ReactDOM.findDOMNode(this.refs.incidentType).value = report.incidentType_id;
+      ReactDOM.findDOMNode(this.refs.status).value = report.status;
     }
     else {
         var textRB = ReactDOM.findDOMNode(this.refs.textReportedBy);
@@ -118,6 +117,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
       var autocomplete = new google.maps.places.Autocomplete(input);
       autocomplete.addListener('place_changed', function() {
           var place = autocomplete.getPlace();
+          locationName = place.name;
           lat = place.geometry.location.lat();
           lng = place.geometry.location.lng();
           console.log(lat)
@@ -153,7 +153,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
                 <td><textarea ref="textAreaDescription" placeholder="Description"/><br/></td>
             </tr>
             <tr>
-                <td></td>
+                <td>Incident Type</td>
                 <td>
                     <select ref="incidentType" defaultValue="" required>
                         <option value="" disabled>Incident Type</option>
@@ -163,6 +163,16 @@ class Reports_Edit extends TrackerReact(React.Component) {
                             value={incidentType._id}>{incidentType.name}</option>;
                         })
                         }
+                    </select><br/>
+                </td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>
+                    <select ref="status" defaultValue="" required>
+                        <option value="Active">Active</option>
+                        <option value="Handled">Handled</option>
+                        <option value="Resolved">Resolved</option>
                     </select><br/>
                 </td>
             </tr>
