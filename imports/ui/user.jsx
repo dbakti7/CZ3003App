@@ -28,6 +28,16 @@ class User extends Component {
     // ReactDOM.findDOMNode(this.refs.textAreaDescription).value = '';
   }
 
+  postTweet(event) {
+    event.preventDefault();
+
+    Meteor.call("postTweet", this.refs.textTweet.value, function(err,result) {
+    if(!err) {
+      alert("Tweet posted");
+    }
+    });
+  }
+
   componentWillReceiveProps() {
     var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
 
@@ -70,7 +80,7 @@ class User extends Component {
                 <table width="100%">
                   <tr>
                     <td width="30%">UserName:</td>
-                    <td><input type="text" ref="textUserName" value={currentUser.username}/><br/></td>
+                    <td><input type="text" ref="textUserName" value={Meteor.user().profile.name}/><br/></td>
                   </tr>
                   <tr>
                     <td>FullName:</td>
@@ -98,6 +108,11 @@ class User extends Component {
                   </tr>
                 </table>
           </form> : null}
+          <form name="postTweet" onSubmit={this.postTweet.bind(this)} >
+            <h2>Enter tweet to post: </h2>
+            <input type="text" ref="textTweet" placeholder="Enter tweet here"/><br/>
+            <input type="submit" value="Post"/>
+          </form>
     
     </div>);
   }
