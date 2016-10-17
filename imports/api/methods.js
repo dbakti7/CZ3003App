@@ -4,6 +4,8 @@ import {UserData_db} from './userData.js';
 import {IncidentType_db} from './incidentType.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
+import { Accounts } from 'meteor/accounts-base';
+
 
 var Twit = require('twit')
 
@@ -42,6 +44,14 @@ Meteor.methods({
    // aux methods
    'userAux.find'(userId) {
      return Meteor.users.find(userId).fetch();
+   },
+
+   'userAux.findByEmail'(email) {
+     return Meteor.users.find(UserData_db.find({email: email}).fetch()[0].originalUserId).fetch();
+   },
+
+   'userAux.setPassword'(userId, password) {
+     Accounts.setPassword(userId, password);
    },
 
    //atabase methods for user object
