@@ -5,25 +5,31 @@ import { Meteor } from 'meteor/meteor';
 import reactMixin from 'react-mixin';
 import { TrackerReactMixin} from 'meteor/ultimatejs:tracker-react';
 import {ReactMeteorData, createContainer} from 'meteor/react-meteor-data';
+import {Reports_db} from '../api/report.js';
+import {IncidentType_db} from '../api/incidentType.js';
 //React ES6 version
-class App extends React.Component {
-  
-  render() {
-    return <MyTestMap />;
-  }
-}
 
 class MyTestMap extends React.Component {
-  // handleSubmit(event){
-  //   event.preventDefault();
-    
-  //   const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
+   constructor() {
+      super();
+      const reportSubscription = Meteor.subscribe('reports', {onReady: function() {
+        this.setState({
+          ready : reportSubscription.ready() && incidentTypeSubscription.ready()
+        });
+        
+      }.bind(this)});
 
-  //   markerlist.insert({
-  //     text,
-  //     createdAt: new Date(),
-  //   });
-  // }
+      const incidentTypeSubscription = Meteor.subscribe('incidentType', {onReady: function() {
+        this.setState({
+          ready : reportSubscription.ready() && incidentTypeSubscription.ready()
+        })
+      }.bind(this)})
+      
+      this.state = {
+        ready : reportSubscription.ready() && incidentTypeSubscription.ready(),
+      }
+    }
+
   componentDidMount() {
     GoogleMaps.load({
       key: 'AIzaSyAv9ob20h8bWZxSS_Hvxv9OwkYyjW7SMOo',
@@ -33,6 +39,7 @@ class MyTestMap extends React.Component {
   getMeteorData() {
     return {
       loaded: GoogleMaps.loaded(),
+      reports: Reports_db.find({}).fetch(),
       mapOptions: GoogleMaps.loaded() && this._mapOptions()
     };
   };
@@ -40,34 +47,24 @@ class MyTestMap extends React.Component {
     return {
        center: new google.maps.LatLng(1.352083,103.819836),
 
-      //     center : [
-      // [-33.890542 , 151.274856,4]],
       zoom: 12
     };
   };
-  // renderCoors(){
-  //   return this.props.coors.map((coor)=>
-  //     (<maps2 coor={coor} />));
-  // }
+
   render() {
-    if (this.data.loaded)
+    if (this.data.loaded && this.state.ready) {
+      
       return (
-              <GoogleMap name="mymap" options={this.data.mapOptions} />
+              <GoogleMap name="mymap" options={this.data.mapOptions} reports = {this.data.reports}/>
              
         );
+    }
 
     return <div></div>;
   }
 }
 
-// MyTestMap.propTypes ={
-//     coors: PropTypes.array.isRequired,
-//   };
-//   export default createContainer(()=>{
-//     return {
-//       coors: Coors.find({}).fetch(),
-//     };
-//   }, MyTestMap);
+
   reactMixin(MyTestMap.prototype, ReactMeteorData);
 
 class GoogleMap extends React.Component {
@@ -79,17 +76,24 @@ class GoogleMap extends React.Component {
       element: ReactDOM.findDOMNode(this),
       options: this.props.options
     });
-
+    
+    var markerlist = []
+    for(var i =0;i<this.props.reports.length;++i) {
+      var temp = []
+      temp.push(this.props.reports[i].lat)
+      temp.push(this.props.reports[i].long)
+      incidentTypeName = IncidentType_db.find({_id: this.props.reports[i].incidentType_id}).fetch()[0].name;
+      temp.push(incidentTypeName)
+      temp.push(this.props.reports[i].title)
+      temp.push(this.props.reports[i].location)
+      temp.push('https://www.google.com.sg/')
+      markerlist.push(temp)
+    }
+    console.log(markerlist)
     // var markerlist = [
-    // [1.352083, 103.819836,'Fire','a','a'],
-    // [1.347582, 103.680699,'Tornado','b','b'],
-    // [1.297051,103.776402,'Flood','c','c']];
-
-    //DUMMY DATAAAA
-    var markerlist = [
-    [1.352083, 103.819836,'Fire','Bishan Fire Station','114 Windsor Park Rd, Singapore 574178','https://www.google.com.sg/'],//dummylink
-    [1.347582, 103.680699,'Tornado','Singapore Civil Defence Forces','Lee Wee Nam Library','https://www.google.com.sg/'],
-    [1.297051,103.776402,'Flood','Singapore Civil Defence Forces','National University of Singapore','https://www.google.com.sg/']];
+    // [1.352083, 103.819836,'Fire','Bishan Fire Station','114 Windsor Park Rd, Singapore 574178','https://www.google.com.sg/'],//dummylink
+    // [1.347582, 103.680699,'Tornado','Singapore Civil Defence Forces','Lee Wee Nam Library','https://www.google.com.sg/'],
+    // [1.297051,103.776402,'Flood','Singapore Civil Defence Forces','National University of Singapore','https://www.google.com.sg/']];
     var icons = {
       Fire: {//fire
         icon: {
@@ -121,12 +125,6 @@ class GoogleMap extends React.Component {
       }
     }
     GoogleMaps.ready(this.props.name, function(map) {
-      // var marker = new google.maps.Marker({
-      //   position: map.options.center,
-      //   map: map.instance
-    //   // });
-
-    // var i,marker;
     var i;
     var arrayofMarkers =[];
     infowindow = new google.maps.InfoWindow({
@@ -154,11 +152,6 @@ content: "holding..."
           detail: contentString,
         });
       arrayofMarkers.push(marker);
-      // google.maps.event.addListener(arrayofMarkers[i],'click',function(i){
-      //     var k=0;
-      //     infowindow.setContent(arrayofMarkers[k].detail);
-      //     infowindow.open(map,arrayofMarkers[k]);
-      //   })
       arrayofMarkers[i].addListener('click', function() {
         var marker = this;
           infowindow.setContent(marker.detail);
@@ -166,11 +159,6 @@ content: "holding..."
         });
 
       };
-      // for(i = 0; i<markerlist.length; i++){
-      //   var k=i;
-      //   console.log(k);
-        
-      // };
 
     });
   };
@@ -197,8 +185,7 @@ content: "holding..."
 
 if (Meteor.isClient) {
   Meteor.startup(function() {
-  	render(<App />, document.getElementById('root'));
-    // return React.render(<App />, document.getElementById('root'));
+  	render(<MyTestMap />, document.getElementById('root'));
   });
 }
 export default React.createClass({
@@ -206,70 +193,3 @@ export default React.createClass({
     return <div id="map-container"></div>
   }
 })
-
-// React.CreateClass version
-// App = React.createClass({
-//   render() {
-//     return <MyTestMap />;
-//   }
-// });
-
-// MyTestMap = React.createClass({
-//   mixins: [ReactMeteorData],
-//   componentDidMount() {
-//     GoogleMaps.load();
-//   },
-//   getMeteorData() {
-//     return {
-//       loaded: GoogleMaps.loaded(),
-//       mapOptions: GoogleMaps.loaded() && this._mapOptions()
-//     };
-//   },
-//   _mapOptions() {
-//     return {
-//       center: new google.maps.LatLng(-37.8136, 144.9631),
-//       zoom: 8
-//     };
-//   },
-//   render() {
-//     if (this.data.loaded)
-//       return <GoogleMap name="mymap" options={this.data.mapOptions} />;
-
-//     return <div></div>;
-//   }
-// });
-
-// GoogleMap = React.createClass({
-//   propTypes: {
-//     name: React.PropTypes.string.isRequired,
-//     options: React.PropTypes.object.isRequired
-//   },
-//   componentDidMount() {
-//     GoogleMaps.create({
-//       name: this.props.name,
-//       element: ReactDOM.findDOMNode(this),
-//       options: this.props.options
-//     });
-
-//     GoogleMaps.ready(this.props.name, function(map) {
-//       var marker = new google.maps.Marker({
-//         position: map.options.center,
-//         map: map.instance
-//       });
-//     });
-//   },
-//   componentWillUnmount() {
-//     if (GoogleMaps.maps[this.props.name]) {
-//       google.maps.event.clearInstanceListeners(GoogleMaps.maps[this.props.name].instance);
-//       delete GoogleMaps.maps[this.props.name];
-//     } 
-//   },
-//   textFunction() {
-//     document.getElementById('map-container').style.visibility = "hidden";
-//   },
-//   render() {
-//     return (<div className="map-container">
-//       {this.textFunction()}
-//       </div>);
-//   }
-// });
