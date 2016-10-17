@@ -19,12 +19,11 @@ var T = new Twit({
 
 Meteor.methods({
     // database methods for report object
-  'reports.insert'(title, reportedBy, location, description, incidentType_id, locationName, lat, long, status) {
+  'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status) {
     check(title, String);
     Reports_db.insert({
        title,
        reportedBy,
-       location,
        description,
        incidentType_id,
        locationName,
@@ -37,8 +36,8 @@ Meteor.methods({
    'reports.remove'(reportId) {
      Reports_db.remove(reportId);
    },
-   'reports.update'(reportId, newTitle, newLocation, newDescription, newIncidentType_id, newLocationName, newLat, newLong, newStatus) {
-     Reports_db.update(reportId, {$set: {title: newTitle, location: newLocation, description: newDescription, 
+   'reports.update'(reportId, newTitle, newDescription, newIncidentType_id, newLocationName, newLat, newLong, newStatus) {
+     Reports_db.update(reportId, {$set: {title: newTitle, description: newDescription, 
        incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong, status:newStatus}});
    },
 
