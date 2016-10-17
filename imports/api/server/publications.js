@@ -22,6 +22,7 @@ if (Meteor.isServer) {
   Meteor.publish('userAux', function userAuxPublication() {
     return Meteor.users.find();
   });
+
   process.env.MAIL_URL = "smtp://postmaster@sandboxd9773ce618c64e03a7a974c15c968833.mailgun.org:f0be7502a761fb69eb9695f6a73d1878@smtp.mailgun.org:587";
      Meteor.methods({
   sendEmail: function (to, subject, text) {
@@ -30,8 +31,8 @@ if (Meteor.isServer) {
     this.unblock();
 
     // don’t allow sending email unless the user is logged in
-    if (!Meteor.user())
-      throw new Meteor.Error(403, "not logged in");
+    // if (!Meteor.user())
+    //   throw new Meteor.Error(403, "not logged in");
 
     // and here is where you can throttle the number of emails this user
     // is allowed to send per day

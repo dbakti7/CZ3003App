@@ -13,6 +13,8 @@ import Category_Edit from '../imports/ui/category_edit.jsx'; // to list out type
 import Category_View from '../imports/ui/category_view.jsx'; // to list out type of crisis, to subscribe
 import Report_Edit from '../imports/ui/reports_edit.jsx'; // crisis report page, for create, edit and view
 import Report_View from '../imports/ui/reports_view.jsx'; // crisis report page, for create, edit and view
+import ForgotPassword from '../imports/ui/ForgotPassword.jsx'; // crisis report page, for create, edit and view
+import ResetPassword from '../imports/ui/ResetPassword.jsx'; // crisis report page, for create, edit and view
 import '../imports/startup/accounts-config.js'; // for account configuration
 
 Meteor.startup(() => {
@@ -26,6 +28,8 @@ Meteor.startup(() => {
     <Route path="/category/view" component={Category_View}/>
     <Route path="/report/:report_id/:edit" component={Report_Edit}/>
     <Route path="/reports/view" component={Report_View}/>
+    <Route path="/forgot_password" component={ForgotPassword}/>
+    <Route path="/reset_password/:user_id" component={ResetPassword}/>
   </Router>
 ), document.getElementById('container'));
 
