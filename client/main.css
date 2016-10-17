@@ -1,4 +1,9 @@
 /* CSS declarations go here */
+body {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
+}
+
 button {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -80,7 +85,7 @@ button.subscribe {
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background: #000;
+    background: #414141;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -121,13 +126,15 @@ button.subscribe {
 .sidebar-nav li a {
     display: block;
     text-decoration: none;
-    color: #999999;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #fff;
 }
 
 .sidebar-nav li a:hover {
     text-decoration: none;
-    color: #fff;
-    background: rgba(255,255,255,0.2);
+    color: #FFFFFF;
+    background: #FF6A5C;
 }
 
 .sidebar-nav li a:active,
@@ -142,7 +149,7 @@ button.subscribe {
 }
 
 .sidebar-nav > .sidebar-brand a {
-    color: #999999;
+    color: #fff;
 }
 
 .sidebar-nav > .sidebar-brand a:hover {
@@ -189,7 +196,7 @@ a {
 }
 
 .header {
-    background-color: black;
+    background-color: #414141;
     color: white;
 }
 
@@ -197,4 +204,20 @@ a {
     padding: 15px;
     color: white;
 }
+
+.header  ul{
+    background: #414141;
+}
+
+.header ul li a {
+    font-size: 1.5 rem;
+    color: #fff;
+}
+
+.header li a:hover {
+    background: #FF6A5C;
+    color: #fff;
+
+}
+
 stack{display:block;margin:0;padding:0;border:0;}
