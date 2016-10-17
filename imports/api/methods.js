@@ -4,6 +4,17 @@ import {UserData_db} from './userData.js';
 import {IncidentType_db} from './incidentType.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
+
+var Twit = require('twit')
+
+var T = new Twit({
+  consumer_key:       '3VpOg3V8wo1zYbHy85lPohsiE',
+  consumer_secret:    'G2JNNJlvnReZKMD7FSHVpjdIk1pt2I2rqzBPKZ9j3GXnAmZMbI',
+  access_token:       '787981834395131904-rzLdfOM9iySaYv32GBwZxJvs43oiYS6',
+  access_token_secret:'a7Pvl4t1gQNmlJBltT6t8XnTS6XLhKmueP0QXV2yw6k2Y',
+  timeout_ms:         60*1000,
+})
+
 Meteor.methods({
     // database methods for report object
   'reports.insert'(title, reportedBy, location, description, incidentType_id, locationName, lat, long) {
@@ -73,5 +84,12 @@ Meteor.methods({
    },
    'incidentType.addSubscriber'(incidentType_id, userId) {
      IncidentType_db.update(incidentType_id, {$addToSet: {subscribers: userId}})
-   }
-  });
+   },
+  'postTweet': function (text) {
+        if(Meteor.user())
+          T.post('statuses/update', { status: text }, function(err,data,response) {
+            console.log(data)
+          });
+        return true;
+    }
+});

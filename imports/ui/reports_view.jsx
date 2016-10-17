@@ -13,8 +13,10 @@ class Reports_View extends TrackerReact(React.Component) {
       super();
       const reportSubscription = Meteor.subscribe('reports', {onReady: function() {
         this.setState({
+          
           ready : reportSubscription.ready()
         });
+        console.log("here")
       }.bind(this)});
       
       this.state = {

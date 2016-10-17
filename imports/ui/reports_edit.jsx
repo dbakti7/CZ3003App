@@ -12,6 +12,8 @@ import {UserData_db} from '../api/userData.js';
 class Reports_Edit extends TrackerReact(React.Component) {
   constructor() {
       super();
+      var lat;
+      var lng;
       const reportSubscription = Meteor.subscribe('reports', {onReady: function() {
         this.setState({
           ready : reportSubscription.ready() && userSubscription.ready() && userAuxSubscription.ready() && incidentTypeSubscription.ready()
@@ -55,14 +57,12 @@ class Reports_Edit extends TrackerReact(React.Component) {
     
     // TODO: retrieve these data from UI
     const locationName = "default location";
-    const lat = 0.0;
-    const long = 10.0;
     if(this.props.report_item.length > 0) {
       var reportArray = this.props.report_item;
-      Meteor.call('reports.update', reportArray[0]._id, title, location, description, incidentType_id, locationName, lat, long);
+      Meteor.call('reports.update', reportArray[0]._id, title, location, description, incidentType_id, locationName, lat, lng);
     }
     else {      
-      Meteor.call('reports.insert', title, Meteor.userId(), location, description, incidentType_id, locationName, lat, long);
+      Meteor.call('reports.insert', title, Meteor.userId(), location, description, incidentType_id, locationName, lat, lng);
     }
     incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
     for(i=0;i<incidentType.subscribers.length;++i) {
@@ -71,7 +71,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
         continue;
       }
       subUser = UserData_db.find({originalUserId: incidentType.subscribers[i]}).fetch()[0]
-      Meteor.call('sendEmail', subUser.email, title, description)
+      // Meteor.call('sendEmail', subUser.email, title, description)
     }
     
     // Clear form
@@ -116,6 +116,12 @@ class Reports_Edit extends TrackerReact(React.Component) {
     if (GoogleMaps.loaded()) {
       var input = document.getElementById("location");
       var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.addListener('place_changed', function() {
+          var place = autocomplete.getPlace();
+          lat = place.geometry.location.lat();
+          lng = place.geometry.location.lng();
+          console.log(lat)
+      })
     }
   }
 
