@@ -53,9 +53,8 @@ class MyTestMap extends React.Component {
 
   render() {
     if (this.data.loaded && this.state.ready) {
-      
       return (
-              <GoogleMap name="mymap" options={this.data.mapOptions} reports = {this.data.reports}/>
+              <GoogleMap name="mymap" options={this.data.mapOptions} reports = {Reports_db.find({}).fetch()}/>
              
         );
     }
@@ -68,15 +67,26 @@ class MyTestMap extends React.Component {
   reactMixin(MyTestMap.prototype, ReactMeteorData);
 
 class GoogleMap extends React.Component {
-
- 
+  constructor() {
+      super();
+      var mapi;
+      this.state = {
+        ready : false
+      }
+       
+    }
+  
   componentDidMount() {
-    GoogleMaps.create({
-      name: this.props.name,
-      element: ReactDOM.findDOMNode(this),
-      options: this.props.options
-    });
+    mapi = new google.maps.Map(ReactDOM.findDOMNode(this),
+        this.props.options);
     
+    this.setState({
+          ready : true
+        })
+  }
+    ;
+    
+    renderMarkers() {
     var markerlist = []
     for(var i =0;i<this.props.reports.length;++i) {
       var temp = []
@@ -89,11 +99,8 @@ class GoogleMap extends React.Component {
       temp.push('https://www.google.com.sg/')
       markerlist.push(temp)
     }
-    console.log(markerlist)
-    // var markerlist = [
-    // [1.352083, 103.819836,'Fire','Bishan Fire Station','114 Windsor Park Rd, Singapore 574178','https://www.google.com.sg/'],//dummylink
-    // [1.347582, 103.680699,'Tornado','Singapore Civil Defence Forces','Lee Wee Nam Library','https://www.google.com.sg/'],
-    // [1.297051,103.776402,'Flood','Singapore Civil Defence Forces','National University of Singapore','https://www.google.com.sg/']];
+    
+    
     var icons = {
       Fire: {//fire
         icon: {
@@ -124,7 +131,8 @@ class GoogleMap extends React.Component {
         anchor: new google.maps.Point(0,0)},
       }
     }
-    GoogleMaps.ready(this.props.name, function(map) {
+    
+    
     var i;
     var arrayofMarkers =[];
     infowindow = new google.maps.InfoWindow({
@@ -145,7 +153,7 @@ content: "holding..."
       var x = Math.floor((Math.random()*3)+1);
       var  marker = new google.maps.Marker({
           position: new google.maps.LatLng(markerlist[i][0],markerlist[i][1]),
-          map: map.instance,
+          map: mapi,
           animation: google.maps.Animation.DROP,
           icon: icons[markerlist[i][2]].icon,
           title: markerlist[i][2],
@@ -155,13 +163,13 @@ content: "holding..."
       arrayofMarkers[i].addListener('click', function() {
         var marker = this;
           infowindow.setContent(marker.detail);
-          infowindow.open(map, marker);
+          infowindow.open(mapi, marker);
         });
 
       };
 
-    });
-  };
+    }//);
+  // };
   componentWillUnmount() {
     if (GoogleMaps.maps[this.props.name]) {
       google.maps.event.clearInstanceListeners(GoogleMaps.maps[this.props.name].instance);
@@ -174,6 +182,7 @@ content: "holding..."
   render() {
     return (<div className="map-container">
       {this.textFunction()}
+      {this.state.ready ? this.renderMarkers(): null}
       </div>);
   };
  
