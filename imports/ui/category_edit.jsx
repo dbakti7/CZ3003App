@@ -63,7 +63,7 @@ class Category extends TrackerReact(React.Component) {
                 <form name="incidentTypeForm" onSubmit={this.handleSubmit.bind(this)} >
                 <table width="100%">
                     <tr>
-                        <td width="10%">Name:</td> 
+                        <td width="15%">Name:</td> 
                         <td><input type="text" ref="textName" placeholder="Name"/></td>
                     </tr>
                     <tr>

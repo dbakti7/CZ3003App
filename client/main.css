@@ -3,7 +3,12 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 1.5rem;
     letter-spacing: 0.5px;
-    background-color: #F5F5F5;
+    background-color: #F3F3F3;
+}
+
+tbody {
+    text-transform: capitalize;
+    font-weight: bold;
 }
 
 tr td{
@@ -33,7 +38,7 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-    background-color: #ffffff; /* Green */
+    background-color:transparent; /* Green */
     color: #414141;
     border: 3px solid #056571;
     border-radius: 5px;
@@ -52,7 +57,7 @@ button, button link {
 }
 
 button:hover, button link:hover{
-    background-color: #ffffff; /* Green */
+    background-color: transparent; /* Green */
     border: 3px solid #056571;
     border-radius: 5px;
     color: #414141;

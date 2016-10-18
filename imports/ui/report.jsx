@@ -8,11 +8,17 @@ export default class Report extends Component {
   }
   render() {
     return (
-      <li><Link to = {`/report/${this.props.report._id}/0`} activeClassName="active">{this.props.report.title}</Link>
-      <button className="delete" onClick={this.deleteReport.bind(this)}>
-          Delete Report
-        </button>
-      </li>
+      <tbody>
+        <tr> 
+          <td><li></li></td>
+          <td>
+            <Link to = {`/report/${this.props.report._id}/0`} activeClassName="active">{this.props.report.title}</Link>
+          </td>
+          <td>
+            <button className="delete" onClick={this.deleteReport.bind(this)}>Delete Report</button>
+          </td>
+        </tr>
+      </tbody>
     );
   }
 }
