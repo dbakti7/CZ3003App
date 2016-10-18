@@ -60,13 +60,24 @@ class Category extends TrackerReact(React.Component) {
 
   render() {     
     return (<div>
-    <form name="incidentTypeForm" onSubmit={this.handleSubmit.bind(this)} >
-            Name: <input type="text" ref="textName" placeholder="Name"/><br/>
-            Description: <textarea ref="textAreaDescription" placeholder="Description"/><br/>
-            <input width="50%" type="submit" value="Update"/>
-          </form>
-          <Link to =  "/category/view" activeClassName="active">Back to list of Incident Types</Link>
+                <form name="incidentTypeForm" onSubmit={this.handleSubmit.bind(this)} >
+                <table width="100%">
+                    <tr>
+                        <td width="15%">Name:</td> 
+                        <td><input type="text" ref="textName" placeholder="Name"/></td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td><textarea ref="textAreaDescription" placeholder="Description"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input width="50%" type="submit" value="Update"/></td>
+                    </tr>
+                </table>
+                </form>
           {this.state.ready ? this.renderIncidentTypeData() : null}
+          <br/>
+          <Link to =  "/category/view" activeClassName="active">← Back to list of Incident Types</Link>
     </div>);
   }
 };

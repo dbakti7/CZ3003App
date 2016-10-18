@@ -3,8 +3,28 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 1.5rem;
     letter-spacing: 0.5px;
-    background-color: #F5F5F5;
+    background-color: #F3F3F3;
 }
+
+tbody {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+tr td{
+    padding:5px;
+}   
+
+input[type=text], textarea {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+input[type=text]:focus, textarea:focus {
+    background-color: #056571;
+    color: #ffffff
+}
+ 
 
 input[type=submit] {
     -webkit-transition-duration: 0.4s; /* Safari */
@@ -14,16 +34,18 @@ input[type=submit] {
     color: #ffffff;
     border-radius: 5px;
     letter-spacing:0.5px;
+    padding:7px;
 }
 
 input[type=submit]:hover {
-    background-color: #ffffff; /* Green */
+    background-color:transparent; /* Green */
     color: #414141;
     border: 3px solid #056571;
     border-radius: 5px;
+    
 }
 
-button {
+button, button link {
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     border: 3px solid #056571;
@@ -31,11 +53,30 @@ button {
     margin-left: 15px;
     color: #ffffff;
     border-radius: 5px;
+    padding:7px;
 }
 
-button:hover {
-    background-color: #ffffff; /* Green */
+button:hover, button link:hover{
+    background-color: transparent; /* Green */
     border: 3px solid #056571;
+    border-radius: 5px;
+    color: #414141;
+}
+
+button.delete {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border: 3px solid #FF6A5C;
+    background-color: #FF6A5C;
+    margin-left: 15px;
+    color: #ffffff;
+    border-radius: 5px;
+    padding:7px;
+}
+
+button.delete:hover {
+    background-color: #ffffff; /* Green */
+    border: 3px solid #FF6A5C;
     border-radius: 5px;
     color: #414141;
 }
