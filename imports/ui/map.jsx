@@ -29,13 +29,15 @@ class MyTestMap extends React.Component {
         ready : reportSubscription.ready() && incidentTypeSubscription.ready(),
       }
     }
-
+  //initialized data when the map is call
   componentDidMount() {
+    //api key
     GoogleMaps.load({
       key: 'AIzaSyAv9ob20h8bWZxSS_Hvxv9OwkYyjW7SMOo',
       libraries: 'places'
     });
   };
+  //get all incident details from mongoDB
   getMeteorData() {
     return {
       loaded: GoogleMaps.loaded(),
@@ -43,6 +45,7 @@ class MyTestMap extends React.Component {
       mapOptions: GoogleMaps.loaded() && this._mapOptions()
     };
   };
+  //focus center of map and detail zoom of the map
   _mapOptions() {
     return {
        center: new google.maps.LatLng(1.352083,103.819836),
@@ -50,10 +53,11 @@ class MyTestMap extends React.Component {
       zoom: 12
     };
   };
-
+  //render the map
   render() {
     if (this.data.loaded && this.state.ready) {
       return (
+              //call the GoogleMap and pass the data
               <GoogleMap name="mymap" options={this.data.mapOptions} reports = {Reports_db.find({}).fetch()}/>
              
         );
@@ -64,7 +68,7 @@ class MyTestMap extends React.Component {
 }
 
 
-  reactMixin(MyTestMap.prototype, ReactMeteorData);
+reactMixin(MyTestMap.prototype, ReactMeteorData);
 
 class GoogleMap extends React.Component {
   constructor() {
@@ -100,7 +104,7 @@ class GoogleMap extends React.Component {
       markerlist.push(temp)
     }
     
-    
+    //marker icon details
     var icons = {
       Fire: {//fire
         icon: {
@@ -135,10 +139,15 @@ class GoogleMap extends React.Component {
     
     var i;
     var arrayofMarkers =[];
+
+    //initialize infoWindow for pop ups
     infowindow = new google.maps.InfoWindow({
-content: "holding..."
-});
+      content: "holding..."
+      });
+
+    //render all the marker to the map
     for(i = 0; i<markerlist.length; i++){
+      //content for each pop ups
       var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
@@ -149,17 +158,16 @@ content: "holding..."
             '<a href="' +markerlist[i][5]+ '" target ="_blank"> Detail here </a>'+
             '</div>'+
             '</div>';
-      
-      var x = Math.floor((Math.random()*3)+1);
+      //detail of each marker
       var  marker = new google.maps.Marker({
           position: new google.maps.LatLng(markerlist[i][0],markerlist[i][1]),
           map: mapi,
-          animation: google.maps.Animation.DROP,
           icon: icons[markerlist[i][2]].icon,
           title: markerlist[i][2],
           detail: contentString,
         });
       arrayofMarkers.push(marker);
+      //link the pop ups with the marker 
       arrayofMarkers[i].addListener('click', function() {
         var marker = this;
           infowindow.setContent(marker.detail);
@@ -170,6 +178,7 @@ content: "holding..."
 
     }//);
   // };
+  //
   componentWillUnmount() {
     if (GoogleMaps.maps[this.props.name]) {
       google.maps.event.clearInstanceListeners(GoogleMaps.maps[this.props.name].instance);
@@ -187,6 +196,8 @@ content: "holding..."
   };
  
 }
+
+//data type for googleMaps
  GoogleMap.propTypes  ={
     name: React.PropTypes.string.isRequired,
     options: React.PropTypes.object.isRequired,
