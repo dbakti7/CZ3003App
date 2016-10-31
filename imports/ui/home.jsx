@@ -28,7 +28,7 @@ constructor() {
         ready : userSubscription.ready() && userAuxSubscription.ready()
         
       }
-      console.log(Roles.userIsInRole( Meteor.userId(), 'roleOne' )) // true) 
+       
     }
 
   render() {

@@ -101,5 +101,8 @@ Meteor.methods({
             console.log(data)
           });
         return true;
+    },
+    'setRole': function(userId, role) {
+      Roles.setUserRoles( userId, role);
     }
 });

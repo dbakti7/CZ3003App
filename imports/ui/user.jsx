@@ -26,8 +26,7 @@ class User extends Component {
       this.state = {
         ready : userSubscription.ready() && userAuxSubscription.ready()
         
-      }
-      console.log(Roles.userIsInRole( Meteor.userId(), 'roleOne' )) // true) 
+      } 
     }
   handleSubmit(event) {
     event.preventDefault();
@@ -43,7 +42,12 @@ class User extends Component {
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = true;
     else
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
-
+      
+    Meteor.call('setRole', Meteor.userId(), type);
+    // console.log(Roles.userIsInRole( Meteor.userId(), 'Admin' ))
+    // console.log(Roles.userIsInRole( Meteor.userId(), 'Operator' ))
+    // console.log(Roles.userIsInRole( Meteor.userId(), 'Agency' ))
+    
     Meteor.call('userData.update', Meteor.userId(), fullName, email, type, agencyName);     
     alert("User data has been updated!");
     // Clear form
