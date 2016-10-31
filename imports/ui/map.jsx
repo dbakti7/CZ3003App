@@ -187,6 +187,7 @@ class GoogleMap extends React.Component {
   };
   textFunction() {
     document.getElementById('map-container').style.visibility = "hidden";
+    document.getElementById('root').style.height = "100%";
   };
   render() {
     return (<div className="map-container">
