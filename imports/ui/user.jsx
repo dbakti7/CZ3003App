@@ -5,6 +5,30 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 
 class User extends Component {
+  constructor() {
+      super();
+      
+      
+      const userSubscription = Meteor.subscribe('userData',{onReady: function() {
+        this.setState({
+          ready : userSubscription.ready() && userAuxSubscription.ready()
+        });
+      }.bind(this)});
+      const subscription = Meteor.subscribe('incidentType');
+
+      const userAuxSubscription = Meteor.subscribe('userAux', {onReady: function() {
+        this.setState({
+          ready : userSubscription.ready() && userAuxSubscription.ready()
+        })
+      }.bind(this)})
+
+      
+      this.state = {
+        ready : userSubscription.ready() && userAuxSubscription.ready()
+        
+      }
+      console.log(Roles.userIsInRole( Meteor.userId(), 'roleOne' )) // true) 
+    }
   handleSubmit(event) {
     event.preventDefault();
  
@@ -75,12 +99,12 @@ class User extends Component {
     var loggedIn = (currentUser && userDataAvailable);
     return (<div>User ID: {this.props.params.user_id} <br/> Edit (True/False): 
     {this.props.params.edit}
-    {loggedIn ? 
+    {loggedIn && this.state.ready ? 
               <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
                 <table width="100%">
                   <tr>
                     <td width="30%">UserName:</td>
-                    <td><input type="text" ref="textUserName" value={Meteor.user().profile.name}/><br/></td>
+                    <td><input type="text" ref="textUserName" value={Meteor.username}/><br/></td>
                   </tr>
                   <tr>
                     <td>FullName:</td>

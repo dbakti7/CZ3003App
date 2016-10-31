@@ -3,8 +3,13 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
-<body> 
+<body onload="checkUser()"> 
     <script>
+        function checkUser() {
+            console.log("INSIDE CHECKUSER")
+            console.log(Meteor.userId())
+            console.log(Meteor.call('userAux.find', Meteor.userId()))
+        }
         if(Meteor.isClient) {
             window.fbAsyncInit = function() {
                 FB.init({
@@ -147,10 +152,18 @@
                     <a href="/map">MAP</a>
                 </li>
                 <li>
-                    <a href="/category/view">CATEGORIES</a>
+                    <a href="#">CATEGORIES</a>
+                    <ul>
+                        <li><a href="/category/view">VIEW</a></li>
+                        <li><a href="/category/0/0">NEW</a></li>
+                    </ul>
                 </li>
                 <li>
-                    <a href="/reports/view">REPORTS</a>
+                    <a href="#">REPORTS</a>
+                    <ul>
+                        <li><a href="/reports/view">VIEW</a></li>
+                        <li><a href="/report/0/0">NEW</a></li>
+                    </ul>
                 </li>
             </ul>
         </div>
