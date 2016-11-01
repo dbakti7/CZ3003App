@@ -14,7 +14,7 @@
                 console.log("YES")
             }
             else {
-                document.getElementById("sidebar-wrapper").style.visibility = "hidden"
+                //document.getElementById("sidebar-wrapper").style.visibility = "hidden"
             }
         }
         if(Meteor.isClient) {
@@ -160,6 +160,7 @@
                 <li>
                     <a href="/map">MAP</a>
                 </li>
+                {{#if isInRole 'Admin, Operator'}}
                 <li>
                     <a href="#">CATEGORIES</a>
                     <ul>
@@ -167,11 +168,14 @@
                         <li><a href="/category/0/0">NEW</a></li>
                     </ul>
                 </li>
+                {{/if}}
                 <li>
                     <a href="#">REPORTS</a>
                     <ul>
                         <li><a href="/reports/view">VIEW</a></li>
+                        {{#if isInRole 'Admin, Operator'}}
                         <li><a href="/report/0/0">NEW</a></li>
+                        {{/if}}
                     </ul>
                 </li>
             </ul>
