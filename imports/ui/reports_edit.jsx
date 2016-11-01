@@ -49,7 +49,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
 
   handleSubmit(event) {
     event.preventDefault();
- 
+    alert("Hi!");
     // Find the text field via the React ref
     const title = ReactDOM.findDOMNode(this.refs.textTitle).value.trim();
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
@@ -82,6 +82,12 @@ class Reports_Edit extends TrackerReact(React.Component) {
   }
 
   renderReportItem() {
+    if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator'])) {
+        document.getElementById("reportCaseFieldSet").disabled = false;
+    }
+    else {
+        document.getElementById("reportCaseFieldSet").disabled = true;
+    }
     if(this.props.report_item.length > 0) {
       var report = this.props.report_item[0];      
       var textRB = ReactDOM.findDOMNode(this.refs.textReportedBy);
@@ -100,13 +106,18 @@ class Reports_Edit extends TrackerReact(React.Component) {
       ReactDOM.findDOMNode(this.refs.textAreaDescription).value = report.description;
       ReactDOM.findDOMNode(this.refs.incidentType).value = report.incidentType_id;
       ReactDOM.findDOMNode(this.refs.status).value = report.status;
+      if(Roles.userIsInRole( Meteor.userId(), ['Admin', 'Agency'] ))
+          ReactDOM.findDOMNode(this.refs.status).disabled = false;
+      else
+          ReactDOM.findDOMNode(this.refs.status).disabled = true;
     }
     else {
         var textRB = ReactDOM.findDOMNode(this.refs.textReportedBy);
         var RBU = null;
+       
         Meteor.call('userAux.find', Meteor.userId(), function(error, result) {
-          RBU = result[0];
-          textRB.value = RBU.username;
+        RBU = result[0];
+        textRB.value = RBU.username;
         });
     }
   }
@@ -134,7 +145,8 @@ class Reports_Edit extends TrackerReact(React.Component) {
     
     return (<div>
       <h2>Report Page</h2> 
-      <form name="reportCase" onSubmit={this.handleSubmit.bind(this)} >
+      <form name="reportCase" onSubmit={this.handleSubmit.bind(this)}>
+        <fieldset id="reportCaseFieldSet">
             <table width="100%" border="0">
             <tr>
                 <td width="15%">Title:</td> 
@@ -176,10 +188,15 @@ class Reports_Edit extends TrackerReact(React.Component) {
                     </select><br/>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2"><input width="50%"type="submit" value="Report"/></td>
-            </tr>
+            {(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']))
+                ? (
+                <tr>
+                    <td colspan="2"><input width="50%"type="submit" value="Report" id="submitButton"/></td>
+                </tr>)
+                : null
+            }
             </table>
+        </fieldset>
       </form>
           {this.state.ready ? this.renderReportItem() : null}
           <br/>
