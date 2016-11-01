@@ -76,6 +76,8 @@ class User extends Component {
         ReactDOM.findDOMNode(this.refs.textEmail).value = users_data[0].email;
       if (users_data[0].fullName != undefined)
         ReactDOM.findDOMNode(this.refs.textFullName).value = users_data[0].fullName;
+      if (users_data[0].agencyName != undefined)
+        ReactDOM.findDOMNode(this.refs.AgencyName).value = users_data[0].agencyName;
       if (users_data[0].type != "Select Type")
         ReactDOM.findDOMNode(this.refs.textType).value = users_data[0].type;
     }
