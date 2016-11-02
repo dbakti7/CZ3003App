@@ -116,6 +116,7 @@ a:hover {
 
 #wrapper {
     padding-left: 0;
+    padding-top: 75px;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -247,6 +248,7 @@ a {
 .header {
     background-color: #414141;
     color: white;
+    position: fixed;
 }
 
 .header tr, .header th {
