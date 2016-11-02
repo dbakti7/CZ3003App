@@ -12,6 +12,9 @@ the following commands on command prompt.
 `meteor add twbs:bootstrap`
 `meteor add ultimatejs:tracker-react`
 'meteor add themeteorchef:bert'
+`meteor npm install --save fbgraph`
+`meteor npm install --save twit`
 
 ## to access mongo db
 `meteor mongo`
+
