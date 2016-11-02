@@ -4,7 +4,7 @@ import {Link} from 'react-router'
 
 export default class UserInstance extends Component {
   deleteUser() {
-    Meteor.users.remove(this.props.user._id);
+    Meteor.call('userData.remove', this.props.user._id);
   }
   render() {
     return (

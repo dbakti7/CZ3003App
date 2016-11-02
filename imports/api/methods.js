@@ -56,7 +56,8 @@ Meteor.methods({
 
    //atabase methods for user object
    'userData.remove'(userId) {
-       UserData_db.remove(userId);
+     Meteor.users.remove(userId);
+     UserData_db.remove({originalUserId:userId});
    },
 
    'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {

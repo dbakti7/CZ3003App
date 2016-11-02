@@ -15,6 +15,7 @@ import Report_Edit from '../imports/ui/reports_edit.jsx'; // crisis report page,
 import Report_View from '../imports/ui/reports_view.jsx'; // crisis report page, for create, edit and view
 import ForgotPassword from '../imports/ui/ForgotPassword.jsx'; // crisis report page, for create, edit and view
 import ResetPassword from '../imports/ui/ResetPassword.jsx'; // crisis report page, for create, edit and view
+import UsersView from '../imports/ui/users_view.jsx';
 import '../imports/startup/accounts-config.js'; // for account configuration
 
 Meteor.startup(() => {
@@ -23,6 +24,7 @@ Meteor.startup(() => {
     <Route path="/" component={Home}/> 
     <Route path="/user/:user_id/:edit" component={User}/>
     <Route path="/user/new" component={User_New}/>
+    <Route path="/users/view" component={UsersView}/>
     <Route path="/map" component={Map}/>
     <Route path="/category/:incidentType_id/:edit" component={Category_Edit}/>
     <Route path="/category/view" component={Category_View}/>

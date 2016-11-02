@@ -4,25 +4,36 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import {IndexLink, Link } from 'react-router'
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import UserInstance from './user_instance.jsx';
 
 class Users_View extends TrackerReact(React.Component) {
   constructor() {
       super();
+      const userSubscription = Meteor.subscribe('userAux',{onReady: function() {
+        this.setState({
+          ready : userSubscription.ready()
+        });
+      }.bind(this)});
+      this.state = {
+        ready: userSubscription.ready(),
+      }
     }
 
 
-  renderReports() {
-    return this.props.user_list.map((user) => (
-      <UserInstance key={user._id} report={reports} />
+  renderUsers() {
+      const userList = Meteor.users.find({}).fetch()
+      console.log(userList)
+    return userList.map((user) => (
+      <UserInstance key={user._id} user={user} />
     ));
   }
 
-//   {this.state.ready ? this.renderReports() : null}
+
   render() {
     
     return (<div>
           <ul>
-          {this.renderReports()}
+          {this.state.ready ? this.renderUsers() : null}
           </ul> 
           </div>)
           
@@ -34,10 +45,7 @@ Users_View.propTypes = {
 };
 
 export default createContainer(({params}) => {
-
-    const user_list = Meteor.users.find({}).fetch();
   
   return {
-    user_list,
   };
 }, Users_View);
