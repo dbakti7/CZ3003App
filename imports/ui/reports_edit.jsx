@@ -49,7 +49,13 @@ class Reports_Edit extends TrackerReact(React.Component) {
 
   handleSubmit(event) {
     event.preventDefault();
-    alert("Hi!");
+    //alert("Hi!");
+    Bert.alert({
+        type: 'success',
+        style: 'fixed-top',
+        title: 'Report Updated!',
+        icon: 'fa-check'
+        });
     // Find the text field via the React ref
     const title = ReactDOM.findDOMNode(this.refs.textTitle).value.trim();
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
