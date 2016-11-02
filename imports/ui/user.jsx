@@ -49,7 +49,8 @@ class User extends Component {
     // console.log(Roles.userIsInRole( Meteor.userId(), 'Agency' ))
     
     Meteor.call('userData.update', Meteor.userId(), fullName, email, type, agencyName);     
-    alert("User data has been updated!");
+    //alert("User data has been updated!");
+    Bert.alert( 'User data has been updated!', 'success', 'fixed-top', 'fa-check' );
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
     // ReactDOM.findDOMNode(this.refs.textLocation).value = '';
@@ -61,7 +62,14 @@ class User extends Component {
 
     Meteor.call("postTweet", this.refs.textTweet.value, function(err,result) {
     if(!err) {
-      alert("Tweet posted");
+        //alert("Tweet posted");
+        Bert.alert({
+          type: 'TwitterPosted',
+          style: 'growl-top-right',
+          title: 'Tweet Posted!',
+          //message: 'Final Fantasy VII',
+          icon: 'fa-twitter'
+        });
     }
     });
   }
@@ -71,7 +79,14 @@ class User extends Component {
 
     Meteor.call("postToFacebook", this.refs.textFB.value, function(err,result) {
     if(!err) {
-      alert("Posted to Facebook!");
+        //alert("Posted to Facebook!");
+        Bert.alert({
+          type: 'FacebookPosted',
+          style: 'growl-top-right',
+          title: 'Posted to Facebook!',
+          //message: 'Final Fantasy VII',
+          icon: 'fa-facebook'
+        });
     }
     });
   }

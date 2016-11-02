@@ -278,6 +278,13 @@ select {
     cursor: pointer;
 }
 
+.bert-alert.FacebookPosted {
+  background: #3b5998;
+  color: #fff;
+}
 
-
+.bert-alert.TwitterPosted {
+  background: #4099ff;
+  color: #fff;
+}
 stack{display:block;margin:0;padding:0;border:0;}
