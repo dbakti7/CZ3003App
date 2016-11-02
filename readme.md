@@ -18,3 +18,5 @@ the following commands on command prompt.
 ## to access mongo db
 `meteor mongo`
 
+"`meteor npm install --save fbgraph`"
+"`meteor npm install --save twit`"
