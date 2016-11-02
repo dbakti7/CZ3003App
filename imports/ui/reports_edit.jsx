@@ -102,7 +102,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
       lng = report.long;
       locationName = report.locationName;
       ReactDOM.findDOMNode(this.refs.textTitle).value = report.title;
-      ReactDOM.findDOMNode(this.refs.textLocation).value = report.location;
+      ReactDOM.findDOMNode(this.refs.textLocation).value = report.locationName;
       ReactDOM.findDOMNode(this.refs.textAreaDescription).value = report.description;
       ReactDOM.findDOMNode(this.refs.incidentType).value = report.incidentType_id;
       ReactDOM.findDOMNode(this.refs.status).value = report.status;

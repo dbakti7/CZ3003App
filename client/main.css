@@ -272,4 +272,12 @@ a {
 
 }
 
+select {
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+
+
 stack{display:block;margin:0;padding:0;border:0;}
