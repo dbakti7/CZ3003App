@@ -218,7 +218,7 @@ a:hover {
 
     #sidebar-wrapper {
         width: 250px;
-    }
+    }   
 
     #wrapper.toggled #sidebar-wrapper {
         width: 0;
@@ -249,6 +249,7 @@ a {
     background-color: #414141;
     color: white;
     position: fixed;
+    z-index:100;
 }
 
 .header tr, .header th {
