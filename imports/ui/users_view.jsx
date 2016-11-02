@@ -21,8 +21,7 @@ class Users_View extends TrackerReact(React.Component) {
 
 
   renderUsers() {
-      const userList = Meteor.users.find({}).fetch()
-      console.log(userList)
+      const userList = Meteor.users.find({}).fetch()  
     return userList.map((user) => (
       <UserInstance key={user._id} user={user} />
     ));

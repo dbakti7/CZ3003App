@@ -54,6 +54,14 @@ Meteor.methods({
      Accounts.setPassword(userId, password);
    },
 
+   'userAux.addUser'(userName, password) {
+     newUserId = Meteor.users.insert({
+         username: userName,
+ });
+ Accounts.setPassword(newUserId, password);
+ return newUserId;
+   },
+
    //atabase methods for user object
    'userData.remove'(userId) {
      Meteor.users.remove(userId);
