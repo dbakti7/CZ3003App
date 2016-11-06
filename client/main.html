@@ -147,6 +147,7 @@
     
     {{> Header}}  
     {{> Footer}}
+    
     <div id="wrapper" style="width:100%; height:100%;">
     
         <!-- Sidebar -->
@@ -157,7 +158,11 @@
                     <a href="/">HOME</a>
                 </li>
                 <li>
-                    <a href="/map">MAP</a>
+                    <a href="#">INFO</a>
+                    <ul>
+                        <li><a href="/map">GENERAL INCIDENTS</a></li>
+                        <li><a href="/dengue">DENGUE CLUSTERS</a></li>
+                    </ul>
                 </li>
                 {{#if isInRole 'Admin, Operator'}}
                 <li>

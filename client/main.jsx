@@ -17,6 +17,7 @@ import ForgotPassword from '../imports/ui/ForgotPassword.jsx'; // crisis report 
 import ResetPassword from '../imports/ui/ResetPassword.jsx'; // crisis report page, for create, edit and view
 import UsersView from '../imports/ui/users_view.jsx';
 import '../imports/startup/accounts-config.js'; // for account configuration
+import Dengue from '../imports/ui/dengue.jsx';
 
 Meteor.startup(() => {
   render((
@@ -32,6 +33,7 @@ Meteor.startup(() => {
     <Route path="/reports/view" component={Report_View}/>
     <Route path="/forgot_password" component={ForgotPassword}/>
     <Route path="/reset_password/:user_id" component={ResetPassword}/>
+    <Route path="/dengue" component={Dengue}/>
   </Router>
 ), document.getElementById('container'));
 
