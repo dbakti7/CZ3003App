@@ -5,10 +5,10 @@ import {IncidentType_db} from './incidentType.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
-
-
+ 
+ 
 var Twit = require('twit')
-
+ 
 var T = new Twit({
   consumer_key:       '3VpOg3V8wo1zYbHy85lPohsiE',
   consumer_secret:    'G2JNNJlvnReZKMD7FSHVpjdIk1pt2I2rqzBPKZ9j3GXnAmZMbI',
@@ -16,7 +16,22 @@ var T = new Twit({
   access_token_secret:'a7Pvl4t1gQNmlJBltT6t8XnTS6XLhKmueP0QXV2yw6k2Y',
   timeout_ms:         60*1000,
 })
-
+ 
+var graph = require('fbgraph')
+ 
+var wallPost = {
+  message: "Life isn't about finding yourself. Life is about creating yourself",
+  privacy: {value: "EVERYONE"},
+  // message: "We do not remember days, we remember moments",
+  // caption: 'This is my wall post example',
+  link: 'http://www.brainyquote.com/quotes/quotes/g/georgebern109542.html?src=t_life',
+};
+ 
+// access token page: EAACEdEose0cBAKZBGe1MZBBITNhaUkEZCHrDO26WkRmxrYMIK3iRkl5BeQ121JbO60MlJ6tm2qFcFc1joJjqDyPgSvlMisluJnxTyVTzE5WdJWDLZBWZCdQPc0gmCnlZCWw8snQFKKX97qvBLKiZBl5gHa1aZCxuJ0DWoEvxT9ZCzZCBbEv5TiIBQI
+// access token user: EAAFd7VBDCW8BALEhRl0ke94mPKKkivs2ZCQqT3LRH691aLIDIi3zblDOfUt5ZCY6QxSv8QePlr8L87wmqTtdcJdx5GqhYbzrxZBtr58R7J7rpYFTGgyZBWWsbnXSTtaVbjIwHOpZAqXuJZCDnJ7RyXlL1NURxVZAhsZD
+// App ID: 384748811913583
+// App Secret: fc7f9815b4bed0987a0a5ae2013b5ff3
+ 
 Meteor.methods({
     // database methods for report object
   'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status) {
@@ -37,37 +52,28 @@ Meteor.methods({
      Reports_db.remove(reportId);
    },
    'reports.update'(reportId, newTitle, newDescription, newIncidentType_id, newLocationName, newLat, newLong, newStatus) {
-     Reports_db.update(reportId, {$set: {title: newTitle, description: newDescription, 
+     Reports_db.update(reportId, {$set: {title: newTitle, description: newDescription,
        incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong, status:newStatus}});
    },
-
+ 
    // aux methods
    'userAux.find'(userId) {
      return Meteor.users.find(userId).fetch();
    },
-
+ 
    'userAux.findByEmail'(email) {
      return Meteor.users.find(UserData_db.find({email: email}).fetch()[0].originalUserId).fetch();
    },
-
+ 
    'userAux.setPassword'(userId, password) {
      Accounts.setPassword(userId, password);
    },
-
-   'userAux.addUser'(userName, password) {
-     newUserId = Meteor.users.insert({
-         username: userName,
- });
- Accounts.setPassword(newUserId, password);
- return newUserId;
-   },
-
+ 
    //atabase methods for user object
    'userData.remove'(userId) {
-     Meteor.users.remove(userId);
-     UserData_db.remove({originalUserId:userId});
+       UserData_db.remove(userId);
    },
-
+ 
    'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
         UserData_db.insert({
@@ -98,6 +104,7 @@ Meteor.methods({
    },
 
 
+
    // database methods for category object
    'incidentType.insert'(name, description) {
     check(name, String);
@@ -124,7 +131,19 @@ Meteor.methods({
           });
         return true;
     },
-    'setRole': function(userId, role) {
-      Roles.setUserRoles( userId, role);
+  'setRole': function(userId, role) {
+    Roles.setUserRoles( userId, role);
+  },
+  'postToFacebook': function(text) {
+    if(Meteor.user()) {
+      graph.setAccessToken("EAAFd7VBDCW8BALEhRl0ke94mPKKkivs2ZCQqT3LRH691aLIDIi3zblDOfUt5ZCY6QxSv8QePlr8L87wmqTtdcJdx5GqhYbzrxZBtr58R7J7rpYFTGgyZBWWsbnXSTtaVbjIwHOpZAqXuJZCDnJ7RyXlL1NURxVZAhsZD");
+      graph.post('/feed',wallPost,function(err,result) {
+        console.log(result);
+      });
     }
-});
+    else {
+      return false;
+    }
+  }
+
+    });
