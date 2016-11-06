@@ -84,6 +84,19 @@ Meteor.methods({
      }
    },
 
+   'userData.checkType'(userId) {
+     user = UserData_db.find({originalUserId:userId}).fetch()
+     if(user.length > 0) {
+       console.log(user[0].type);
+       if(!user[0].type)
+        return "NoType"
+       else
+        return user[0].type;
+     }
+     else
+      return "undkhkjh";
+   },
+
 
    // database methods for category object
    'incidentType.insert'(name, description) {
