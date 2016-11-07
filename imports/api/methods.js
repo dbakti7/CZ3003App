@@ -74,6 +74,7 @@ Meteor.methods({
  
    // aux methods
    'userAux.find'(userId) {
+     console.log(userId)
      return Meteor.users.find(userId).fetch();
    },
  
@@ -98,6 +99,11 @@ Meteor.methods({
        Meteor.users.remove(userId);
        UserData_db.remove({originalUserId: userId});
    },
+
+   'userData.getAgencies'() {
+     var filter = "Agency"
+     return UserData_db.find({type: filter}).fetch()
+   },
  
    'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
@@ -118,7 +124,6 @@ Meteor.methods({
    'userData.checkType'(userId) {
      user = UserData_db.find({originalUserId:userId}).fetch()
      if(user.length > 0) {
-       console.log(user[0].type);
        if(!user[0].type)
         return "NoType"
        else

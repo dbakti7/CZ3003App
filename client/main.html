@@ -3,106 +3,17 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
-<body onload="checkUser()"> 
+<body> 
     <script>
-        function checkUser() {
-            if(Roles.userIsInRole( Meteor.userId(), 'Admin' )) {
-                console.log("YES")
-            }
-            else {
-                //document.getElementById("sidebar-wrapper").style.visibility = "hidden"
-            }
-        }
-        if(Meteor.isClient) {
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId      : '1773012212937646',
-                    status     : true,
-                    xfbml      : true
-                });
-              };  
-            //Bert.alert( 'YOW!', 'danger', 'growl-top-right' );
-            FB.getLoginStatus(onFacebookLoginStatus);
-        }
-        
-        (function() {
-            var e = document.createElement('script');
-            e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-            e.async = true;
-            document.getElementById('fb-root').appendChild(e);
-        }());
-   
-        
-        //FB LOGIN
-        function facebookLogin()
-        {
-            var loginUrl="http://www.facebook.com/dialog/oauth/?"+
-                "scope=publish_actions&"+
-                "client_id="+'1773012212937646'+"&"+
-                "redirect_uri="+document.location.href+"&"+
-                "response_type=token";
-            window.location=loginUrl;
-        }
-
-
-        //FB.LOGIN CALLBACK
-        /*function onFacebookLoginStatus(response)
-        {
-            if (response.status=="connected" && response.authResponse)
-            {
-                Bert.alert( 'Yes, I do Mind!', 'danger', 'growl-top-right' );
-                document.getElementById("txtEcho").innerHTML="Logged in.";
-            }
-            else
-            {
-                document.getElementById("txtEcho").innerHTML="Not logged in.";
-            }
-        }*/
-
-
-        //POST TO WALL
-        function postToWallUsingFBApi()
-        {
-            var data=
-            {
-                caption: 'This is my wall post example',
-                message: 'Posted using FB.api',
-                link: 'http://www.google.com',
-             }
-            FB.api('/me/feed', 'post', data, onPostToWallCompleted);
-        }
-
-    //the return function after posting to wall
-        function onPostToWallCompleted(response)
-        {
-            if (response)
-            {
-                if (response.error)
-                {
-                    document.getElementById("txtEcho").innerHTML=response.error.message;
-                }
-                else
-                {
-                    if (response.id)
-                        document.getElementById("txtEcho").innerHTML="Posted as post_id "+response.id;
-                    else if (response.post_id)
-                        document.getElementById("txtEcho").innerHTML="Posted as post_id "+response.post_id;
-                    else
-                        document.getElementById("txtEcho").innerHTML="Unknown Error";
-                }
-            }
-        }
-
         //Check whether user is logged in -> determine the button display on the top right corner
         window.onload = function() {
             var profileDisplay;
             var profileDropdown = document.getElementById("profileDropdown");
             var dropdownListLogout = document.createElement("a");
             var logoutButton = document.createTextNode("Sign Out");
-            
             if (Meteor.user()) {
                 profileDisplay = "Hi, " + Meteor.user().username + " ▼";
-                //dropdownListLogout.className = "dropdown-menu";
+                dropdownListLogout.setAttribute("id", "signOutButton");
                 dropdownListLogout.appendChild(logoutButton);
                 dropdownListLogout.onclick = function() { logout(); };
                 profileDropdown.appendChild(dropdownListLogout);
@@ -111,16 +22,6 @@
             }
             //Show username greeting or default button display
             document.getElementById("profileButton").innerHTML = profileDisplay;
-            
-            //Show the dropdown list
-            /*FB.getLoginStatus(function(response) {
-            if (response.status === 'connected') {
-                Bert.alert( 'Yes, I do Mind!', 'danger', 'growl-top-right' );
-                var uid = response.authResponse.userID;
-                var accessToken = response.authResponse.accessToken;
-              }
-             });*/
-                                     
         }
         
         function logout() {
@@ -193,10 +94,6 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper" style="width:100%; height:100%;">
-            <!--<input id="loginButton" type="button" value="Login To Facebook" onclick="facebookLogin();"/>
-            <input id="postToWallWithFBApiPrompt" type="button" value="Post To Wall" onclick="postToWallUsingFBApi();"/>
-            <div id="txtEcho"><b></b></div>
-            <br>-->
             <div id="root" style="width:100%; height:0%;"></div>
             <div id="container"></div>
         </div>
@@ -218,12 +115,7 @@
                         <a  id="profileButton" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi There! <span class="caret"></span></a>
               <ul id="profileDropdown" class="dropdown-menu">
                 <li><a onclick="userPage()">View Profile</a></li>
-                <!--<li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Separated link</a></li>-->
-                <li role="separator" class="divider"></li>
-                <!--<li><a href="#">Sign Out</a></li>-->
               </ul>
             </li>
                 </ul>

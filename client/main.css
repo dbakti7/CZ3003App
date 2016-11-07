@@ -292,7 +292,7 @@ select {
   background: #87FC70;
   color: #fff;
 }
-stack{display:block;margin:0;padding:0;border:0;}
+
 
 #firstHeading {
     color: #056571;
@@ -303,3 +303,12 @@ stack{display:block;margin:0;padding:0;border:0;}
     color: #056571;
     font-weight: bold;
 }
+
+#signOutButton {
+    padding-left: 20px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 80px;
+}
+
+stack{display:block;margin:0;padding:0;border:0;}

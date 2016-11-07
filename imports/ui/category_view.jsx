@@ -53,7 +53,8 @@ class Category extends TrackerReact(React.Component) {
     return  <div>
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID)
-                alert("Subscribed!")
+                //alert("Subscribed!")
+                Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
                 console.log("WHAAAT", row.subscribers);
               }} >SUBSCRIBE</button>
               <Link to = {`/category/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
