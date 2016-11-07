@@ -67,6 +67,10 @@ class Reports_Edit extends TrackerReact(React.Component) {
     }
     else {      
       Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status);
+      Meteor.call('getNearestShelter', lat, lng, function(err,result) {
+        // get the nearest civil defense
+          console.log(result.name)
+      })
       // incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
       // for(i=0;i<incidentType.subscribers.length;++i) {
       //   // skip null data

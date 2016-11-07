@@ -354,37 +354,16 @@ class GoogleMap extends React.Component {
       markerlist.push(temp)
     }
     
+    incidentList = {'Gas Leak': 'gasleak.png', 'Traffic Accident': 'caracc.png', 'Dengue': 'dengue.png', 
+  'MRT Breakdown': 'mrtbd.png', 'Fire': 'fire.png'}
     //marker icon details
-    var icons = {
-      Fire: {//fire
-        icon: {
-        url: 'http://www.ifssgroup.com/wp-content/uploads/2016/01/fire-icon-287x300.png',
-        scaledSize: new google.maps.Size(20,20),
+    var icon = {
+        url: 'images/logo.png',
+        scaledSize: new google.maps.Size(30,30),
         origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0)},
-      },
-      Flood: {//flood
-        icon: {
-        url: 'http://www.covervillemedia.com/statewidesolutions/wp-content/uploads/2015/06/flood-icon.png',
-        scaledSize: new google.maps.Size(20,20),
-        origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0)},
-      },
-      Earthquake: {//earthquake
-        icon: {
-        url: 'http://www.tinepal.org/tmp-content/uploads/2015/04/main_offering_service_icon_remodel_earthquake.png',
-        scaledSize: new google.maps.Size(20,20),
-        origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0)},
-      },
-      Tornado: {//earthquake
-        icon: {
-        url: 'https://emergency.unl.edu/images/icons-master-101116_03.png',
-        scaledSize: new google.maps.Size(20,20),
-        origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0)},
+        anchor: new google.maps.Point(0,0),
       }
-    }
+      
     
     
     var i;
@@ -409,10 +388,11 @@ class GoogleMap extends React.Component {
             '</div>'+
             '</div>';
       //detail of each marker
+      icon['url'] = 'images/' + incidentList[markerlist[i][2]]
       var  marker = new google.maps.Marker({
           position: new google.maps.LatLng(markerlist[i][0],markerlist[i][1]),
           map: mapi,
-          icon: icons[markerlist[i][2]].icon,
+          icon: icon,
           title: markerlist[i][2],
           detail: contentString,
         });
