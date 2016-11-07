@@ -211,7 +211,7 @@ class GoogleMap extends React.Component {
     var arrayofMarkers = []
     var icon = {
         url: 'images/haze.png',
-        scaledSize: new google.maps.Size(20,20),
+        scaledSize: new google.maps.Size(30,30),
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(0,0)}
     for(i = 0; i<markerlist.length; i++){
@@ -298,7 +298,7 @@ class GoogleMap extends React.Component {
             '</div>';
       //detail of each marker
       var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]),
+          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]-0.0075),
           map: mapi,
           title: markerlist[i][0],
           icon: icon,
@@ -368,7 +368,7 @@ class GoogleMap extends React.Component {
     var arrayofMarkers = []
     var icon = {
         url: 'images/logo.png',
-        scaledSize: new google.maps.Size(20,20),
+        scaledSize: new google.maps.Size(30,30),
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(0,0)}
     for(i = 0; i<markerlist.length; i++){
@@ -382,12 +382,14 @@ class GoogleMap extends React.Component {
       //detail of each marker
       icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
       var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]),
+          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]+0.00075),
+          
           map: mapi,
           title: markerlist[i][0],
           icon: icon,
           detail: contentString,
         });
+
       arrayofMarkers.push(marker);
       //link the pop ups with the marker 
       arrayofMarkers[i].addListener('click', function() {
