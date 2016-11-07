@@ -40,7 +40,8 @@ class ResetPassword extends TrackerReact(React.Component) {
     if(this.state.ready) {
         Meteor.call('userAux.setPassword', this.props.userID, password)
       }
-    alert("Your Password has been reset!");
+    //alert("Your Password has been reset!");
+      Bert.alert( 'Your Password has been reset!', 'success', 'fixed-top', 'fa-check' );
   }
 
   

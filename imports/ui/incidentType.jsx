@@ -10,7 +10,8 @@ export default class IncidentType extends Component {
   }
   subscribeIncidentType() {
     Meteor.call('incidentType.addSubscriber', this.props.incidentType._id, this.props.userID)
-    alert("Subscribed!")
+    //alert("Subscribed!")
+    Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
   }
   render() {
     return (

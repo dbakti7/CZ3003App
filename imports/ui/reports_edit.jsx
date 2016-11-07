@@ -81,7 +81,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
       //   if(!subUser)
       //     continue;
       //   Meteor.call('sendEmail', subUser.email, title, description);
-        
+        //Meteor.call("sendSMS", this.refs.textSMS.value,this.refs.phone.value, function(err,result)
       // }
       // Meteor.call('postTweet', title + ":" + description)
       // Meteor.call('postToFacebook', title + ":" + description)

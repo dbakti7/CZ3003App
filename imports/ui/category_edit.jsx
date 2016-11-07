@@ -39,7 +39,8 @@ class Category extends TrackerReact(React.Component) {
       Meteor.call('incidentType.update', this.props.category_id, name, description);
     }
          
-    alert("Incident type has been updated!");
+    //alert("Incident type has been updated!");
+      Bert.alert( 'Incident type has been updated!', 'success', 'fixed-top', 'fa-check' );
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
     // ReactDOM.findDOMNode(this.refs.textLocation).value = '';

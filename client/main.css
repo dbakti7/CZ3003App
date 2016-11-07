@@ -287,4 +287,20 @@ select {
   background: #4099ff;
   color: #fff;
 }
+
+.bert-alert.SMSSent {
+  background: #87FC70;
+  color: #fff;
+}
+
+#signOutButton {
+    padding-left: 20px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 80px;
+}
+
+#signOutButton:hover {
+    
+}
 stack{display:block;margin:0;padding:0;border:0;}
