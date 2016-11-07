@@ -219,22 +219,81 @@ class GoogleMap extends React.Component {
       var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
-            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][0] +'</h1>'+
+            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][0] +'</h3>'+
             '<div id="bodyContent">'+
-            '<p> 24-hr PSI :'+ markerlist[i][1] +'</p>'+
-            '<p> 3-hr PSI:'+ markerlist[i][2]+ '</p>'+
-            '<p> 1-hr NO2 concentration:'+ markerlist[i][5]+ '</p>'+
-            '<p> 24-hrs PM10 concentration:'+ markerlist[i][6]+ '</p>'+
-            '<p> 24-hrs PM2.5 concentration:'+ markerlist[i][7]+ '</p>'+
-            '<p> 24-hrs SO2 concentration:'+ markerlist[i][8]+ '</p>'+
-            '<p> 8-hrs CO concentration:'+ markerlist[i][9]+ '</p>'+
-            '<p> 8-hrs O3 concentration:'+ markerlist[i][10]+ '</p>'+
-            '<p> CO sub-index:'+ markerlist[i][11]+ '</p>'+
-            '<p> NO2 sub-index:'+ markerlist[i][12]+ '</p>'+
-            '<p> O3 sub-index:'+ markerlist[i][13]+ '</p>'+
-            '<p> PM10 sub-index:'+ markerlist[i][14]+ '</p>'+
-            '<p> PM2.5 sub-index:'+ markerlist[i][15]+ '</p>'+
-            '<p> SO2 sub-index:'+ markerlist[i][16]+ '</p>'+
+            '<table>'+
+              '<tr>' +
+                '<td>24-hr PSI</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][1] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>3-hr PSI</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][2] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>1-hr NO2 concentration</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][5] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>24-hrs PM10 concentration</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][6] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>24-hrs PM2.5 concentration</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][7] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>24-hrs SO2 concentration</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][8] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>8-hrs CO concentration</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][9] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>8-hrs O3 concentration</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][10] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>CO sub-index</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][11] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>NO2 sub-index</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][12] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>O3 sub-index</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][13] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>PM10 sub-index</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][14] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>PM2.5 sub-index</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][15] + '</td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>SO2 sub-index</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][16] + '</td>' +
+              '</tr>' +
+            '</table>'+
+
             '</div>'+
             '</div>';
       //detail of each marker
@@ -317,8 +376,8 @@ class GoogleMap extends React.Component {
       var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
-            '<div id="bodyContent">'+
-            '<p>' + weatherList[markerlist[i][0]][1] + '</p>'
+            '<div id="firstHeading">'+
+            '<h3>' + weatherList[markerlist[i][0]][1] + '</h3>'
             '</div>';
       //detail of each marker
       icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
@@ -382,9 +441,19 @@ class GoogleMap extends React.Component {
             '</div>'+
             '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][4] +'</h1>'+
             '<div id="bodyContent">'+
-            '<p> Accident :'+ markerlist[i][2] +'</p>'+
-            '<p> Handle By:'+ markerlist[i][3]+ '</p>'+
-            '<a href="' +markerlist[i][5]+ '" target ="_blank"> Detail here </a>'+
+            '<table>'+
+              '<tr>'+
+                '<td>Accident</td>'+ 
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][2] + '</td>'+
+              '</tr>' +
+              '<tr>' +
+                '<td>Handle By</td>' +
+                '<td>:</td>' +
+                '<td class="mapContent">'+ markerlist[i][3]+ '</td>'+
+              '</tr>'+
+            '</table><br/>'+
+            '<a href="' +markerlist[i][5]+ '" target ="_blank"> <i>Detail here</i> </a>'+
             '</div>'+
             '</div>';
       //detail of each marker
