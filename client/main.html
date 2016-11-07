@@ -6,10 +6,6 @@
 <body onload="checkUser()"> 
     <script>
         function checkUser() {
-            console.log("INSIDE CHECKUSER")
-            console.log(Meteor.userId())
-            console.log(Meteor.call('userAux.find', Meteor.userId()))
-            console.log(Roles.getUsersInRole('Admin').fetch())
             if(Roles.userIsInRole( Meteor.userId(), 'Admin' )) {
                 console.log("YES")
             }
