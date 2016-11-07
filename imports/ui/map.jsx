@@ -349,7 +349,7 @@ class GoogleMap extends React.Component {
       incidentTypeName = IncidentType_db.find({_id: this.props.reports[i].incidentType_id}).fetch()[0].name;
       temp.push(incidentTypeName)
       temp.push(this.props.reports[i].title)
-      temp.push(this.props.reports[i].location)
+      temp.push(this.props.reports[i].locationName)
       temp.push('https://www.google.com.sg/')
       markerlist.push(temp)
     }
