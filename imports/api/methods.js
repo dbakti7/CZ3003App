@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import {Reports_db} from './report.js';
 import {UserData_db} from './userData.js';
 import {IncidentType_db} from './incidentType.js';
+import {CDShelter_db} from './cdShelter.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
@@ -18,7 +19,7 @@ var T = new Twit({
 })
  
 var graph = require('fbgraph')
- 
+
 
  
 // access token page: EAACEdEose0cBAKZBGe1MZBBITNhaUkEZCHrDO26WkRmxrYMIK3iRkl5BeQ121JbO60MlJ6tm2qFcFc1joJjqDyPgSvlMisluJnxTyVTzE5WdJWDLZBWZCdQPc0gmCnlZCWw8snQFKKX97qvBLKiZBl5gHa1aZCxuJ0DWoEvxT9ZCzZCBbEv5TiIBQI
@@ -27,6 +28,21 @@ var graph = require('fbgraph')
 // App Secret: fc7f9815b4bed0987a0a5ae2013b5ff3
  
 Meteor.methods({
+
+  //database methods for CD shelter
+  'cdShelter.insert'(name, address, zip) {
+    CDShelter_db.insert({
+      name,
+      address,
+      zip,
+      createdAt: new Date(),
+    });
+  },
+
+  'cdShelter.remove'() {
+    CDShelter_db.remove({});
+  },
+
     // database methods for report object
   'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status) {
     check(title, String);
