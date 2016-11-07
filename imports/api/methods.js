@@ -5,6 +5,7 @@ import {IncidentType_db} from './incidentType.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
+import React from 'react'
  
  
 var Twit = require('twit')
@@ -145,6 +146,7 @@ Meteor.methods({
     else {
       return false;
     }
-  }
+  },
+
 
     });

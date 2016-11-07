@@ -8,8 +8,6 @@ import {UserData_db} from '../api/userData.js';
 class Home extends Component {
 constructor() {
       super();
-      
-      
       const userSubscription = Meteor.subscribe('userData',{onReady: function() {
         this.setState({
           ready : userSubscription.ready() && userAuxSubscription.ready()
