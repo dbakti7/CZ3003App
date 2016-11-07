@@ -13,6 +13,7 @@ the following commands on command prompt.
 `meteor add twbs:bootstrap`
 `meteor add ultimatejs:tracker-react`
 'meteor add themeteorchef:bert'
+'meteor add jquery'
 
 
 ## to access mongo db

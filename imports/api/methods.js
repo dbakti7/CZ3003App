@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import {Reports_db} from './report.js';
 import {UserData_db} from './userData.js';
 import {IncidentType_db} from './incidentType.js';
+import {CDShelter_db} from './cdShelter.js';
 import {Mongo} from 'meteor/mongo';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
@@ -19,7 +20,7 @@ var T = new Twit({
 })
  
 var graph = require('fbgraph')
- 
+
 var TMClient = require('textmagic-rest-client');
   
 var c = new TMClient('kelvinchandra', '6iFrTE7jAyEitElLrVdQAPkmmUEHdB');
@@ -31,6 +32,21 @@ var c = new TMClient('kelvinchandra', '6iFrTE7jAyEitElLrVdQAPkmmUEHdB');
 // App Secret: fc7f9815b4bed0987a0a5ae2013b5ff3
  
 Meteor.methods({
+
+  //database methods for CD shelter
+  'cdShelter.insert'(name, address, zip) {
+    CDShelter_db.insert({
+      name,
+      address,
+      zip,
+      createdAt: new Date(),
+    });
+  },
+
+  'cdShelter.remove'() {
+    CDShelter_db.remove({});
+  },
+
     // database methods for report object
   'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status) {
     check(title, String);
@@ -66,10 +82,19 @@ Meteor.methods({
    'userAux.setPassword'(userId, password) {
      Accounts.setPassword(userId, password);
    },
+
+   'userAux.addUser'(userName, password) {
+      newUserId = Meteor.users.insert({
+          username: userName,
+    });
+      Accounts.setPassword(newUserId, password);
+      return newUserId;
+    },
  
    //atabase methods for user object
    'userData.remove'(userId) {
-       UserData_db.remove(userId);
+       Meteor.users.remove(userId);
+       UserData_db.remove({originalUserId: userId});
    },
  
    'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {

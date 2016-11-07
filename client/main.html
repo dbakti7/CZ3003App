@@ -6,10 +6,6 @@
 <body onload="checkUser()"> 
     <script>
         function checkUser() {
-            console.log("INSIDE CHECKUSER")
-            console.log(Meteor.userId())
-            console.log(Meteor.call('userAux.find', Meteor.userId()))
-            console.log(Roles.getUsersInRole('Admin').fetch())
             if(Roles.userIsInRole( Meteor.userId(), 'Admin' )) {
                 console.log("YES")
             }
@@ -162,7 +158,6 @@
                     <ul>
                         <li><a href="/map">GENERAL INCIDENTS</a></li>
                         <li><a href="/dengue">DENGUE CLUSTERS</a></li>
-                        <li><a href="/PSIMonitor">24-hr PSI</a></li>
                     </ul>
                 </li>
                 {{#if isInRole 'Admin, Operator'}}
