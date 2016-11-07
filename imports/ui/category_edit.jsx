@@ -65,11 +65,11 @@ class Category extends TrackerReact(React.Component) {
                 <table width="100%">
                     <tr>
                         <td width="15%">Name:</td> 
-                        <td><input type="text" ref="textName" placeholder="Name"/></td>
+                        <td><input type="text" ref="textName" placeholder="Name" required/></td>
                     </tr>
                     <tr>
                         <td>Description:</td>
-                        <td><textarea ref="textAreaDescription" placeholder="Description"/></td>
+                        <td><textarea ref="textAreaDescription" placeholder="Description" required/></td>
                     </tr>
                     <tr>
                         <td colspan="2"><input width="50%" type="submit" value="Update"/></td>

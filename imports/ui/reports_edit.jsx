@@ -175,7 +175,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
             <table width="100%" border="0">
             <tr>
                 <td width="15%">Title:</td> 
-                <td><input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/></td>
+                <td><input type="text" ref="textTitle" placeholder="Type to add new tasks" required/><br/></td>
             </tr>
             <tr>
                 <td>Reported By:</td>
@@ -183,11 +183,11 @@ class Reports_Edit extends TrackerReact(React.Component) {
             </tr>
             <tr>
                 <td>Location:</td> 
-                <td><input type="text" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} /><br/></td>
+                <td><input type="text" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} required/><br/></td>
             </tr>
             <tr>
                 <td>Description:</td> 
-                <td><textarea ref="textAreaDescription" placeholder="Description"/><br/></td>
+                <td><textarea ref="textAreaDescription" placeholder="Description" required/><br/></td>
             </tr>
             <tr>
                 <td>Incident Type</td>

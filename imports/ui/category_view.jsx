@@ -80,10 +80,10 @@ class Category extends TrackerReact(React.Component) {
     console.log("ASS", categoryData);
     return (<div>
               <BootstrapTable data={categoryData} striped={true} hover={true} pagination={true} search={true}>
-                <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField="name" dataSort={true}>Category Name</TableHeaderColumn>
-                <TableHeaderColumn dataField="description" dataSort={true}>Description</TableHeaderColumn>
-                <TableHeaderColumn dataField="_id" dataFormat={this.editFormatter} formatExtraData={this.state.userID}>Action</TableHeaderColumn> 
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="name" dataSort={true}>Category Name</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="description" dataSort={true}>Description</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" dataFormat={this.editFormatter} formatExtraData={this.state.userID}>Action</TableHeaderColumn> 
               </BootstrapTable>         
             </div>);
   }
