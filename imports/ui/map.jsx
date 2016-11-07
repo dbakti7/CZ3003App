@@ -78,7 +78,7 @@ class GoogleMap extends React.Component {
   constructor() {
       super();
       var mapi;
-      var PSIMarkers;
+      var PSIMarkers = null;
       var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 
       var xmlHttp = new XMLHttpRequest();
@@ -102,6 +102,7 @@ class GoogleMap extends React.Component {
       this.state = {
         ready : false,
         PSIReadings: null,
+        PSIToggle: true,
       }
        
     }
@@ -109,14 +110,62 @@ class GoogleMap extends React.Component {
   componentDidMount() {
     mapi = new google.maps.Map(ReactDOM.findDOMNode(this),
         this.props.options);
-    
+    PSIMarkers = null;
+    var self = this;
+    var PSIControlDiv = document.createElement('div');
+    var PSIControl = new this.PSIControl(PSIControlDiv, mapi, self);
+    PSIControlDiv.index = 1;
+    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(PSIControlDiv);
     this.setState({
           ready : true
         })
   }
     ;
     
+    PSIControl(controlDiv, map, self) {
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to show PSI Markers';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '16px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '5px';
+        controlText.style.paddingRight = '5px';
+        controlText.innerHTML = 'PSI';
+        controlUI.appendChild(controlText);
+
+        // Setup the click event listeners: simply set the map to Chicago.
+        console.log(self)
+        controlUI.addEventListener('click', function() {
+          self.setState({
+              PSIToggle: !self.state.PSIToggle,
+            })
+        });
+
+      }
+
   renderPSIMarkers() {
+    if(PSIMarkers != null) {
+      for(i=0;i<PSIMarkers.length;++i) {
+        if(this.state.PSIToggle)
+          PSIMarkers[i].setMap(mapi);
+        else
+          PSIMarkers[i].setMap(null);
+      }
+      return;
+    }
     var markerlist = []
     console.log("INSIDE PSI MARKER")
     console.log(this.state.PSIReadings)
@@ -134,7 +183,7 @@ class GoogleMap extends React.Component {
       markerlist.push(temp);
       console.log(temp)
     }
-
+    PSIMarkers = markerlist;
     var arrayofMarkers = []
     for(i = 0; i<markerlist.length; i++){
       //content for each pop ups
@@ -174,6 +223,7 @@ class GoogleMap extends React.Component {
           infowindow.open(mapi, marker);
         });
     }
+    PSIMarkers = arrayofMarkers;
   }
 
     renderMarkers() {
@@ -279,12 +329,12 @@ class GoogleMap extends React.Component {
     return (<div className="map-container">
       {this.textFunction()}
       {this.state.ready ? this.renderMarkers(): null}
-      {this.state.PSIReadings != null ? this.renderPSIMarkers() : null}
+      {this.state.PSIReadings != null ? (this.state.PSIToggle ? this.renderPSIMarkers(): this.renderPSIMarkers()) : null}
       </div>);
   };
  
 }
-
+// {this.state.PSIReadings != null ? this.renderPSIMarkers() : null}
 //data type for googleMaps
  GoogleMap.propTypes  ={
     name: React.PropTypes.string.isRequired,
