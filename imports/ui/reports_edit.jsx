@@ -76,10 +76,10 @@ class Reports_Edit extends TrackerReact(React.Component) {
       })
       Meteor.call('incidentType.find', incidentType_id, function(err, result) {
           for(i=0;i<result.emailSubscribers.length;++i) {
-        console.log(result.emailSubscribers[i])
+        // console.log(result.emailSubscribers[i])
       }
       for(i=0;i<result.smsSubscribers.length;++i) {
-        console.log(result.smsSubscribers[i])
+        // console.log(result.smsSubscribers[i])
       }
       })
       //incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
