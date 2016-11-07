@@ -404,6 +404,8 @@ class GoogleMap extends React.Component {
     renderMarkers() {
     var markerlist = []
     for(var i =0;i<this.props.reports.length;++i) {
+      if(this.props.reports[i].status == "Resolved")
+        continue;
       var temp = []
       temp.push(this.props.reports[i].lat)
       temp.push(this.props.reports[i].long)
@@ -412,6 +414,10 @@ class GoogleMap extends React.Component {
       temp.push(this.props.reports[i].title)
       temp.push(this.props.reports[i].locationName)
       temp.push('https://www.google.com.sg/')
+      if(this.props.reports[i].status == "Handled")
+        temp.push("Handled by: " + this.props.reports[i].handledBy)
+      else if(this.props.reports[i].status == "Active")
+        temp.push("Active")
       markerlist.push(temp)
     }
     
@@ -441,7 +447,7 @@ class GoogleMap extends React.Component {
       var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
-            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][4] +'</h1>'+
+            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][3] +'</h1>'+
             '<div id="bodyContent">'+
             '<table>'+
               '<tr>'+
@@ -449,10 +455,15 @@ class GoogleMap extends React.Component {
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][2] + '</td>'+
               '</tr>' +
+              '<tr>'+
+                '<td>Location</td>'+ 
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][4] + '</td>'+
+              '</tr>' +
               '<tr>' +
-                '<td>Handle By</td>' +
+                '<td>Status</td>' +
                 '<td>:</td>' +
-                '<td class="mapContent">'+ markerlist[i][3]+ '</td>'+
+                '<td class="mapContent">'+ markerlist[i][6]+ '</td>'+
               '</tr>'+
             '</table><br/>'+
             '<a href="' +markerlist[i][5]+ '" target ="_blank"> <i>Detail here</i> </a>'+

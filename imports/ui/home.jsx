@@ -46,7 +46,11 @@ constructor() {
   }
   renderUser() {
     return (
+      <div>
     <Link to =  "/report/0/1" activeClassName="active"><button>Submit Report</button></Link>
+    <Link to =  "https://www.facebook.com/profile.php?id=100013904162136&fref=ts" target="_blank" activeClassName="active"><button>Facebook Subscription</button></Link>
+    <Link to =  "https://twitter.com/cmssingapore" target="_blank" activeClassName="active"><button>Twitter Subscription</button></Link>
+    </div>
     );
   }
 }

@@ -61,12 +61,15 @@ class Reports_Edit extends TrackerReact(React.Component) {
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
     const incidentType_id = ReactDOM.findDOMNode(this.refs.incidentType).value.trim();
     const status = ReactDOM.findDOMNode(this.refs.status).value.trim();
+    var handledBy = Meteor.user().username;
+
     if(this.props.report_item.length > 0) {
       var reportArray = this.props.report_item;
-      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status);
+      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status, handledBy);
     }
-    else {      
-      Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status);
+    else {
+      var empty = ""      
+      Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status, empty);
       Meteor.call('getNearestShelter', lat, lng, function(err,result) {
         // get the nearest civil defense
           console.log(result.name)
