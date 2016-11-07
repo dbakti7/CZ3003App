@@ -287,4 +287,9 @@ select {
   background: #4099ff;
   color: #fff;
 }
+
+.bert-alert.SMSSent {
+  background: #87FC70;
+  color: #fff;
+}
 stack{display:block;margin:0;padding:0;border:0;}

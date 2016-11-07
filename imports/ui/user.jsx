@@ -105,7 +105,14 @@ class User extends Component {
 
     Meteor.call("sendSMS", this.refs.textSMS.value,this.refs.phone.value, function(err,result) {
     if(!err) {
-      alert("send SMS!");
+      //alert("send SMS!");
+        Bert.alert({
+          type: 'SMSSent',
+          style: 'growl-top-right',
+          title: 'SMS Sent!',
+          //message: 'Final Fantasy VII',
+          icon: 'fa-send'
+        });
     }
     });
   }
