@@ -37,6 +37,7 @@ class User extends Component {
       var password = ReactDOM.findDOMNode(this.refs.textPassword).value.trim();
     const fullName = ReactDOM.findDOMNode(this.refs.textFullName).value.trim();
     const email = ReactDOM.findDOMNode(this.refs.textEmail).value.trim();
+    const phone = ReactDOM.findDOMNode(this.refs.textPhone).value.trim();
     const type = ReactDOM.findDOMNode(this.refs.textType).value;
     const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
 
@@ -47,13 +48,13 @@ class User extends Component {
       
     if(this.props.newUser) {
        Meteor.call('userAux.addUser', userName, password, function(err, result) {
-         Meteor.call('userData.update', result, fullName, email, type, agencyName, function(err1, result1) {
+         Meteor.call('userData.update', result, fullName, email, type, agencyName, phone, function(err1, result1) {
            Meteor.call('setRole', result, type);
          })
        });
      }
      else {
-       Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName);
+       Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName, phone);
        Meteor.call('setRole', this.props.currentActiveUserId, type);
      }
     
@@ -157,6 +158,8 @@ updateValues() {
      if (users_data.length > 0 && !this.props.newUser) { 
       if (data.email != undefined)
         ReactDOM.findDOMNode(this.refs.textEmail).value = data.email;
+      if (data.phone != undefined)
+        ReactDOM.findDOMNode(this.refs.textPhone).value = data.phone;
       if (data.fullName != undefined)
         ReactDOM.findDOMNode(this.refs.textFullName).value = data.fullName;
       if (data.agencyName != undefined)
@@ -201,11 +204,15 @@ updateValues() {
                   {this.props.newUser ? 
                    <tr>
                      <td>Password:</td>
-                     <td><input type="text" ref="textPassword" placeholder="Password"/><br/></td>
+                     <td><input type="password" ref="textPassword" placeholder="Password"/><br/></td>
                    </tr> : null}
                   <tr>
                     <td>Email:</td> 
-                    <td><input type="text" ref="textEmail" placeholder="Email Address"/><br/></td>
+                    <td><input type="email" ref="textEmail" placeholder="Email Address"/><br/></td>
+                  </tr>
+                  <tr>
+                    <td>Phone Number:</td> 
+                    <td><input type="tel" ref="textPhone" placeholder="Phone Number"/><br/></td>
                   </tr>
                   <tr>
                     <td>Type:</td> 

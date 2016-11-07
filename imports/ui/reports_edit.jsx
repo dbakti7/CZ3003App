@@ -74,7 +74,16 @@ class Reports_Edit extends TrackerReact(React.Component) {
         // get the nearest civil defense
           console.log(result.name)
       })
-      // incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
+      Meteor.call('incidentType.find', incidentType_id, function(err, result) {
+          for(i=0;i<result.emailSubscribers.length;++i) {
+        console.log(result.emailSubscribers[i])
+      }
+      for(i=0;i<result.smsSubscribers.length;++i) {
+        console.log(result.smsSubscribers[i])
+      }
+      })
+      //incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
+      
       // for(i=0;i<incidentType.subscribers.length;++i) {
       //   // skip null data
       //   if(!incidentType.subscribers[i])

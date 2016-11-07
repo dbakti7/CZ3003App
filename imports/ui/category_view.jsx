@@ -49,14 +49,24 @@ class Category extends TrackerReact(React.Component) {
     this.state.subscription.stop();
   }
 
+
+
   editFormatter(cell, row, UserID){
+    var email = "EMAIL"
+    var sms = "SMS"
     return  <div>
               <button className="subscribe"onClick={function() {
-                Meteor.call('incidentType.addSubscriber', cell, UserID)
+                Meteor.call('incidentType.addSubscriber', cell, UserID, email)
                 //alert("Subscribed!")
                 Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
-                console.log("WHAAAT", row.subscribers);
-              }} >SUBSCRIBE</button>
+              }} >SUBSCRIBE EMAIL</button>
+
+              <button className="subscribe"onClick={function() {
+                Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
+                //alert("Subscribed!")
+                Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
+              }} >SUBSCRIBE SMS</button>
+
               <Link to = {`/category/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
               <button className="delete" onClick={function() {
                 IncidentType_db.remove(cell);

@@ -106,7 +106,7 @@ Meteor.methods({
      return UserData_db.find({type: filter}).fetch()
    },
  
-   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {
+   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName, newPhone) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
         UserData_db.insert({
           originalUserId: userId,
@@ -114,11 +114,12 @@ Meteor.methods({
           email: newEmail,
           type: newType,
           agencyName: newAgencyName,
+          phone: newPhone,
           createdAt: new Date(),
        })
      }
      else {
-      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName}});
+      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName, phone: newPhone}});
      }
    },
 
@@ -142,7 +143,8 @@ Meteor.methods({
     IncidentType_db.insert({
        name,
        description,
-       subscribers: [],
+       emailSubscribers: [],
+       smsSubscribers: [],
        createdAt: new Date(),
      });
    },
@@ -152,9 +154,18 @@ Meteor.methods({
    'incidentType.update'(incidentTypeId, newName, newDescription) {
      IncidentType_db.update(incidentTypeId, {$set: {name: newName, description: newDescription}});
    },
-   'incidentType.addSubscriber'(incidentType_id, userId) {
-     IncidentType_db.update(incidentType_id, {$addToSet: {subscribers: userId}})
+   'incidentType.addSubscriber'(incidentType_id, userId, type) {
+     if(type == "SMS")
+      IncidentType_db.update(incidentType_id, {$addToSet: {smsSubscribers: userId}})
+    else if(type == "EMAIL")
+     IncidentType_db.update(incidentType_id, {$addToSet: {emailSubscribers: userId}})
+
    },
+'incidentType.find'(id) {
+     return IncidentType_db.find(id).fetch()[0]
+
+   },
+   
   'postTweet': function (text) {
         if(Meteor.user())
           T.post('statuses/update', { status: text }, function(err,data,response) {
