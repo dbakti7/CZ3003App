@@ -53,7 +53,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
     Bert.alert({
         type: 'success',
         style: 'fixed-top',
-        title: 'Report Updated!',
+        title: 'Reported!',
         icon: 'fa-check'
         });
     // Find the text field via the React ref
