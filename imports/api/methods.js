@@ -19,13 +19,7 @@ var T = new Twit({
  
 var graph = require('fbgraph')
  
-var wallPost = {
-  message: "Life isn't about finding yourself. Life is about creating yourself",
-  privacy: {value: "EVERYONE"},
-  // message: "We do not remember days, we remember moments",
-  // caption: 'This is my wall post example',
-  link: 'http://www.brainyquote.com/quotes/quotes/g/georgebern109542.html?src=t_life',
-};
+
  
 // access token page: EAACEdEose0cBAKZBGe1MZBBITNhaUkEZCHrDO26WkRmxrYMIK3iRkl5BeQ121JbO60MlJ6tm2qFcFc1joJjqDyPgSvlMisluJnxTyVTzE5WdJWDLZBWZCdQPc0gmCnlZCWw8snQFKKX97qvBLKiZBl5gHa1aZCxuJ0DWoEvxT9ZCzZCBbEv5TiIBQI
 // access token user: EAAFd7VBDCW8BALEhRl0ke94mPKKkivs2ZCQqT3LRH691aLIDIi3zblDOfUt5ZCY6QxSv8QePlr8L87wmqTtdcJdx5GqhYbzrxZBtr58R7J7rpYFTGgyZBWWsbnXSTtaVbjIwHOpZAqXuJZCDnJ7RyXlL1NURxVZAhsZD
@@ -89,8 +83,22 @@ Meteor.methods({
       UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName}});
      }
    },
- 
- 
+
+   'userData.checkType'(userId) {
+     user = UserData_db.find({originalUserId:userId}).fetch()
+     if(user.length > 0) {
+       console.log(user[0].type);
+       if(!user[0].type)
+        return "NoType"
+       else
+        return user[0].type;
+     }
+     else
+      return "undkhkjh";
+   },
+
+
+
    // database methods for category object
    'incidentType.insert'(name, description) {
     check(name, String);
@@ -121,6 +129,13 @@ Meteor.methods({
     Roles.setUserRoles( userId, role);
   },
   'postToFacebook': function(text) {
+    var wallPost = {
+      message: text,
+      privacy: {value: "EVERYONE"},
+      // message: "We do not remember days, we remember moments",
+      // caption: 'This is my wall post example',
+      link: 'https://www.facebook.com/gbbpentium?fref=ts'
+    };
     if(Meteor.user()) {
       graph.setAccessToken("EAAFd7VBDCW8BALEhRl0ke94mPKKkivs2ZCQqT3LRH691aLIDIi3zblDOfUt5ZCY6QxSv8QePlr8L87wmqTtdcJdx5GqhYbzrxZBtr58R7J7rpYFTGgyZBWWsbnXSTtaVbjIwHOpZAqXuJZCDnJ7RyXlL1NURxVZAhsZD");
       graph.post('/feed',wallPost,function(err,result) {

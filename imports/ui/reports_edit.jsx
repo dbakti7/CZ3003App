@@ -67,17 +67,20 @@ class Reports_Edit extends TrackerReact(React.Component) {
     }
     else {      
       Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status);
-    }
-
-    incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
-    for(i=0;i<incidentType.subscribers.length;++i) {
-      // skip null data
-      if(!incidentType.subscribers[i]) {
-        continue;
-      }
-      subUser = UserData_db.find({originalUserId: incidentType.subscribers[i]}).fetch()[0]
-      // TODO: send notification to subscribers
-      // Meteor.call('sendEmail', subUser.email, title, description)
+      // incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
+      // for(i=0;i<incidentType.subscribers.length;++i) {
+      //   // skip null data
+      //   if(!incidentType.subscribers[i])
+      //     continue;
+      //   subUser = UserData_db.find({originalUserId: incidentType.subscribers[i]}).fetch()[0]
+      //   // send notification to subscribers
+      //   if(!subUser)
+      //     continue;
+      //   Meteor.call('sendEmail', subUser.email, title, description);
+        
+      // }
+      // Meteor.call('postTweet', title + ":" + description)
+      // Meteor.call('postToFacebook', title + ":" + description)
     }
   }
 
