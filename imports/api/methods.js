@@ -84,10 +84,19 @@ Meteor.methods({
    'userAux.setPassword'(userId, password) {
      Accounts.setPassword(userId, password);
    },
+
+   'userAux.addUser'(userName, password) {
+      newUserId = Meteor.users.insert({
+          username: userName,
+    });
+      Accounts.setPassword(newUserId, password);
+      return newUserId;
+    },
  
    //atabase methods for user object
    'userData.remove'(userId) {
-       UserData_db.remove(userId);
+       Meteor.users.remove(userId);
+       UserData_db.remove({originalUserId: userId});
    },
  
    'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {
