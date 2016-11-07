@@ -20,7 +20,10 @@ var T = new Twit({
  
 var graph = require('fbgraph')
  
-
+var TMClient = require('textmagic-rest-client');
+  
+var c = new TMClient('kelvinchandra', '6iFrTE7jAyEitElLrVdQAPkmmUEHdB');
+ 
  
 // access token page: EAACEdEose0cBAKZBGe1MZBBITNhaUkEZCHrDO26WkRmxrYMIK3iRkl5BeQ121JbO60MlJ6tm2qFcFc1joJjqDyPgSvlMisluJnxTyVTzE5WdJWDLZBWZCdQPc0gmCnlZCWw8snQFKKX97qvBLKiZBl5gHa1aZCxuJ0DWoEvxT9ZCzZCBbEv5TiIBQI
 // access token user: EAAFd7VBDCW8BALEhRl0ke94mPKKkivs2ZCQqT3LRH691aLIDIi3zblDOfUt5ZCY6QxSv8QePlr8L87wmqTtdcJdx5GqhYbzrxZBtr58R7J7rpYFTGgyZBWWsbnXSTtaVbjIwHOpZAqXuJZCDnJ7RyXlL1NURxVZAhsZD
@@ -128,6 +131,12 @@ Meteor.methods({
     },
   'setRole': function(userId, role) {
     Roles.setUserRoles( userId, role);
+  },
+  'sendSMS': function(text,number){
+    c.Messages.send({text: text, phones:number }, function(err, res){
+    console.log('Messages.send()', err, res);
+  });
+
   },
   'postToFacebook': function(text) {
     var wallPost = {

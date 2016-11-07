@@ -91,6 +91,16 @@ class User extends Component {
     });
   }
 
+  sendSMS(event) {
+    event.preventDefault();
+
+    Meteor.call("sendSMS", this.refs.textSMS.value,this.refs.phone.value, function(err,result) {
+    if(!err) {
+      alert("send SMS!");
+    }
+    });
+  }
+
   componentWillReceiveProps() {
     var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
 
@@ -174,7 +184,12 @@ class User extends Component {
             <input type="text" ref="textFB" placeholder="Enter post here"/><br/>
             <input type="submit" value="Post"/>
           </form>
-    
+          <form name="sendSMS" onSubmit={this.sendSMS.bind(this)}>
+            <h2>Enter text to send: </h2>
+            <input type="text" ref="textSMS" placeholder="Enter post here"/><br/>
+            <input type="text" ref="phone" placeholder="Enter phone here"/><br/>
+            <input type="submit" value="Post"/>
+          </form>
     </div>);
   }
 }
