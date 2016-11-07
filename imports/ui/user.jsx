@@ -48,13 +48,13 @@ class User extends Component {
     if(this.props.newUser) {
        Meteor.call('userAux.addUser', userName, password, function(err, result) {
          Meteor.call('userData.update', result, fullName, email, type, agencyName, function(err1, result1) {
-           Meteor.call('setRole', newUserId, type);
+           Meteor.call('setRole', result, type);
          })
        });
      }
      else {
-       Meteor.call('userData.update', Meteor.userId(), fullName, email, type, agencyName);
-       Meteor.call('setRole', Meteor.userId(), type);
+       Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName);
+       Meteor.call('setRole', this.props.currentActiveUserId, type);
      }
     
          
@@ -110,20 +110,52 @@ class User extends Component {
     });
   }
 
-  componentWillReceiveProps() {
+  // componentWillReceiveProps() {
+  //   var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
+  //   if(!this.props.newUser)
+  //      ReactDOM.findDOMNode(this.refs.textUserName).value = Meteor.user().username;
+  //    // ReactDOM.findDOMNode(this.refs.textUserName).disabled = !this.props.newUser;
+  //    if (users_data.length > 0 && !this.props.newUser) { 
+  //     if (users_data[0].email != undefined)
+  //       ReactDOM.findDOMNode(this.refs.textEmail).value = users_data[0].email;
+  //     if (users_data[0].fullName != undefined)
+  //       ReactDOM.findDOMNode(this.refs.textFullName).value = users_data[0].fullName;
+  //     if (users_data[0].agencyName != undefined)
+  //       ReactDOM.findDOMNode(this.refs.AgencyName).value = users_data[0].agencyName;
+  //     if (users_data[0].type != "Select Type")
+  //       ReactDOM.findDOMNode(this.refs.textType).value = users_data[0].type;
+  //   }
+  //   else {
+  //     ReactDOM.findDOMNode(this.refs.textEmail).value = "";
+  //     ReactDOM.findDOMNode(this.refs.textFullName).value = "";
+  //     ReactDOM.findDOMNode(this.refs.textType).value = "Select Type";
+  //   }
+
+  //   if (ReactDOM.findDOMNode(this.refs.textType).value == "Agency") {
+  //     ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
+  //     ReactDOM.findDOMNode(this.refs.AgencyID).value = users_data[0].agencyID;
+  //   }
+    
+  // }
+updateValues() {
     var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
+    var data = this.props.user_data;
     if(!this.props.newUser)
-       ReactDOM.findDOMNode(this.refs.textUserName).value = Meteor.user().username;
+    console.log(this.props.currentActiveUserId)
+    var self = this
+    Meteor.call('userAux.find', this.props.currentActiveUserId, function(err, result) {
+       ReactDOM.findDOMNode(self.refs.textUserName).value = result[0].username;
+    })
      // ReactDOM.findDOMNode(this.refs.textUserName).disabled = !this.props.newUser;
      if (users_data.length > 0 && !this.props.newUser) { 
-      if (users_data[0].email != undefined)
-        ReactDOM.findDOMNode(this.refs.textEmail).value = users_data[0].email;
-      if (users_data[0].fullName != undefined)
-        ReactDOM.findDOMNode(this.refs.textFullName).value = users_data[0].fullName;
-      if (users_data[0].agencyName != undefined)
-        ReactDOM.findDOMNode(this.refs.AgencyName).value = users_data[0].agencyName;
-      if (users_data[0].type != "Select Type")
-        ReactDOM.findDOMNode(this.refs.textType).value = users_data[0].type;
+      if (data.email != undefined)
+        ReactDOM.findDOMNode(this.refs.textEmail).value = data.email;
+      if (data.fullName != undefined)
+        ReactDOM.findDOMNode(this.refs.textFullName).value = data.fullName;
+      if (data.agencyName != undefined)
+        ReactDOM.findDOMNode(this.refs.AgencyName).value = data.agencyName;
+      if (data.type != "Select Type")
+        ReactDOM.findDOMNode(this.refs.textType).value = data.type;
     }
     else {
       ReactDOM.findDOMNode(this.refs.textEmail).value = "";
@@ -133,11 +165,10 @@ class User extends Component {
 
     if (ReactDOM.findDOMNode(this.refs.textType).value == "Agency") {
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
-      ReactDOM.findDOMNode(this.refs.AgencyID).value = users_data[0].agencyID;
+      ReactDOM.findDOMNode(this.refs.AgencyID).value = data.agencyID;
     }
     
   }
-
   
   render() {
     var userDataAvailable = true;
@@ -149,7 +180,7 @@ class User extends Component {
     var loggedIn = (currentUser && userDataAvailable);
     return (<div>User ID: {this.props.params.user_id} <br/> Edit (True/False): 
     {this.props.params.edit}
-    {loggedIn && this.state.ready ? 
+    
               <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
                 <table width="100%">
                   <tr>
@@ -186,7 +217,7 @@ class User extends Component {
                     <td colspan="2"><input width="50%" type="submit" value="Update"/><br/></td>
                   </tr>
                 </table>
-          </form> : null}
+          </form>
           <form name="postTweet" onSubmit={this.postTweet.bind(this)} >
             <h2>Enter tweet to post: </h2>
             <input type="text" ref="textTweet" placeholder="Enter tweet here"/><br/>
@@ -204,6 +235,7 @@ class User extends Component {
             <input type="text" ref="phone" placeholder="Enter phone here"/><br/>
             <input type="submit" value="Post"/>
           </form>
+          {this.state.ready ? this.updateValues() : null}
     </div>);
   }
 }
@@ -213,14 +245,17 @@ User.propTypes = {
 };
 
 export default createContainer(({params}) => {
-  Meteor.subscribe('userData');
-  const user_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
+  const user_data = UserData_db.find({originalUserId: params.user_id}).fetch()[0];
   const currentUser = Meteor.user();
   const newUser = (params.user_id == 0)
+  const currentActiveUserId = (params.user_id)
+  const currentActiveUser = Meteor.call('userAux.find', params.user_id) 
   return {
         //report_item,
         user_data,
         currentUser,
         newUser,
+        currentActiveUserId,
+        currentActiveUser,
       };
 }, User);
