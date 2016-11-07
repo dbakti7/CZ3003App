@@ -34,11 +34,13 @@ var c = new TMClient('kelvinchandra', '6iFrTE7jAyEitElLrVdQAPkmmUEHdB');
 Meteor.methods({
 
   //database methods for CD shelter
-  'cdShelter.insert'(name, address, zip) {
+  'cdShelter.insert'(name, address, zip, lat, lng) {
     CDShelter_db.insert({
       name,
       address,
       zip,
+      lat,
+      lng,
       createdAt: new Date(),
     });
   },
@@ -173,5 +175,21 @@ Meteor.methods({
     }
   },
 
+  'getNearestShelter': function(lat, lng) {
+    var min = 1000000000;
+    var cursor = CDShelter_db.find();
+    var result = null;
 
-    });
+    cursor.forEach(function(item) { 
+      var latDiff = (lat - item.lat);
+      var lngDiff = (lng - item.lng);
+      var dist = Math.sqrt(latDiff*latDiff*+lngDiff*lngDiff);
+      if(dist<min) {
+        min = dist
+        result = item;
+      }
+    })
+    
+    return result;
+  },
+});
