@@ -410,22 +410,22 @@ select {
 
 img.subscribeButton {
     content: url('/images/fb.png');
-    height: 50px;
+    height: 60px;
 }
 
 img.subscribeButton:hover {
     content: url('/images/fb_hover.png');
-    height: 50px;
+    height: 60px;
 }
 
 img.followButton {
     content: url('images/twitter.png');
-    height:50px;
+    height:60px;
 }
 
 img.followButton:hover {
     content: url('images/twitter_hover.png');
-    height:50px;
+    height:60px;
 }
 
 .subscribe {
