@@ -198,7 +198,17 @@ class GoogleMap extends React.Component {
     regions = this.state.PSIReadings
     for(i=0;i<regions.length;++i) {
       var temp = []
-      temp.push(regions[i].getElementsByTagName("id")[0].innerHTML)
+      var regionName = regions[i].getElementsByTagName("id")[0].innerHTML
+      if(regionName == 'rNO') 
+        temp.push("North Region")
+      else if(regionName == 'rSO')
+        temp.push("South Region")
+      else if(regionName == 'rCE')
+        temp.push("Central Region")
+      else if(regionName == 'rWE')
+        temp.push("West Region")
+      else if(regionName == 'rEA')
+        temp.push("East Region")
       temp.push(regions[i].getElementsByTagName("latitude")[0].innerHTML)
       temp.push(regions[i].getElementsByTagName("longitude")[0].innerHTML)
       var readings = regions[i].getElementsByTagName("reading")

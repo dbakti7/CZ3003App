@@ -50,7 +50,7 @@ Meteor.methods({
   },
 
     // database methods for report object
-  'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status, handledBy) {
+  'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status, handledBy, handledTime) {
     check(title, String);
     Reports_db.insert({
        title,

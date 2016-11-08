@@ -211,6 +211,7 @@ development of incidents! &lt;website link&gt;</div>"
                 <td>Status:</td>
                 <td>
                     <select ref="status" defaultValue="" required>
+                        <option value="PendingVerification">Pending Verification</option>
                         <option value="Active">Active</option>
                         <option value="Handled">Handled</option>
                         <option value="Resolved">Resolved</option>
