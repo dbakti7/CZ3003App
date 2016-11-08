@@ -189,6 +189,8 @@ class Reports_Edit extends TrackerReact(React.Component) {
     var reportedByUser = this.props.reportedByUser;
     var report_item = this.props.report_item;
 
+    console.log("FUCK", report_item);
+
     if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Operator'])) {
         return (<div>
       <h2>Incident Page</h2> 

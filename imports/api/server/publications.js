@@ -22,8 +22,12 @@ if (Meteor.isServer) {
   Meteor.publish('userAux', function userAuxPublication() {
     return Meteor.users.find();
   });
-
-  process.env.MAIL_URL = "smtp://postmaster@sandboxd9773ce618c64e03a7a974c15c968833.mailgun.org:f0be7502a761fb69eb9695f6a73d1878@smtp.mailgun.org:587";
+  // dian
+  // process.env.MAIL_URL = "smtp://postmaster@sandboxd9773ce618c64e03a7a974c15c968833.mailgun.org:f0be7502a761fb69eb9695f6a73d1878@smtp.mailgun.org:587";
+  
+  // pentium
+  process.env.MAIL_URL = "smtp://postmaster@sandboxdb0e5714e9e0402b87f76488f3af21d9.mailgun.org:86b2eb48691bec1cd679f76bc58069a4@smtp.mailgun.org:587";
+     
      Meteor.methods({
   sendEmail: function (to, subject, text) {
     // Let other method calls from the same client start running,
