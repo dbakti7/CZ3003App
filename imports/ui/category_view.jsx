@@ -49,8 +49,6 @@ class Category extends TrackerReact(React.Component) {
     this.state.subscription.stop();
   }
 
-
-
   editFormatter(cell, row, UserID){
     isInside = function(curID, subscribers){
       isIn = false;
@@ -67,11 +65,6 @@ class Category extends TrackerReact(React.Component) {
     var sms = "SMS"
     return  <div>
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null)?
-              <button className="subscribe"onClick={function() {
-                Meteor.call('incidentType.addSubscriber', cell, UserID, email)
-                Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
-              // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
-              }}> SUBSCRIBE EMAIL </button> : null}
                 (isInside(UserID,row.emailSubscribers)?(
                   <button className="subscribe"onClick={function() {
                     Meteor.call('incidentType.removeSubscriber', cell, UserID, email)
@@ -121,8 +114,6 @@ class Category extends TrackerReact(React.Component) {
   render() {
     //  {this.state.ready ? this.renderIncidentTypes() : null}
     categoryData = this.props.incidentType_data;
-    console.log(categoryData);
-    console.log(subscribedUser);
     return (<div>
               <BootstrapTable data={categoryData} striped={true} hover={true} pagination={true} search={true}>
                 <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
