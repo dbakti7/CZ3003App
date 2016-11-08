@@ -90,30 +90,35 @@ class Reports_Edit extends TrackerReact(React.Component) {
             var smsTemplateAgency = "A case of " + result.name + " has been reported in " + locationName + ". Please handle the situation!"
           Meteor.call('postToFacebook', title + ":" + facebookTemplate, "cacadcmssingapore.scalingo.io/map")
           Meteor.call('postTweet', title + ":" + twitTemplate);
-          for(i=0;i<result.emailSubscribers.length;++i) {
-              if(!result.emailSubscribers[i])
-                continue;
-                subUser = UserData_db.find({originalUserId: result.emailSubscribers[i]}).fetch()[0]
-            // send notification to subscribers
-                if(!subUser)
-                 continue;
-                 if(subUser.type == "Public" && subUser.email != "")
-                    Meteor.call('sendEmail', subUser.email, title, emailTemplate);
-                else if(subUser.type == "Agency" && subUser.email != "")
-                    Meteor.call('sendEmail', subUser.email, title, emailTemplateAgency);
-        // console.log(result.emailSubscribers[i])
-            }
-      for(i=0;i<result.smsSubscribers.length;++i) {
-        // console.log(result.smsSubscribers[i])
-        if(!result.smsSubscribers[i])
-            continue;
-        subUser = UserData_db.find({originalUserId: result.smsSubscribers[i]}).fetch()[0]
-        // if(subUser.type == "Public" && subUser.phone != "")
-        //     Meteor.call("sendSMS", twitTemplate, subUser.phone)
-        // else if(subUser.type == "Agency" && subUser.phone != "")
-        //     Meteor.call("sendSMS", smsTemplateAgency, subUser.phone)
-      }
-      })
+          Meteor.call('getRegion', lat, lng, function(err, regionIndex) {
+                for(i=0;i<result.emailSubscribers.length;++i) {
+                    if(!result.emailSubscribers[i])
+                        continue;
+                    subUser = UserData_db.find({originalUserId: result.emailSubscribers[i]}).fetch()[0]
+                    // send notification to subscribers
+                    if(!subUser)
+                        continue;
+                    Meteor.call('getRegion', subUser.lat, subUser.lng, function(err, res) {
+                        if(subUser.type == "Public" && subUser.email != "")
+                            Meteor.call('sendEmail', subUser.email, title, emailTemplate);
+                        else if(subUser.type == "Agency" && subUser.email != "" && res == regionIndex)
+                            Meteor.call('sendEmail', subUser.email, title, emailTemplateAgency);
+                    })
+                }
+                 for(i=0;i<result.smsSubscribers.length;++i) {
+                    if(!result.smsSubscribers[i])
+                        continue;
+                    subUser = UserData_db.find({originalUserId: result.smsSubscribers[i]}).fetch()[0]
+                    if(!subUser)
+                        continue;
+                    Meteor.call('getRegion', subUser.lat, subUser.lng, function(err, res) {
+                        if(subUser.type == "Public" && subUser.phone != "")
+                           Meteor.call("sendSMS", twitTemplate, subUser.phone)
+                        else if(subUser.type == "Agency" && subUser.phone != "" && res == regionIndex)
+                            Meteor.call("sendSMS", smsTemplateAgency, subUser.phone)
+                    })}
+            })
+         })
       })
 
       
