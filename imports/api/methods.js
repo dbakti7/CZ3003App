@@ -166,14 +166,34 @@ Meteor.methods({
    'incidentType.update'(incidentTypeId, newName, newDescription) {
      IncidentType_db.update(incidentTypeId, {$set: {name: newName, description: newDescription}});
    },
-   'incidentType.addSubscriber'(incidentType_id, userId, type) {
-     if(type == "SMS")
-      IncidentType_db.update(incidentType_id, {$addToSet: {smsSubscribers: userId}})
-    else if(type == "EMAIL")
-     IncidentType_db.update(incidentType_id, {$addToSet: {emailSubscribers: userId}})
-
+   'incidentType.addSubscriber'(incidentType_id, userId, type, status) {
+    //  if(status == 0) {
+      if(type == "SMS")
+        IncidentType_db.update(incidentType_id, {$addToSet: {smsSubscribers: userId}})
+      else if(type == "EMAIL")
+        IncidentType_db.update(incidentType_id, {$addToSet: {emailSubscribers: userId}})
+    //  }
+    //  else {
+    //    if(type == "SMS") {
+    //      IncidentType_db.update(incidentType_id, {$pull: {smsSubscribers: userId}})
+    //    }
+    //    else if(type == "EMAIL") {
+    //     IncidentType_db.update(incidentType_id, {$pull: {emailSubscribers: userId}})
+    //    }
+    //  }
    },
-'incidentType.find'(id) {
+
+  //  'incidentType.checkSubscriber'(incidentType_id, userId, type) {
+  //    if(type == "SMS") {
+  //       if(IncidentType_db.find(incidentType_id, {smsSubscribers: {$in: userID}}))
+  //         return true
+  //       else {
+  //         return false
+  //       }
+  //    }
+  //  },
+
+  'incidentType.find'(id) {
      return IncidentType_db.find(id).fetch()[0]
 
    },

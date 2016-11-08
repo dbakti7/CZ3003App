@@ -60,14 +60,16 @@ class Category extends TrackerReact(React.Component) {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, email)
                 //alert("Subscribed!")
                 Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
-              }}> {/*condition*/ ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}
+              // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
+              }}> SUBSCRIBE EMAIL </button> : null}
 
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
                 //alert("Subscribed!")
                 Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
-              }} >{/*condition*/ ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
+              // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
+              }} >SUBSCRIBE SMS</button> : null}
 
               <Link to = {`/category/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin']) ? "Edit" : "View"}</button></Link>
 

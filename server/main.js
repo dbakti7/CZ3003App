@@ -46,7 +46,7 @@ Meteor.setInterval(function() {
     // console.log(incidents)
 
     // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", email + incidents);
-    Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", email + incidents);
+    // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", email + incidents);
 }, 5000);
 function GetMinuteDiff(a, b) {
     var diff = a - b;

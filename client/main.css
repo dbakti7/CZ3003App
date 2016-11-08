@@ -432,3 +432,15 @@ img.followButton:hover {
     text-align:center;
 }
 stack{display:block;margin:0;padding:0;border:0;}
+
+.subscribe {
+    background: #f89c1b;
+    border: 3px solid #f89c1b;
+    color: #ffffff;
+}
+
+.subscribe:hover {
+    background: transparent;
+    border: 3px solid #f89c1b;
+    color: #414141;
+}
