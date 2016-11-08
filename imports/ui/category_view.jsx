@@ -55,14 +55,14 @@ class Category extends TrackerReact(React.Component) {
     var email = "EMAIL"
     var sms = "SMS"
     return  <div>
-              {Roles.userIsInRole(Meteor.userId(), ['PublicUser', 'Agency']) ?
+              {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null)?
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, email)
                 //alert("Subscribed!")
                 Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
               }} >SUBSCRIBE EMAIL</button> : null}
 
-              {Roles.userIsInRole(Meteor.userId(), ['PublicUser', 'Agency']) ?
+              {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
                 //alert("Subscribed!")
