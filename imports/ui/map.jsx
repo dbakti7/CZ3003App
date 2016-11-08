@@ -327,6 +327,7 @@ class GoogleMap extends React.Component {
       return;
     }
     var markerlist = []
+    
     hour = new Date().getHours()
     if(hour >= 6 && hour <= 12)
       weathers = this.state.weatherReadings["weatherMorn"][0]
@@ -335,38 +336,34 @@ class GoogleMap extends React.Component {
     else 
       weathers = this.state.weatherReadings["weatherNight"]
     
-    console.log(weathers);
-    for(i=0;i<weathers.length;++i) {
       var temp = []
-      temp.push(weathers[i].getElementsByTagName("wxeast")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxeast")[0].innerHTML)
       temp.push(1.35735)
       temp.push(103.94000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxwest")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxwest")[0].innerHTML)
       temp.push(1.35735)
       temp.push(103.70000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxnorth")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxnorth")[0].innerHTML)
       temp.push(1.41803)
       temp.push(103.82000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxsouth")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxsouth")[0].innerHTML)
       temp.push(1.29587)
       temp.push(103.82000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxcentral")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxcentral")[0].innerHTML)
       temp.push(1.35735)
       temp.push(103.82000)
       markerlist.push(temp)
-    }
-    
-    //PC, TL weather???
+        
     var weatherList = {'BR': ['haze.png', 'Mist'], 'CL': ['cloudy.png', 'Cloudy'], 'FA': ['sunny.png', 'Fair (Day)'], 
-  'FN': ['sunny.png', 'Fair (Night)']}
+  'FN': ['sunny.png', 'Fair (Night)'], 'TL' : ['storm.png', 'Thundery Showers'], 'PC': ['cloudy.png', 'Partly Cloudy']}
     var arrayofMarkers = []
     var icon = {
         url: 'images/logo.png',

@@ -33,12 +33,15 @@ class User extends Component {
  
     // Find the text field via the React ref
     const userName = ReactDOM.findDOMNode(this.refs.textUserName).value.trim();
-    if(this.props.newUser)
+    var type = "Public"
+    if(this.props.newUser) {
       var password = ReactDOM.findDOMNode(this.refs.textPassword).value.trim();
+      type = ReactDOM.findDOMNode(this.refs.textType).value;
+    }
     const fullName = ReactDOM.findDOMNode(this.refs.textFullName).value.trim();
     const email = ReactDOM.findDOMNode(this.refs.textEmail).value.trim();
     const phone = ReactDOM.findDOMNode(this.refs.textPhone).value.trim();
-    const type = ReactDOM.findDOMNode(this.refs.textType).value;
+    
     const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
 
     if(type == "Admin" || type == "Operator")
@@ -214,7 +217,7 @@ updateValues() {
                     <td>Phone Number:</td> 
                     <td><input type="tel" ref="textPhone" placeholder="Phone Number"/><br/></td>
                   </tr>
-                  <tr>
+                  <tr style="display: {this.props.newUser}">
                     <td>Type:</td> 
                     <td>
                       <select name="UserType" ref="textType">
