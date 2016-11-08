@@ -350,7 +350,7 @@ select {
     background-color: #056571;
     color: #ffffff;
     font-weight: bold;
-    border: 2px solid #056571;
+    border: 3px solid #056571;
     border-radius: 5px;
     padding: 10px;
     text-decoration: none !important;
@@ -377,7 +377,6 @@ select {
     transition-duration: 0.4s !important;
     border: 3px solid #056571 !important;
     background-color: #056571 !important;
-    margin-left: 15px !important;
     color: #ffffff !important;
     border-radius: 5px !important;
     padding:7px !important;
@@ -388,5 +387,19 @@ select {
     border: 3px solid #056571 !important;
     border-radius: 5px !important;
     color: #414141 !important;
+}
+
+.login-text-and-button, .or {
+    display: none !important;
+}
+
+.additional-link {
+    text-decoration:none !important;
+    font-style: italic !important;
+    color: #414141 !important;
+}
+
+.additional-link:hover {
+    color: #056571 !important;
 }
 stack{display:block;margin:0;padding:0;border:0;}
