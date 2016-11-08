@@ -72,10 +72,18 @@ Meteor.methods({
      Reports_db.update(reportId, {$set: {title: newTitle, description: newDescription,
        incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong, status:newStatus, handledBy: newHandledBy}});
    },
- 
+
+   'reports.getByType'(t) {
+     var result = Meteor.call('incidentType.findByType', t)
+      var result1 = Meteor.call('reports.find', result)
+        return result1
+   },
+
+   'reports.find'(id) {
+      return Reports_db.find({incidentType_id: id}).fetch()
+   },
    // aux methods
    'userAux.find'(userId) {
-     console.log(userId)
      return Meteor.users.find(userId).fetch();
    },
  
@@ -166,6 +174,9 @@ Meteor.methods({
 
    },
    
+   'incidentType.findByType'(type) {
+     return IncidentType_db.find({name: type}).fetch()[0]._id
+   },
   'postTweet': function (text) {
         if(Meteor.user())
           T.post('statuses/update', { status: text }, function(err,data,response) {
