@@ -229,13 +229,25 @@ class Reports_Edit extends TrackerReact(React.Component) {
             </tr>
             <tr>
                 <td>Status:</td>
-                <td>
-                    <select ref="status" defaultValue="" required>
-                        <option value="PendingVerification">Pending Verification</option>
-                        <option value="Active">Active</option>
-                        <option value="Handled">Handled</option>
-                        <option value="Resolved">Resolved</option>
-                    </select><br/>
+                <td>{(report_item[0].status == "Active")?(
+                        <select ref="status" defaultValue="" required>
+                            <option value="Active">Active</option>
+                            <option value="Handled">Handled</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    ):(
+                        (report_item[0].status == "Handled")?(
+                            <select ref="status" defaultValue="" required>
+                                <option value="Handled">Handled</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        ):(
+                            <select ref="status" defaultValue="" required>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        )
+                    )}
+                    <br/>
                 </td>
             </tr>
             {(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']))
@@ -295,11 +307,25 @@ class Reports_Edit extends TrackerReact(React.Component) {
                  <tr>
                   <td>Status:</td>
                   <td>
-                    <select ref="status" defaultValue="" required>
-                        <option value="Active">Active</option>
-                        <option value="Handled">Handled</option>
-                        <option value="Resolved">Resolved</option>
-                    </select><br/>
+                  {(report_item[0].status == "Active")?(
+                        <select ref="status" defaultValue="" required>
+                            <option value="Active">Active</option>
+                            <option value="Handled">Handled</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    ):(
+                        (report_item[0].status == "Handled")?(
+                            <select ref="status" defaultValue="" required>
+                                <option value="Handled">Handled</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        ):(
+                            <select ref="status" defaultValue="" required>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        )
+                    )}
+                    <br/>
                   </td>
                 </tr>
                 )
