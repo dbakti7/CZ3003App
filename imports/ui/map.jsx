@@ -362,8 +362,42 @@ class GoogleMap extends React.Component {
       temp.push(103.82000)
       markerlist.push(temp)
         
-    var weatherList = {'BR': ['haze.png', 'Mist'], 'CL': ['cloudy.png', 'Cloudy'], 'FA': ['sunny.png', 'Fair (Day)'], 
-  'FN': ['sunny.png', 'Fair (Night)'], 'TL' : ['storm.png', 'Thundery Showers'], 'PC': ['cloudy.png', 'Partly Cloudy']}
+    var weatherList = {
+      'BR': ['haze.png', 'Mist'], 
+      'CL': ['cloudy.png', 'Cloudy'], 
+      'DR': ['rain.png', 'Drizzle'], 
+      'FA': ['sunny.png', 'Fair (Day)'], 
+      'FG': ['haze.png', 'Fog'], 
+      'FN': ['sunny.png', 'Fair (Night)'], 
+      'FW': ['sunny.png', 'Fair and Warm'],
+      'HG': ['storm.png', 'Heavy Thundery Showers with Gusty Winds'],
+      'HR': ['rain.png', 'Heavy Rain'],
+      'HS': ['rain.png', 'Heavy Showers'],
+      'HT': ['storm.png', 'Heavy Thundery Showers'], 
+      'HZ': ['haze.png', 'Hazy'],
+      'LH': ['haze.png', 'Slightly Hazy'],
+      'LR': ['rain.png', 'Light Rain'],
+      'LS': ['rain.png', 'Light Showers'],
+      'OC': ['cloudy.png', 'Overcast'],
+      'PC': ['cloudy.png', 'Partly Cloudy (Day)'], 
+      'PN': ['cloudy.png', 'Partly Cloudy (Night)'],
+      'PS': ['rain.png', 'Passing Showers'],
+      'RA': ['rain.png', 'Moderate Rain'],
+      'SH': ['rain.png', 'Showers'],
+      'SK': ['rain.png', 'Strong Wind, Showers'],
+      'SN': ['snowflake.png', 'Snow'],
+      'SR': ['rain.png', 'Strong Wing, Rains'],
+      'SS': ['snowflake.png', 'Snow Showers'],
+      'SU': ['sunny.png', 'Sunny'],
+      'SW': ['windy.png', 'Strong Winds'],
+      'TL': ['storm.png', 'Thundery Showers'],
+      'WC': ['windy.png', 'Windy, Cloudy'], 
+      'WD': ['windy.png', 'Windy'], 
+      'WF': ['windy.png', 'Windy, Fair'], 
+      'WR': ['windy.png', 'Windy, Rain'], 
+      'WS': ['windy.png', 'Windy, Showers'], 
+  }
+  
     var arrayofMarkers = []
     var icon = {
         url: 'images/logo.png',
