@@ -543,7 +543,7 @@ renderShelterMarkers() {
       temp.push(incidentTypeName)
       temp.push(this.props.reports[i].title)
       temp.push(this.props.reports[i].locationName)
-      temp.push('https://www.google.com.sg/')
+      temp.push('http://cacadcmssingapore.scalingo.io/reports/view')
       if(this.props.reports[i].status == "Handled")
         temp.push("Handled by: " + this.props.reports[i].handledBy)
       else if(this.props.reports[i].status == "Active")
