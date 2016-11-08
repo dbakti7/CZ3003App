@@ -67,13 +67,11 @@ class Category extends TrackerReact(React.Component) {
     var sms = "SMS"
     return  <div>
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null)?
-<<<<<<< HEAD
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, email)
                 Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
               // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
               }}> SUBSCRIBE EMAIL </button> : null}
-=======
                 (isInside(UserID,row.emailSubscribers)?(
                   <button className="subscribe"onClick={function() {
                     Meteor.call('incidentType.removeSubscriber', cell, UserID, email)
@@ -89,7 +87,6 @@ class Category extends TrackerReact(React.Component) {
                   // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
                   }}> SUBSCRIBE EMAIL </button>
                 )) : null}
->>>>>>> ebe0e570dd39cc7284771e7205e02fc822690cfb
 
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
                 (isInside(UserID,row.smsSubscribers)?(
