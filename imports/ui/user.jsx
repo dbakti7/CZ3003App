@@ -8,7 +8,9 @@ import {browserHistory } from 'react-router'
 class User extends Component {
   constructor() {
       super();
-      
+      var lat = 0;
+      var lng = 0;
+      var locationName = "";
       
       const userSubscription = Meteor.subscribe('userData',{onReady: function() {
         this.setState({
@@ -43,21 +45,32 @@ class User extends Component {
     const phone = ReactDOM.findDOMNode(this.refs.textPhone).value.trim();
     const type = ReactDOM.findDOMNode(this.refs.textType).value;
     const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
-
-    if(type != "Agency")
+    console.log(locationName)
+    console.log(lat)
+    console.log(lng)
+    if(type != "Agency") {
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = true;
-    else
+      ReactDOM.findDOMNode(this.refs.locationDiv).hidden = true;
+    }
+    else {
+      returnFlag = false
+      if(ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden == true)
+        returnFlag = true
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
+      ReactDOM.findDOMNode(this.refs.locationDiv).hidden = false;
+      if(returnFlag)
+        return;
+    }
       
     if(this.props.newUser) {
        Meteor.call('userAux.addUser', userName, password, function(err, result) {
-         Meteor.call('userData.update', result, fullName, email, type, agencyName, phone, function(err1, result1) {
+         Meteor.call('userData.update', result, fullName, email, type, agencyName, phone, locationName, lat, lng, function(err1, result1) {
            Meteor.call('setRole', result, type);
          })
        });
      }
      else {
-       Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName, phone);
+       Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName, phone, locationName, lat, lng);
        Meteor.call('setRole', this.props.currentActiveUserId, type);
      }
     
@@ -166,6 +179,8 @@ updateValues() {
         ReactDOM.findDOMNode(this.refs.textFullName).value = data.fullName;
       if (data.agencyName != undefined)
         ReactDOM.findDOMNode(this.refs.AgencyName).value = data.agencyName;
+      if (data.region != undefined)
+        document.getElementById('location').value = data.region;
       ReactDOM.findDOMNode(this.refs.textType).value = data.type;
     }
     else {
@@ -179,11 +194,26 @@ updateValues() {
 
     if (ReactDOM.findDOMNode(this.refs.textType).value == "Agency") {
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
+      ReactDOM.findDOMNode(this.refs.locationDiv).hidden = false;
       ReactDOM.findDOMNode(this.refs.AgencyID).value = data.agencyID;
+      ReactDOM.findDOMNode(this.refs.textLocation).value = data.region;
     }
     
   }
   
+autocomplete() {
+    if (GoogleMaps.loaded()) {
+      var input = document.getElementById("location");
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.addListener('place_changed', function() {
+          var place = autocomplete.getPlace();
+          locationName = place.name;
+          lat = place.geometry.location.lat();
+          lng = place.geometry.location.lng();
+      })
+    }
+  }
+
   render() {
     var userDataAvailable = true;
     var currentUser = this.props.currentUser;
@@ -232,6 +262,9 @@ updateValues() {
                   </tr>
                   <tr>
                     <td colspan="2"><div ref="AgencyDiv" hidden>Agency Name: <input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></div></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><div ref="locationDiv" hidden>Location: <input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete}/><br/></div></td>
                   </tr>
                   <tr>
                     <td colspan="2"><input width="50%" type="submit" value="Update"/><br/></td>

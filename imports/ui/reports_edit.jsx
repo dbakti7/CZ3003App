@@ -85,7 +85,9 @@ class Reports_Edit extends TrackerReact(React.Component) {
             var emailTemplate = "<div>Warning! A case of " + result.name + "has been reported in " + locationName +". Please evacuate the location\
                                 immediately and act accordingly." + "You can go to the nearest shelter at " + shelterList.address + "Click on the following link to get further information on the latest\
                                 development of incidents! cacadcmssingapore.scalingo.io/map</div>"
-
+            var emailTemplateAgency = "<div>Warning! A case of " + result.name + "has been reported in " + locationName +". Please handle the situation!. Click on the following link to get further information on the latest\
+                                development of incidents! cacadcmssingapore.scalingo.io/map</div>"
+            var smsTemplateAgency = "A case of " + result.name + " has been reported in " + locationName + ". Please handle the situation!"
           Meteor.call('postToFacebook', title + ":" + facebookTemplate, "cacadcmssingapore.scalingo.io/map")
           Meteor.call('postTweet', title + ":" + twitTemplate);
           for(i=0;i<result.emailSubscribers.length;++i) {
@@ -95,7 +97,10 @@ class Reports_Edit extends TrackerReact(React.Component) {
             // send notification to subscribers
                 if(!subUser)
                  continue;
-               Meteor.call('sendEmail', subUser.email, title, emailTemplate);
+                 if(subUser.type == "Public" && subUser.email != "")
+                    Meteor.call('sendEmail', subUser.email, title, emailTemplate);
+                else if(subUser.type == "Agency" && subUser.email != "")
+                    Meteor.call('sendEmail', subUser.email, title, emailTemplateAgency);
         // console.log(result.emailSubscribers[i])
             }
       for(i=0;i<result.smsSubscribers.length;++i) {
@@ -103,7 +108,10 @@ class Reports_Edit extends TrackerReact(React.Component) {
         if(!result.smsSubscribers[i])
             continue;
         subUser = UserData_db.find({originalUserId: result.smsSubscribers[i]}).fetch()[0]
-        // Meteor.call("sendSMS", twitTemplate, subUser.phone)
+        // if(subUser.type == "Public" && subUser.phone != "")
+        //     Meteor.call("sendSMS", twitTemplate, subUser.phone)
+        // else if(subUser.type == "Agency" && subUser.phone != "")
+        //     Meteor.call("sendSMS", smsTemplateAgency, subUser.phone)
       }
       })
       })

@@ -115,7 +115,7 @@ Meteor.methods({
      return UserData_db.find({type: filter}).fetch()
    },
  
-   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName, newPhone) {
+   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName, newPhone, newRegion, newLat, newLng) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
         UserData_db.insert({
           originalUserId: userId,
@@ -124,11 +124,14 @@ Meteor.methods({
           type: newType,
           agencyName: newAgencyName,
           phone: newPhone,
+          region: newRegion,
+          lat: newLat,
+          lng: newLng,
           createdAt: new Date(),
        })
      }
      else {
-      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName, phone: newPhone}});
+      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName, phone: newPhone, region:newRegion, lat:newLat, lng:newLng}});
      }
    },
 
@@ -231,5 +234,41 @@ Meteor.methods({
     })
     
     return result;
+  },
+  
+  'getRegion': function(lat, lng){
+    // 0 = central 
+    // 1 = east
+    // 2 = north
+    // 3 = north-east
+    // 4 = west
+    var center = [{
+        lat:1.291667,
+        lng:103.85,
+      }, {
+        lat:1.349592,
+        lng:103.956789,
+      }, {
+        lat:1.436269,
+        lng:103.786706,
+      }, {
+        lat:1.405333,
+        lng:103.866278,
+      }, {
+        lat:1.328883,
+        lng:103.739947,
+      },];
+    var min = 100000000;
+    var choosen = -1;
+    for (i = 0; i < center.length; i++){
+      var latDiff = lat - center[i].lat;
+      var lngDiff = lng - center[i].lng;
+      var dist = Math.sqrt(latDiff*latDiff+lngDiff*lngDiff);
+      if(dist<min){
+        min = dist;
+        choosen = i;
+      }
+    }
+    return choosen;
   },
 });

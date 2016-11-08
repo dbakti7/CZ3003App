@@ -75,6 +75,7 @@ class Category extends TrackerReact(React.Component) {
               <button className="delete" onClick={function() {
                 if(confirm("Are you sure you want to delete this?")){
                   IncidentType_db.remove(cell);
+                  Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
                 }
                 
               }} >Delete</button> : null}
