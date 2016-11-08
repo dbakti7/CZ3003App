@@ -3,6 +3,7 @@ import {UserData_db} from '../api/userData.js';
 import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
+import {browserHistory } from 'react-router'
 
 class User extends Component {
   constructor() {
@@ -67,6 +68,7 @@ class User extends Component {
     // ReactDOM.findDOMNode(this.refs.).value = '';
     // ReactDOM.findDOMNode(this.refs.textLocation).value = '';
     // ReactDOM.findDOMNode(this.refs.textAreaDescription).value = '';
+    browserHistory.push('/users/view')
   }
 
   postTweet(event) {

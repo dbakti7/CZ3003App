@@ -412,7 +412,7 @@ renderShelterMarkers() {
     }
       var arrayofMarkers = []
     var icon = {
-        url: 'images/logo.png',
+        url: 'images/shelter.png',
         scaledSize: new google.maps.Size(30,30),
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(0,0)}
