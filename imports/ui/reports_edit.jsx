@@ -8,6 +8,7 @@ import {IndexLink, Link } from 'react-router'
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import {IncidentType_db} from '../api/incidentType.js';
 import {UserData_db} from '../api/userData.js';
+import {browserHistory } from 'react-router'
 
 class Reports_Edit extends TrackerReact(React.Component) {
   constructor() {
@@ -67,8 +68,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
       var reportArray = this.props.report_item;
       if(status == "Resolved")
         resolvedTime = new Date()
-        console.log(resolvedTime)
-      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status, handledBy, resolvedTime);
+      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status, handledBy, reportArray[0].handledTime);
     }
     else {
       var empty = ""      
@@ -111,6 +111,7 @@ development of incidents! &lt;website link&gt;</div>"
       }
       })
     }
+    browserHistory.push('/reports/view')
   }
 
   renderReports() {

@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import IncidentType from './incidentType.jsx';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import {IndexLink, Link } from 'react-router'
+import {Router, Route, IndexRoute, Link, browserHistory } from 'react-router'
 
 class Category extends TrackerReact(React.Component) {
 
@@ -41,6 +41,7 @@ class Category extends TrackerReact(React.Component) {
          
     //alert("Incident type has been updated!");
       Bert.alert( 'Incident type has been updated!', 'success', 'fixed-top', 'fa-check' );
+      browserHistory.push('/category/view')
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
     // ReactDOM.findDOMNode(this.refs.textLocation).value = '';
