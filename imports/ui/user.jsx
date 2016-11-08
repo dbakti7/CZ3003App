@@ -236,23 +236,6 @@ updateValues() {
                   </tr>
                 </table>
           </form>
-          <form name="postTweet" onSubmit={this.postTweet.bind(this)} >
-            <h2>Enter tweet to post: </h2>
-            <input type="text" ref="textTweet" placeholder="Enter tweet here"/><br/>
-            <input type="submit" value="Post"/>
-          </form>
-
-           <form name="postFB" onSubmit={this.postFB.bind(this)} >
-            <h2>Enter text to post: </h2>
-            <input type="text" ref="textFB" placeholder="Enter post here"/><br/>
-            <input type="submit" value="Post"/>
-          </form>
-          <form name="sendSMS" onSubmit={this.sendSMS.bind(this)}>
-            <h2>Enter text to send: </h2>
-            <input type="text" ref="textSMS" placeholder="Enter post here"/><br/>
-            <input type="text" ref="phone" placeholder="Enter phone here"/><br/>
-            <input type="submit" value="Post"/>
-          </form>
           {this.state.ready ? this.updateValues() : null}
     </div>);
   }

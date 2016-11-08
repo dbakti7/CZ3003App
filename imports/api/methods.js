@@ -193,13 +193,13 @@ Meteor.methods({
   });
 
   },
-  'postToFacebook': function(text) {
+  'postToFacebook': function(text, link) {
     var wallPost = {
       message: text,
       privacy: {value: "EVERYONE"},
       // message: "We do not remember days, we remember moments",
       // caption: 'This is my wall post example',
-      link: 'https://www.facebook.com/gbbpentium?fref=ts'
+      link: link
     };
     if(Meteor.user()) {
       graph.setAccessToken("EAAFd7VBDCW8BALEhRl0ke94mPKKkivs2ZCQqT3LRH691aLIDIi3zblDOfUt5ZCY6QxSv8QePlr8L87wmqTtdcJdx5GqhYbzrxZBtr58R7J7rpYFTGgyZBWWsbnXSTtaVbjIwHOpZAqXuJZCDnJ7RyXlL1NURxVZAhsZD");

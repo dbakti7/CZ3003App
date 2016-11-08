@@ -74,29 +74,39 @@ class Reports_Edit extends TrackerReact(React.Component) {
         // get the nearest civil defense
           console.log(result.name)
       })
+
+      
+
       Meteor.call('incidentType.find', incidentType_id, function(err, result) {
+          var facebookTemplate = "Warning! A case of "+ result.name + " has been reported in " + locationName+". Please evacuate the location \
+      immediately and act accordingly. Click on the following link to get further information on the latest \
+      development of incidents! \"google.com\""
+
+      var twitTemplate = "A case of " + result.name + " has been reported in " + locationName+". Please evacuate \
+immediately and act accordingly."
+        var emailTemplate = "<div>Warning! A case of &lt;incident type&gt; has been reported in &lt;location&gt;. Please evacuate the location\
+immediately and act accordingly. Click on the following link to get further information on the latest\
+development of incidents! &lt;website link&gt;</div>"
+          Meteor.call('postToFacebook', title + ":" + facebookTemplate, "google.com")
+          Meteor.call('postTweet', title + ":" + twitTemplate);
           for(i=0;i<result.emailSubscribers.length;++i) {
+              if(!result.emailSubscribers[i])
+                continue;
+                subUser = UserData_db.find({originalUserId: result.emailSubscribers[i]}).fetch()[0]
+            // send notification to subscribers
+                if(!subUser)
+                 continue;
+               Meteor.call('sendEmail', subUser.email, title, emailTemplate);
         // console.log(result.emailSubscribers[i])
-      }
+            }
       for(i=0;i<result.smsSubscribers.length;++i) {
         // console.log(result.smsSubscribers[i])
+        if(!result.smsSubscribers[i])
+            continue;
+        subUser = UserData_db.find({originalUserId: result.smsSubscribers[i]}).fetch()[0]
+        Meteor.call("sendSMS", twitTemplate, subUser.phone)
       }
       })
-      //incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
-      
-      // for(i=0;i<incidentType.subscribers.length;++i) {
-      //   // skip null data
-      //   if(!incidentType.subscribers[i])
-      //     continue;
-      //   subUser = UserData_db.find({originalUserId: incidentType.subscribers[i]}).fetch()[0]
-      //   // send notification to subscribers
-      //   if(!subUser)
-      //     continue;
-      //   Meteor.call('sendEmail', subUser.email, title, description);
-        //Meteor.call("sendSMS", this.refs.textSMS.value,this.refs.phone.value, function(err,result)
-      // }
-      // Meteor.call('postTweet', title + ":" + description)
-      // Meteor.call('postToFacebook', title + ":" + description)
     }
   }
 
