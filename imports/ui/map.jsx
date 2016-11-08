@@ -78,6 +78,7 @@ class GoogleMap extends React.Component {
       var PSIMarkers = null;
       var WeatherMarkers = null;
       var ShelterMarkers = null;
+      var ReportedMarkers = null;
       
       var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 
@@ -123,6 +124,10 @@ class GoogleMap extends React.Component {
         PSIToggle: true,
         weatherToggle: true,
         shelterToggle: true,
+        FireToggle: true,
+        DengueToggle: true,
+        TrafficToggle: true,
+        GasToggle: true,
       }
        
     }
@@ -133,6 +138,7 @@ class GoogleMap extends React.Component {
     PSIMarkers = null;
     WeatherMarkers = null;
     ShelterMarkers = null;
+    ReportedMarkers = null;
     var self = this;
     var PSIControlDiv = document.createElement('div');
     var PSIControl = new this.PSIControl(PSIControlDiv, mapi, self, "PSI");
@@ -140,12 +146,28 @@ class GoogleMap extends React.Component {
     var WeatherControl = new this.PSIControl(WeatherControlDiv, mapi, self, "Weather");
     var ShelterControlDiv = document.createElement('div');
     var ShelterControl = new this.PSIControl(ShelterControlDiv, mapi, self, "Shelter");
+    var FireControlDiv = document.createElement('div');
+    var FireControl = new this.PSIControl(FireControlDiv, mapi, self, "Fire");
+    var DengueControlDiv = document.createElement('div');
+    var DengueControl = new this.PSIControl(DengueControlDiv, mapi, self, "Dengue");
+    var TrafficControlDiv = document.createElement('div');
+    var TrafficControl = new this.PSIControl(TrafficControlDiv, mapi, self, "Traffic");
+    var GasControlDiv = document.createElement('div');
+    var GasControl = new this.PSIControl(GasControlDiv, mapi, self, "Gas");
     PSIControlDiv.index = 1;
     WeatherControlDiv.index = 1;
     ShelterControlDiv.index = 1;
+    FireControlDiv.index = 1;
+    DengueControlDiv.index = 1;
+    TrafficControlDiv.index = 1;
+    GasControlDiv.index = 1;
     mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(PSIControlDiv);
     mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(WeatherControlDiv);
     mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(ShelterControlDiv);
+    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(FireControlDiv);
+    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(DengueControlDiv);
+    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(TrafficControlDiv);
+    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(GasControlDiv);
     this.setState({
           ready : true
         })
@@ -195,6 +217,34 @@ class GoogleMap extends React.Component {
           controlUI.addEventListener('click', function() {
             self.setState({
                 shelterToggle: !self.state.shelterToggle,
+              })
+          });
+        }
+        else if(title == "Fire") {
+          controlUI.addEventListener('click', function() {
+            self.setState({
+                FireToggle: !self.state.FireToggle,
+              })
+          });
+        }
+        else if(title == "Dengue") {
+          controlUI.addEventListener('click', function() {
+            self.setState({
+                DengueToggle: !self.state.DengueToggle,
+              })
+          });
+        }
+        else if(title == "Traffic") {
+          controlUI.addEventListener('click', function() {
+            self.setState({
+                TrafficControl: !self.state.TrafficControl,
+              })
+          });
+        }
+        else if(title == "Gas") {
+          controlUI.addEventListener('click', function() {
+            self.setState({
+                GasToggle: !self.state.GasToggle,
               })
           });
         }
@@ -522,6 +572,11 @@ renderShelterMarkers() {
   }
 
     renderMarkers() {
+      if(ReportedMarkers != null) {
+        for(i = 0;i<ReportedMarkers.length;++i)
+          ReportedMarkers[i].setMap(null);
+      }
+        var toggles = {"Fire":this.state.FireToggle, "Gas Leak": this.state.GasToggle, "Traffic Accident": this.state.TrafficToggle, "Dengue":this.state.DengueToggle}
     var markerlist = []
     for(var i =0;i<this.props.reports.length;++i) {
       if(this.props.reports[i].status == "Resolved")
@@ -590,6 +645,8 @@ renderShelterMarkers() {
             '</div>'+
             '</div>';
       //detail of each marker
+      if(toggles[markerlist[i][2]] == false)
+        continue
       icon['url'] = 'images/' + incidentList[markerlist[i][2]]
       var  marker = new google.maps.Marker({
           position: new google.maps.LatLng(markerlist[i][0],markerlist[i][1]),
@@ -600,14 +657,14 @@ renderShelterMarkers() {
         });
       arrayofMarkers.push(marker);
       //link the pop ups with the marker 
-      arrayofMarkers[i].addListener('click', function() {
+      arrayofMarkers[arrayofMarkers.length-1].addListener('click', function() {
         var marker = this;
           infowindow.setContent(marker.detail);
           infowindow.open(mapi, marker);
         });
 
       };
-
+      ReportedMarkers = arrayofMarkers;
     }//);
   // };
   //
@@ -624,7 +681,7 @@ renderShelterMarkers() {
   render() {
     return (<div className="map-container">
       {this.textFunction()}
-      {this.state.ready ? this.renderMarkers(): null}
+      {this.state.ready ? ((this.state.FireToggle || this.state.GasToggle || this.state.TrafficToggle || this.state.DengueToggle) ? this.renderMarkers(): this.renderMarkers()) : null}
       {this.state.PSIReadings != null ? (this.state.PSIToggle ? this.renderPSIMarkers(): this.renderPSIMarkers()) : null}
       {this.state.weatherReadings != null ? (this.state.weatherToggle ? this.renderWeatherMarkers(): this.renderWeatherMarkers()) : null}
       {this.state.shelters != null ? (this.state.shelterToggle ? this.renderShelterMarkers(): this.renderShelterMarkers()) : null}
