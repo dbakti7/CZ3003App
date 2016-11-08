@@ -45,17 +45,16 @@ class User extends Component {
     const phone = ReactDOM.findDOMNode(this.refs.textPhone).value.trim();
     const type = ReactDOM.findDOMNode(this.refs.textType).value;
     const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
-    console.log(locationName)
-    console.log(lat)
-    console.log(lng)
+    returnFlag = false
+      if(ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden == true)
+        returnFlag = true
+    console.log(returnFlag)
     if(type != "Agency") {
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = true;
       ReactDOM.findDOMNode(this.refs.locationDiv).hidden = true;
     }
     else {
-      returnFlag = false
-      if(ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden == true)
-        returnFlag = true
+      
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
       ReactDOM.findDOMNode(this.refs.locationDiv).hidden = false;
       if(returnFlag)
