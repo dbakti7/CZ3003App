@@ -87,7 +87,10 @@ class Category extends TrackerReact(React.Component) {
   render() {
     //  {this.state.ready ? this.renderIncidentTypes() : null}
     categoryData = this.props.incidentType_data;
-    console.log("ASS", categoryData);
+    subscribedUser = categoryData._id;
+    console.log("WOY");
+              console.log(categoryData);
+    console.log(subscribedUser);
     return (<div>
               <BootstrapTable data={categoryData} striped={true} hover={true} pagination={true} search={true}>
                 <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>

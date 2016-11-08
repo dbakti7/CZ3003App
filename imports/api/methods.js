@@ -166,6 +166,15 @@ Meteor.methods({
    'incidentType.update'(incidentTypeId, newName, newDescription) {
      IncidentType_db.update(incidentTypeId, {$set: {name: newName, description: newDescription}});
    },
+    'incidentType.removeSubscriber'(incidentType_id, userId, type){
+        //if(emailSubscribers: userId){
+        //IncidentType_db.update(incidentType_id, {$addToSet: {smsSubscribers: userId}})
+        //console.log(userId)
+        if(type == "SMS")
+            IncidentType_db.update(incidentType_id, {$pull: {smsSubscribers: userId}})   
+        else if(type == "EMAIL")
+            IncidentType_db.update(incidentType_id, {$pull: {emailSubscribers: userId}})   
+    },
    'incidentType.addSubscriber'(incidentType_id, userId, type, status) {
     //  if(status == 0) {
       if(type == "SMS")
