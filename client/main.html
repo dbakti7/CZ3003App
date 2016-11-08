@@ -1,5 +1,6 @@
 <head>
-  <title>CZ3003App</title>
+  <title>CMS Singapore - CACAD</title>
+  <link rel="icon" href="/images/icon.png">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
@@ -54,11 +55,7 @@
                     <a href="/">HOME</a>
                 </li>
                 <li>
-                    <a href="#">INFO</a>
-                    <ul type="disc">
-                        <li class="sublist"><a href="/map">GENERAL INCIDENTS</a></li>
-                        <li class="sublist"><a href="/dengue">DENGUE CLUSTERS</a></li>
-                    </ul>
+                    <a href="/map">MAP</a>
                 </li>
                 <li>
                     <a href="#">CATEGORIES</a>
@@ -67,10 +64,10 @@
                         {{#if isInRole 'Admin'}}
                         <li class="sublist"><a href="/category/0/0">NEW</a></li>
                         {{/if}}
-                    </ul>
+                    </ul> 
                 </li>
                 <li>
-                    <a href="#">REPORTS</a>
+                    <a href="#">INCIDENTS</a>
                     <ul type="disc">
                         <li class="sublist"><a href="/reports/view">VIEW</a></li>
                         {{#if isInRole 'Admin, Operator'}}

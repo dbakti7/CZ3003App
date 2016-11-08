@@ -40,7 +40,7 @@ class Category extends TrackerReact(React.Component) {
     }
          
     //alert("Incident type has been updated!");
-      Bert.alert( 'Incident type has been updated!', 'success', 'fixed-top', 'fa-check' );
+      Bert.alert( 'Category has been updated!', 'success', 'fixed-top', 'fa-check' );
       browserHistory.push('/category/view')
     // Clear form
     // ReactDOM.findDOMNode(this.refs.).value = '';
@@ -89,7 +89,7 @@ class Category extends TrackerReact(React.Component) {
                 </form>
           {this.state.ready ? this.renderIncidentTypeData() : null}
           <br/>
-          <Link to =  "/category/view" activeClassName="active">← Back to list of Incident Types</Link>
+          <Link to =  "/category/view" activeClassName="active">← Back to list of Categories</Link>
     </div>);
   }
 };
