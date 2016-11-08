@@ -30,6 +30,35 @@ input[type=text]:focus, textarea:focus {
     color: #ffffff
 }
  
+input[type=password], textarea {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+input[type=password]:focus, textarea:focus {
+    background-color: #056571;
+    color: #ffffff
+}
+
+input[type=email], textarea {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+input[type=email]:focus, textarea:focus {
+    background-color: #056571;
+    color: #ffffff
+}
+
+input[type=tel], textarea {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+input[type=tel]:focus, textarea:focus {
+    background-color: #056571;
+    color: #ffffff
+}
 
 input[type=submit] {
     -webkit-transition-duration: 0.4s; /* Safari */
@@ -442,5 +471,17 @@ stack{display:block;margin:0;padding:0;border:0;}
 .subscribe:hover {
     background: transparent;
     border: 3px solid #f89c1b;
+    color: #414141;
+}
+
+.unsubscribe {
+    background: #DE1900;
+    border: 3px solid #DE1900;
+    color: #ffffff;
+}
+
+.unsubscribe:hover {
+    background: transparent;
+    border: 3px solid #DE1900;
     color: #414141;
 }

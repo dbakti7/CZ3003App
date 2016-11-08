@@ -66,7 +66,7 @@ class Category extends TrackerReact(React.Component) {
     return  <div>
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null)?
                 (isInside(UserID,row.emailSubscribers)?(
-                  <button className="subscribe"onClick={function() {
+                  <button className="unsubscribe"onClick={function() {
                     Meteor.call('incidentType.removeSubscriber', cell, UserID, email)
                     //alert("Subscribed!")
                     Bert.alert( 'Unsubscribed', 'success', 'fixed-top', 'fa-check' );
@@ -83,17 +83,17 @@ class Category extends TrackerReact(React.Component) {
 
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
                 (isInside(UserID,row.smsSubscribers)?(
-                  <button className="subscribe"onClick={function() {
+                  <button className="unsubscribe"onClick={function() {
                     Meteor.call('incidentType.removeSubscriber', cell, UserID, sms)
                     //alert("Subscribed!")
-                    Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
+                    Bert.alert( 'Unsubscribed', 'success', 'fixed-top', 'fa-check' );
                   // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
                   }} >UNSUBSCRIBE SMS</button>
                 ):(
                   <button className="subscribe"onClick={function() {
                     Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
                     //alert("Subscribed!")
-                    Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
+                    Bert.alert( 'Subscribed', 'success', 'fixed-top', 'fa-check' );
                   // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
                   }} >SUBSCRIBE SMS</button>
                 )) : null}

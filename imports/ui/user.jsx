@@ -257,12 +257,14 @@ autocomplete() {
                         <option value="PublicUser">Public User</option>
                   </select><br/></td>
                   </tr>
-                  <tr>
-                    <td colspan="2"><div ref="AgencyDiv" hidden>Agency Name: <input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></div></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2"><div ref="locationDiv" hidden>Location: <input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete}/><br/></div></td>
-                  </tr>
+                </table>
+                  
+                    <div ref="AgencyDiv" hidden><table width="100%"><tr><td width="30%">Agency Name: </td>
+<td><input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></td></tr></table></div>
+                  
+                    <div ref="locationDiv" hidden><table width="100%"><tr><td width="30%">Location: </td>
+                        <td><input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete}/><br/></td></tr></table></div>
+                <table width="100%">
                   <tr>
                     <td colspan="2"><input width="50%" type="submit" value="Update"/><br/></td>
                   </tr>
