@@ -322,7 +322,7 @@ select {
     color: #ffffff;
 }
 
-#thisImage {
+#thisImage { /* ??? */
     visibility: visible;
     width: 500 !important;
     height: 500 !important; 
@@ -334,34 +334,25 @@ select {
 }
 
 .cellTable{
-     border-right: solid 3px #555; 
-  border-left: solid 3px #555;
+     border-right: solid 1px #414141; 
+    border-left: solid 1px #414141;
     padding-left: 50px;
     padding-right: 50px;
+    text-align:center;
+}
+
+.cellTable h2, .rest h2 {
+    font-weight: bold;
 }
 
 .rest{
     padding-left: 50px;
     padding-right: 50px;
+    text-align:center;
 }
+
 
 /* testing for home */
-.login-link-text {
-    background-color: #056571;
-    color: #ffffff;
-    font-weight: bold;
-    border: 3px solid #056571;
-    border-radius: 5px;
-    padding: 10px;
-    text-decoration: none !important;
-}
-
-.login-link-text:hover {
-    background-color: #ffffff;
-    color: #414141;
-    text-decoration: none !important;
-}
-
 .login-close-text {
     font-weight: bold;
     color: #414141;
@@ -372,6 +363,19 @@ select {
     color: #056571;
 }
 
+.login-link-text {
+    -webkit-transition-duration: 0.4s !important; /* Safari */
+    transition-duration: 0.4s !important;
+    border: 3px solid #056571 !important;
+    background-color: #056571 !important;
+    color: #ffffff !important;
+    border-radius: 5px !important;
+    padding:7px 50px 7px 50px !important;
+    text-decoration: none !important;
+    margin-left: 5px;
+
+}
+
 .login-button {
     -webkit-transition-duration: 0.4s !important; /* Safari */
     transition-duration: 0.4s !important;
@@ -380,10 +384,11 @@ select {
     color: #ffffff !important;
     border-radius: 5px !important;
     padding:7px !important;
+    text-decoration: none !important;
 }
 
-.login-button:hover{
-    background-color: transparent !important; /* Green */
+.login-button:hover, .login-link-text:hover {
+    background-color: transparent !important;
     border: 3px solid #056571 !important;
     border-radius: 5px !important;
     color: #414141 !important;
@@ -402,4 +407,25 @@ select {
 .additional-link:hover {
     color: #056571 !important;
 }
+
+img.subscribeButton {
+    content: url('/images/fb.png');
+    height: 50px;
+}
+
+img.subscribeButton:hover {
+    content: url('/images/fb_hover.png');
+    height: 50px;
+}
+
+img.followButton {
+    content: url('images/twitter.png');
+    height:50px;
+}
+
+img.followButton:hover {
+    content: url('images/twitter_hover.png');
+    height:50px;
+}
+
 stack{display:block;margin:0;padding:0;border:0;}

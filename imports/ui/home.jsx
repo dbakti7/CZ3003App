@@ -34,7 +34,9 @@ constructor() {
     return (
       <div>
       <br/>
+      <br/>
       <AccountsUIWrapper />
+      <br/>
       <br/><br/>
       {this.renderUser()}
       {this.state.ready ? this.checkUser() : null}
@@ -51,14 +53,14 @@ constructor() {
         <div>
         <table className="homeTable" border="1">
           <tr>
-            <td className="rest"><img src="/images/realTime.png" height="100" width="100" align="middle"/></td>
-            <td className="cellTable"><img src="/images/report.png" height="100" width="100" align="middle"/></td> 
-            <td className="rest"><img src="/images/24hr.png" height="100" width="100" align="middle"/></td>
+            <td className="rest"><img src="/images/realTime.png" height="200" width="200" align="center"/></td>
+            <td className="cellTable"><img src="/images/report.png" height="200" width="200" align="center"/></td> 
+            <td className="rest"><img src="/images/24hr.png" height="200" width="200" align="center"/></td>
           </tr>
           <tr>
-            <td className="rest"><h3>Real-time Update</h3></td>
-            <td className="cellTable"><h3>Reliable Report</h3></td> 
-            <td className="rest"><h3>24-hr Status</h3></td>
+            <td className="rest"><h2><font color="#056571">Real-time Update</font></h2></td>
+            <td className="cellTable"><h2><font color="#f2695d">Reliable Report</font></h2></td> 
+            <td className="rest"><h2><font color="#f89c1b">24-hr Status</font></h2></td>
           </tr>
           <tr>
             <td className="rest">We provide real-time updates to all the reports and crisis reported. This helps you to get information quickly and precisely. </td>
@@ -69,14 +71,18 @@ constructor() {
         <br/>
         <br/>
         <br/>
-
-        <Link to =  "/report/0/1" activeClassName="active"><button>Submit Report</button></Link>
-                &emsp;
-
-        <Link to =  "https://www.facebook.com/profile.php?id=100013904162136&fref=ts" target="_blank" activeClassName="active"><button>Facebook Subscription</button></Link>
-                &emsp;
-
-        <Link to =  "https://twitter.com/cmssingapore" target="_blank" activeClassName="active"><button>Twitter Subscription</button></Link>
+        <table>
+          <tr>
+            <td></td>
+            <td>
+              <Link to =  "https://www.facebook.com/profile.php?id=100013904162136&fref=ts" target="_blank" activeClassName="active"><img className="subscribeButton"/></Link>
+              &nbsp;&nbsp;
+              <Link to =  "https://twitter.com/cmssingapore" target="_blank" activeClassName="active"><img className="followButton"/></Link>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+        
         </div>
     );
   }
