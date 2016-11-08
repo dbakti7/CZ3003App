@@ -58,7 +58,6 @@ class Category extends TrackerReact(React.Component) {
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null)?
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, email)
-                //alert("Subscribed!")
                 Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
               // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
               }}> SUBSCRIBE EMAIL </button> : null}
@@ -87,9 +86,7 @@ class Category extends TrackerReact(React.Component) {
   render() {
     //  {this.state.ready ? this.renderIncidentTypes() : null}
     categoryData = this.props.incidentType_data;
-    subscribedUser = categoryData._id;
-    console.log("WOY");
-              console.log(categoryData);
+    console.log(categoryData);
     console.log(subscribedUser);
     return (<div>
               <BootstrapTable data={categoryData} striped={true} hover={true} pagination={true} search={true}>

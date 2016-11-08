@@ -8,6 +8,7 @@ import {IndexLink, Link } from 'react-router'
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import {IncidentType_db} from '../api/incidentType.js';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import {Label} from 'react-bootstrap';
 
 
 class Reports_View extends TrackerReact(React.Component) {
@@ -33,7 +34,17 @@ class Reports_View extends TrackerReact(React.Component) {
       <Report key={reports._id} report={reports} />
     ));
   }
-  
+    
+    statusFormatter(cell,row){
+        if(cell="Active"){
+            return <h4><Label bsStyle="danger">Active</Label></h4>
+        } else if(cell="Resolved") {
+            return <h4><Label bsStyle="success">Resolved</Label></h4>   
+        } else if(cell="Handled") {
+            return <h4><Label bsStyle="warning">Handled</Label></h4>  
+        }
+    }
+    
 
   editFormatter(cell, row){
     // console.log("HAHAHA",cell);
@@ -49,6 +60,8 @@ class Reports_View extends TrackerReact(React.Component) {
             </div>;
   }
   
+              
+              
   render() {
     // console.log("ASS", this.props.reports);
     //  {this.state.ready ? this.renderReports() : null}
@@ -59,7 +72,7 @@ class Reports_View extends TrackerReact(React.Component) {
                 <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
                 <TableHeaderColumn className="bsTableHeader" dataField="title" dataSort={true}>Title</TableHeaderColumn>
                 <TableHeaderColumn className="bsTableHeader" dataField="locationName" dataSort={true}>Location</TableHeaderColumn>
-                <TableHeaderColumn className="bsTableHeader" dataField="status" dataSort={true}>Status</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataAlign="center" dataField="status" dataSort={true} dataFormat={this.statusFormatter}>Status</TableHeaderColumn>
                 <TableHeaderColumn className="bsTableHeader" dataField="_id" dataFormat={this.editFormatter}>Action</TableHeaderColumn> 
               </BootstrapTable>
             </div>)
