@@ -41,7 +41,7 @@ if (Meteor.isServer) {
       to: to,
       from: "sample@sample.com", //Meteor.user().emails[0].address,
       subject: subject,
-      text: text
+      html: text
     });
   }
 });

@@ -38,10 +38,11 @@ class Reports_View extends TrackerReact(React.Component) {
   editFormatter(cell, row){
     // console.log("HAHAHA",cell);
     return  <div>
-              <Link to = {`/report/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
+              <Link to = {`/report/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? "Edit" : "View"}</button></Link>
+              {Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? 
               <button className="delete" onClick={function() {
                 Reports_db.remove(cell);
-              }} >Delete</button>
+              }} >Delete</button> : null}
             </div>;
   }
   
@@ -52,17 +53,17 @@ class Reports_View extends TrackerReact(React.Component) {
     
     return (<div>
               <BootstrapTable data={reportData} striped={true} hover={true} pagination={true} search={true}>
-                <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField="title" dataSort={true}>Title</TableHeaderColumn>
-                <TableHeaderColumn dataField="locationName" dataSort={true}>Location</TableHeaderColumn>
-                <TableHeaderColumn dataField="status" dataSort={true}>Status</TableHeaderColumn>
-                <TableHeaderColumn dataField="_id" dataFormat={this.editFormatter}>Action</TableHeaderColumn> 
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="title" dataSort={true}>Title</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="locationName" dataSort={true}>Location</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="status" dataSort={true}>Status</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" dataFormat={this.editFormatter}>Action</TableHeaderColumn> 
               </BootstrapTable>
             </div>)
           
   }
 }
-
+// hidden={!Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator'])}
 Reports_View.propTypes = {
   reports: PropTypes.array.isRequired,
 };

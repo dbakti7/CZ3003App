@@ -61,30 +61,52 @@ class Reports_Edit extends TrackerReact(React.Component) {
     const description = ReactDOM.findDOMNode(this.refs.textAreaDescription).value.trim();
     const incidentType_id = ReactDOM.findDOMNode(this.refs.incidentType).value.trim();
     const status = ReactDOM.findDOMNode(this.refs.status).value.trim();
+    var handledBy = Meteor.user().username;
+
     if(this.props.report_item.length > 0) {
       var reportArray = this.props.report_item;
-      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status);
+      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status, handledBy);
     }
-    else {      
-      Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status);
+    else {
+      var empty = ""      
+      Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status, empty);
       Meteor.call('getNearestShelter', lat, lng, function(err,result) {
         // get the nearest civil defense
           console.log(result.name)
       })
-      // incidentType = IncidentType_db.find({_id: incidentType_id}).fetch()[0];
-      // for(i=0;i<incidentType.subscribers.length;++i) {
-      //   // skip null data
-      //   if(!incidentType.subscribers[i])
-      //     continue;
-      //   subUser = UserData_db.find({originalUserId: incidentType.subscribers[i]}).fetch()[0]
-      //   // send notification to subscribers
-      //   if(!subUser)
-      //     continue;
-      //   Meteor.call('sendEmail', subUser.email, title, description);
-        //Meteor.call("sendSMS", this.refs.textSMS.value,this.refs.phone.value, function(err,result)
-      // }
-      // Meteor.call('postTweet', title + ":" + description)
-      // Meteor.call('postToFacebook', title + ":" + description)
+
+      
+
+      Meteor.call('incidentType.find', incidentType_id, function(err, result) {
+          var facebookTemplate = "Warning! A case of "+ result.name + " has been reported in " + locationName+". Please evacuate the location \
+      immediately and act accordingly. Click on the following link to get further information on the latest \
+      development of incidents! \"google.com\""
+
+      var twitTemplate = "A case of " + result.name + " has been reported in " + locationName+". Please evacuate \
+immediately and act accordingly."
+        var emailTemplate = "<div>Warning! A case of &lt;incident type&gt; has been reported in &lt;location&gt;. Please evacuate the location\
+immediately and act accordingly. Click on the following link to get further information on the latest\
+development of incidents! &lt;website link&gt;</div>"
+          Meteor.call('postToFacebook', title + ":" + facebookTemplate, "google.com")
+          Meteor.call('postTweet', title + ":" + twitTemplate);
+          for(i=0;i<result.emailSubscribers.length;++i) {
+              if(!result.emailSubscribers[i])
+                continue;
+                subUser = UserData_db.find({originalUserId: result.emailSubscribers[i]}).fetch()[0]
+            // send notification to subscribers
+                if(!subUser)
+                 continue;
+               Meteor.call('sendEmail', subUser.email, title, emailTemplate);
+        // console.log(result.emailSubscribers[i])
+            }
+      for(i=0;i<result.smsSubscribers.length;++i) {
+        // console.log(result.smsSubscribers[i])
+        if(!result.smsSubscribers[i])
+            continue;
+        subUser = UserData_db.find({originalUserId: result.smsSubscribers[i]}).fetch()[0]
+        Meteor.call("sendSMS", twitTemplate, subUser.phone)
+      }
+      })
     }
   }
 
@@ -95,12 +117,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
   }
 
   renderReportItem() {
-    if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator'])) {
-        document.getElementById("reportCaseFieldSet").disabled = false;
-    }
-    else {
-        document.getElementById("reportCaseFieldSet").disabled = true;
-    }
+    
     if(this.props.report_item.length > 0) {
       var report = this.props.report_item[0];      
       var textRB = ReactDOM.findDOMNode(this.refs.textReportedBy);
@@ -154,31 +171,30 @@ class Reports_Edit extends TrackerReact(React.Component) {
     var reportedByUser = this.props.reportedByUser;
     var report_item = this.props.report_item;
 
-    
-    
-    return (<div>
+    if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Operator'])) {
+        return (<div>
       <h2>Report Page</h2> 
       <form name="reportCase" onSubmit={this.handleSubmit.bind(this)}>
         <fieldset id="reportCaseFieldSet">
             <table width="100%" border="0">
             <tr>
                 <td width="15%">Title:</td> 
-                <td><input type="text" ref="textTitle" placeholder="Type to add new tasks"/><br/></td>
+                <td><input type="text" size="40" ref="textTitle" placeholder="Type to add new tasks" required/><br/></td>
             </tr>
             <tr>
                 <td>Reported By:</td>
-                <td><input type="text" ref="textReportedBy" disabled = "true"/><br/></td>
+                <td><input type="text" size="40" ref="textReportedBy" disabled = "true"/><br/></td>
             </tr>
             <tr>
                 <td>Location:</td> 
-                <td><input type="text" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} /><br/></td>
+                <td><input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} required/><br/></td>
             </tr>
             <tr>
                 <td>Description:</td> 
-                <td><textarea ref="textAreaDescription" placeholder="Description"/><br/></td>
+                <td><textarea cols="40" rows="4" ref="textAreaDescription" placeholder="Description" required/><br/></td>
             </tr>
             <tr>
-                <td>Incident Type</td>
+                <td>Incident Type:</td>
                 <td>
                     <select ref="incidentType" defaultValue="" required>
                         <option value="" disabled>Incident Type</option>
@@ -192,7 +208,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
                 </td>
             </tr>
             <tr>
-                <td>Status</td>
+                <td>Status:</td>
                 <td>
                     <select ref="status" defaultValue="" required>
                         <option value="Active">Active</option>
@@ -214,8 +230,89 @@ class Reports_Edit extends TrackerReact(React.Component) {
           {this.state.ready ? this.renderReportItem() : null}
           <br/>
           <Link to =  "/reports/view" activeClassName="active">← Back to list of reports</Link>
+      </div>)
+    }
+    else {
+        return (<div>
+      <h2>Report Page</h2> 
+      <form name="reportCase" onSubmit={this.handleSubmit.bind(this)}>
+        <fieldset id="reportCaseFieldSet">
+            <table width="100%" border="0">
+            <tr>
+                <td width="15%">Title:</td> 
+                <td><input type="text" size="40" ref="textTitle" placeholder="Type to add new tasks" disabled="true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Reported By:</td>
+                <td><input type="text" size="40" ref="textReportedBy" disabled = "true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Location:</td> 
+                <td><input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} disabled="true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Description:</td> 
+                <td><textarea cols="40" rows="4" ref="textAreaDescription" placeholder="Description" disabled="true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Incident Type:</td>
+                <td>
+                    <select ref="incidentType" defaultValue="" disabled="true">
+                        <option value="" disabled>Incident Type</option>
+                        {
+                        this.props.incidentTypeList.map(function(incidentType) {
+                            return <option key={incidentType._id}
+                            value={incidentType._id}>{incidentType.name}</option>;
+                        })
+                        }
+                    </select><br/>
+                </td>
+            </tr>
+
+            {(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency']))
+                ? (
+                 <tr>
+                  <td>Status:</td>
+                  <td>
+                    <select ref="status" defaultValue="" required>
+                        <option value="Active">Active</option>
+                        <option value="Handled">Handled</option>
+                        <option value="Resolved">Resolved</option>
+                    </select><br/>
+                  </td>
+                </tr>
+                )
+                : (
+                  <tr>
+                    <td>Status:</td>
+                    <td>
+                        <select ref="status" defaultValue="" disabled="true">
+                            <option value="Active">Active</option>
+                            <option value="Handled">Handled</option>
+                            <option value="Resolved">Resolved</option>
+                        </select><br/>
+                    </td>
+                  </tr>
+                )
+            }
+                        
+            {(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']))
+                ? (
+                <tr>
+                    <td colspan="2"><input width="50%"type="submit" value="Report" id="submitButton"/></td>
+                </tr>)
+                : null
+            }
+            </table>
+        </fieldset>
+      </form>
+          {this.state.ready ? this.renderReportItem() : null}
+          <br/>
+          <Link to =  "/reports/view" activeClassName="active">← Back to list of reports</Link>
       </div>
     )
+    }
+    
           
   }
 }

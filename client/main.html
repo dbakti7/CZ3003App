@@ -55,36 +55,38 @@
                 </li>
                 <li>
                     <a href="#">INFO</a>
-                    <ul>
-                        <li><a href="/map">GENERAL INCIDENTS</a></li>
-                        <li><a href="/dengue">DENGUE CLUSTERS</a></li>
+                    <ul type="disc">
+                        <li class="sublist"><a href="/map">GENERAL INCIDENTS</a></li>
+                        <li class="sublist"><a href="/dengue">DENGUE CLUSTERS</a></li>
                     </ul>
                 </li>
-                {{#if isInRole 'Admin, Operator'}}
                 <li>
                     <a href="#">CATEGORIES</a>
-                    <ul>
-                        <li><a href="/category/view">VIEW</a></li>
-                        <li><a href="/category/0/0">NEW</a></li>
-                    </ul>
-                </li>
-                {{/if}}
-                <li>
-                    <a href="#">REPORTS</a>
-                    <ul>
-                        <li><a href="/reports/view">VIEW</a></li>
-                        {{#if isInRole 'Admin, Operator'}}
-                        <li><a href="/report/0/0">NEW</a></li>
+                    <ul type="disc">
+                        <li class="sublist"><a href="/category/view">VIEW</a></li>
+                        {{#if isInRole 'Admin'}}
+                        <li class="sublist"><a href="/category/0/0">NEW</a></li>
                         {{/if}}
                     </ul>
                 </li>
                 <li>
-                    <a href="#">USERS</a>
-                    <ul>
-                        <li><a href="/users/view">VIEW</a></li>
-                        <li><a href="/user/0/0">NEW</a></li>
+                    <a href="#">REPORTS</a>
+                    <ul type="disc">
+                        <li class="sublist"><a href="/reports/view">VIEW</a></li>
+                        {{#if isInRole 'Admin, Operator'}}
+                        <li class="sublist"><a href="/report/0/0">NEW</a></li>
+                        {{/if}}
                     </ul>
                 </li>
+                {{#if isInRole 'Admin'}}
+                <li>
+                    <a href="#">USERS</a>
+                    <ul type="disc">
+                        <li class="sublist"><a href="/users/view">VIEW</a></li>
+                        <li class="sublist"><a href="/user/0/0">NEW</a></li>
+                    </ul>
+                </li>
+                {{/if}}
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->

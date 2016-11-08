@@ -78,6 +78,7 @@ class GoogleMap extends React.Component {
       var mapi;
       var PSIMarkers = null;
       var WeatherMarkers = null;
+      
       var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
       var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 
@@ -211,7 +212,7 @@ class GoogleMap extends React.Component {
     var arrayofMarkers = []
     var icon = {
         url: 'images/haze.png',
-        scaledSize: new google.maps.Size(20,20),
+        scaledSize: new google.maps.Size(30,30),
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(0,0)}
     for(i = 0; i<markerlist.length; i++){
@@ -225,12 +226,12 @@ class GoogleMap extends React.Component {
               '<tr>' +
                 '<td>24-hr PSI</td>'+
                 '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][1] + '</td>' +
+                '<td class="mapContent">' + markerlist[i][3] + '</td>' +
               '</tr>' +
               '<tr>' +
                 '<td>3-hr PSI</td>'+
                 '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][2] + '</td>' +
+                '<td class="mapContent">' + markerlist[i][4] + '</td>' +
               '</tr>' +
               '<tr>' +
                 '<td>1-hr NO2 concentration</td>'+
@@ -268,29 +269,24 @@ class GoogleMap extends React.Component {
                 '<td class="mapContent">' + markerlist[i][11] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>NO2 sub-index</td>'+
+                '<td>O3 sub-index</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][12] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>O3 sub-index</td>'+
+                '<td>PM10 sub-index</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][13] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>PM10 sub-index</td>'+
+                '<td>PM2.5 sub-index</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][14] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>PM2.5 sub-index</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][15] + '</td>' +
-              '</tr>' +
-              '<tr>' +
                 '<td>SO2 sub-index</td>'+
                 '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][16] + '</td>' +
+                '<td class="mapContent">' + markerlist[i][15] + '</td>' +
               '</tr>' +
             '</table>'+
 
@@ -298,7 +294,7 @@ class GoogleMap extends React.Component {
             '</div>';
       //detail of each marker
       var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]),
+          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]-0.0075),
           map: mapi,
           title: markerlist[i][0],
           icon: icon,
@@ -327,6 +323,7 @@ class GoogleMap extends React.Component {
       return;
     }
     var markerlist = []
+    
     hour = new Date().getHours()
     if(hour >= 6 && hour <= 12)
       weathers = this.state.weatherReadings["weatherMorn"][0]
@@ -335,40 +332,72 @@ class GoogleMap extends React.Component {
     else 
       weathers = this.state.weatherReadings["weatherNight"]
     
-    for(i=0;i<weathers.length;++i) {
       var temp = []
-      temp.push(weathers[i].getElementsByTagName("wxeast")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxeast")[0].innerHTML)
       temp.push(1.35735)
       temp.push(103.94000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxwest")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxwest")[0].innerHTML)
       temp.push(1.35735)
       temp.push(103.70000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxnorth")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxnorth")[0].innerHTML)
       temp.push(1.41803)
       temp.push(103.82000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxsouth")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxsouth")[0].innerHTML)
       temp.push(1.29587)
       temp.push(103.82000)
       markerlist.push(temp)
       temp = []
-      temp.push(weathers[i].getElementsByTagName("wxcentral")[0].innerHTML)
+      temp.push(weathers.getElementsByTagName("wxcentral")[0].innerHTML)
       temp.push(1.35735)
       temp.push(103.82000)
       markerlist.push(temp)
-    }
-    
-    var weatherList = {'BR': ['haze.png', 'Mist'], 'CL': ['cloudy.png', 'Cloudy'], 'FA': ['sunny.png', 'Fair (Day)'], 
-  'FN': ['sunny.png', 'Fair (Night)']}
+        
+    var weatherList = {
+      'BR': ['haze.png', 'Mist'], 
+      'CL': ['cloudy.png', 'Cloudy'], 
+      'DR': ['rain.png', 'Drizzle'], 
+      'FA': ['sunny.png', 'Fair (Day)'], 
+      'FG': ['haze.png', 'Fog'], 
+      'FN': ['sunny.png', 'Fair (Night)'], 
+      'FW': ['sunny.png', 'Fair and Warm'],
+      'HG': ['storm.png', 'Heavy Thundery Showers with Gusty Winds'],
+      'HR': ['rain.png', 'Heavy Rain'],
+      'HS': ['rain.png', 'Heavy Showers'],
+      'HT': ['storm.png', 'Heavy Thundery Showers'], 
+      'HZ': ['haze.png', 'Hazy'],
+      'LH': ['haze.png', 'Slightly Hazy'],
+      'LR': ['rain.png', 'Light Rain'],
+      'LS': ['rain.png', 'Light Showers'],
+      'OC': ['cloudy.png', 'Overcast'],
+      'PC': ['cloudy.png', 'Partly Cloudy (Day)'], 
+      'PN': ['cloudy.png', 'Partly Cloudy (Night)'],
+      'PS': ['rain.png', 'Passing Showers'],
+      'RA': ['rain.png', 'Moderate Rain'],
+      'SH': ['rain.png', 'Showers'],
+      'SK': ['rain.png', 'Strong Wind, Showers'],
+      'SN': ['snowflake.png', 'Snow'],
+      'SR': ['rain.png', 'Strong Wing, Rains'],
+      'SS': ['snowflake.png', 'Snow Showers'],
+      'SU': ['sunny.png', 'Sunny'],
+      'SW': ['windy.png', 'Strong Winds'],
+      'TL': ['storm.png', 'Thundery Showers'],
+      'WC': ['windy.png', 'Windy, Cloudy'], 
+      'WD': ['windy.png', 'Windy'], 
+      'WF': ['windy.png', 'Windy, Fair'], 
+      'WR': ['windy.png', 'Windy, Rain'], 
+      'WS': ['windy.png', 'Windy, Showers'], 
+  }
+  
     var arrayofMarkers = []
     var icon = {
         url: 'images/logo.png',
-        scaledSize: new google.maps.Size(20,20),
+        scaledSize: new google.maps.Size(30,30),
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(0,0)}
     for(i = 0; i<markerlist.length; i++){
@@ -382,12 +411,14 @@ class GoogleMap extends React.Component {
       //detail of each marker
       icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
       var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]),
+          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]+0.00075),
+          
           map: mapi,
           title: markerlist[i][0],
           icon: icon,
           detail: contentString,
         });
+
       arrayofMarkers.push(marker);
       //link the pop ups with the marker 
       arrayofMarkers[i].addListener('click', function() {
@@ -402,6 +433,8 @@ class GoogleMap extends React.Component {
     renderMarkers() {
     var markerlist = []
     for(var i =0;i<this.props.reports.length;++i) {
+      if(this.props.reports[i].status == "Resolved")
+        continue;
       var temp = []
       temp.push(this.props.reports[i].lat)
       temp.push(this.props.reports[i].long)
@@ -410,6 +443,10 @@ class GoogleMap extends React.Component {
       temp.push(this.props.reports[i].title)
       temp.push(this.props.reports[i].locationName)
       temp.push('https://www.google.com.sg/')
+      if(this.props.reports[i].status == "Handled")
+        temp.push("Handled by: " + this.props.reports[i].handledBy)
+      else if(this.props.reports[i].status == "Active")
+        temp.push("Active")
       markerlist.push(temp)
     }
     
@@ -439,7 +476,7 @@ class GoogleMap extends React.Component {
       var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
-            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][4] +'</h1>'+
+            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][3] +'</h1>'+
             '<div id="bodyContent">'+
             '<table>'+
               '<tr>'+
@@ -447,10 +484,15 @@ class GoogleMap extends React.Component {
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][2] + '</td>'+
               '</tr>' +
+              '<tr>'+
+                '<td>Location</td>'+ 
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][4] + '</td>'+
+              '</tr>' +
               '<tr>' +
-                '<td>Handle By</td>' +
+                '<td>Status</td>' +
                 '<td>:</td>' +
-                '<td class="mapContent">'+ markerlist[i][3]+ '</td>'+
+                '<td class="mapContent">'+ markerlist[i][6]+ '</td>'+
               '</tr>'+
             '</table><br/>'+
             '<a href="' +markerlist[i][5]+ '" target ="_blank"> <i>Detail here</i> </a>'+

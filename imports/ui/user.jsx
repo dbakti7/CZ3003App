@@ -33,27 +33,30 @@ class User extends Component {
  
     // Find the text field via the React ref
     const userName = ReactDOM.findDOMNode(this.refs.textUserName).value.trim();
-    if(this.props.newUser)
+    if(this.props.newUser) {
       var password = ReactDOM.findDOMNode(this.refs.textPassword).value.trim();
+      
+    }
     const fullName = ReactDOM.findDOMNode(this.refs.textFullName).value.trim();
     const email = ReactDOM.findDOMNode(this.refs.textEmail).value.trim();
+    const phone = ReactDOM.findDOMNode(this.refs.textPhone).value.trim();
     const type = ReactDOM.findDOMNode(this.refs.textType).value;
     const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
 
-    if(type == "Admin" || type == "Operator")
+    if(type != "Agency")
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = true;
     else
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
       
     if(this.props.newUser) {
        Meteor.call('userAux.addUser', userName, password, function(err, result) {
-         Meteor.call('userData.update', result, fullName, email, type, agencyName, function(err1, result1) {
+         Meteor.call('userData.update', result, fullName, email, type, agencyName, phone, function(err1, result1) {
            Meteor.call('setRole', result, type);
          })
        });
      }
      else {
-       Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName);
+       Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName, phone);
        Meteor.call('setRole', this.props.currentActiveUserId, type);
      }
     
@@ -147,8 +150,6 @@ class User extends Component {
 updateValues() {
     var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
     var data = this.props.user_data;
-    if(!this.props.newUser)
-    console.log(this.props.currentActiveUserId)
     var self = this
     Meteor.call('userAux.find', this.props.currentActiveUserId, function(err, result) {
        ReactDOM.findDOMNode(self.refs.textUserName).value = result[0].username;
@@ -157,17 +158,21 @@ updateValues() {
      if (users_data.length > 0 && !this.props.newUser) { 
       if (data.email != undefined)
         ReactDOM.findDOMNode(this.refs.textEmail).value = data.email;
+      if (data.phone != undefined)
+        ReactDOM.findDOMNode(this.refs.textPhone).value = data.phone;
       if (data.fullName != undefined)
         ReactDOM.findDOMNode(this.refs.textFullName).value = data.fullName;
       if (data.agencyName != undefined)
         ReactDOM.findDOMNode(this.refs.AgencyName).value = data.agencyName;
-      if (data.type != "Select Type")
-        ReactDOM.findDOMNode(this.refs.textType).value = data.type;
+      ReactDOM.findDOMNode(this.refs.textType).value = data.type;
     }
     else {
       ReactDOM.findDOMNode(this.refs.textEmail).value = "";
       ReactDOM.findDOMNode(this.refs.textFullName).value = "";
-      ReactDOM.findDOMNode(this.refs.textType).value = "Select Type";
+      if(!this.props.newUser)
+        ReactDOM.findDOMNode(this.refs.textType).value = "PublicUser";
+      else
+        ReactDOM.findDOMNode(this.refs.textType).value = "Admin";
     }
 
     if (ReactDOM.findDOMNode(this.refs.textType).value == "Agency") {
@@ -185,6 +190,8 @@ updateValues() {
     }
     var loggedOut = (!currentUser && userDataAvailable);
     var loggedIn = (currentUser && userDataAvailable);
+    var initial = "initial"
+    var noneStr = "none"
     return (<div>User ID: {this.props.params.user_id} <br/> Edit (True/False): 
     {this.props.params.edit}
     
@@ -201,20 +208,24 @@ updateValues() {
                   {this.props.newUser ? 
                    <tr>
                      <td>Password:</td>
-                     <td><input type="text" ref="textPassword" placeholder="Password"/><br/></td>
+                     <td><input type="password" ref="textPassword" placeholder="Password"/><br/></td>
                    </tr> : null}
                   <tr>
                     <td>Email:</td> 
-                    <td><input type="text" ref="textEmail" placeholder="Email Address"/><br/></td>
+                    <td><input type="email" ref="textEmail" placeholder="Email Address"/><br/></td>
                   </tr>
                   <tr>
+                    <td>Phone Number:</td> 
+                    <td><input type="tel" ref="textPhone" placeholder="Phone Number"/><br/></td>
+                  </tr>
+                  <tr style={{display: (this.props.newUser ? "initial" : "none")}}>
                     <td>Type:</td> 
                     <td>
                       <select name="UserType" ref="textType">
-                        <option value="Select Type" selected disabled>Select Type</option>
                         <option value="Admin">Admin</option>
                         <option value="Operator">Operator</option>
                         <option value="Agency">Agency</option>
+                        <option value="PublicUser">Public User</option>
                   </select><br/></td>
                   </tr>
                   <tr>
@@ -224,23 +235,6 @@ updateValues() {
                     <td colspan="2"><input width="50%" type="submit" value="Update"/><br/></td>
                   </tr>
                 </table>
-          </form>
-          <form name="postTweet" onSubmit={this.postTweet.bind(this)} >
-            <h2>Enter tweet to post: </h2>
-            <input type="text" ref="textTweet" placeholder="Enter tweet here"/><br/>
-            <input type="submit" value="Post"/>
-          </form>
-
-           <form name="postFB" onSubmit={this.postFB.bind(this)} >
-            <h2>Enter text to post: </h2>
-            <input type="text" ref="textFB" placeholder="Enter post here"/><br/>
-            <input type="submit" value="Post"/>
-          </form>
-          <form name="sendSMS" onSubmit={this.sendSMS.bind(this)}>
-            <h2>Enter text to send: </h2>
-            <input type="text" ref="textSMS" placeholder="Enter post here"/><br/>
-            <input type="text" ref="phone" placeholder="Enter phone here"/><br/>
-            <input type="submit" value="Post"/>
           </form>
           {this.state.ready ? this.updateValues() : null}
     </div>);

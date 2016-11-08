@@ -311,6 +311,17 @@ select {
     padding-right: 80px;
 }
 
+.bsTableHeader {
+    background-color: #056571;
+    font-weight:bold;
+    color:#ffffff;
+    cursor:pointer;
+}
+
+.sublist {
+    color: #ffffff;
+}
+
 #thisImage {
     visibility: visible;
     width: 500 !important;

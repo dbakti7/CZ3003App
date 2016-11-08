@@ -49,18 +49,32 @@ class Category extends TrackerReact(React.Component) {
     this.state.subscription.stop();
   }
 
+
+
   editFormatter(cell, row, UserID){
+    var email = "EMAIL"
+    var sms = "SMS"
     return  <div>
+              {Roles.userIsInRole(Meteor.userId(), ['PublicUser', 'Agency']) ?
               <button className="subscribe"onClick={function() {
-                Meteor.call('incidentType.addSubscriber', cell, UserID)
+                Meteor.call('incidentType.addSubscriber', cell, UserID, email)
                 //alert("Subscribed!")
                 Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
-                console.log("WHAAAT", row.subscribers);
-              }} >SUBSCRIBE</button>
-              <Link to = {`/category/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
+              }} >SUBSCRIBE EMAIL</button> : null}
+
+              {Roles.userIsInRole(Meteor.userId(), ['PublicUser', 'Agency']) ?
+              <button className="subscribe"onClick={function() {
+                Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
+                //alert("Subscribed!")
+                Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
+              }} >SUBSCRIBE SMS</button> : null}
+
+              <Link to = {`/category/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin']) ? "Edit" : "View"}</button></Link>
+
+              {Roles.userIsInRole(Meteor.userId(), ['Admin']) ?
               <button className="delete" onClick={function() {
                 IncidentType_db.remove(cell);
-              }} >Delete</button>
+              }} >Delete</button> : null}
             </div>;
   }
 
@@ -70,10 +84,10 @@ class Category extends TrackerReact(React.Component) {
     console.log("ASS", categoryData);
     return (<div>
               <BootstrapTable data={categoryData} striped={true} hover={true} pagination={true} search={true}>
-                <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField="name" dataSort={true}>Category Name</TableHeaderColumn>
-                <TableHeaderColumn dataField="description" dataSort={true}>Description</TableHeaderColumn>
-                <TableHeaderColumn dataField="_id" dataFormat={this.editFormatter} formatExtraData={this.state.userID}>Action</TableHeaderColumn> 
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="name" dataSort={true}>Category Name</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="description" dataSort={true}>Description</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" dataFormat={this.editFormatter} formatExtraData={this.state.userID}>Action</TableHeaderColumn> 
               </BootstrapTable>         
             </div>);
   }

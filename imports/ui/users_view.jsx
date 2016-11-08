@@ -50,10 +50,10 @@ class Users_View extends TrackerReact(React.Component) {
     // console.log("ASS", userData);
     return (<div>
               <BootstrapTable data={userData} striped={true} hover={true} pagination={true} search={true}>
-                <TableHeaderColumn dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
-                <TableHeaderColumn dataField="username" dataSort={true}>User Name</TableHeaderColumn>
-                <TableHeaderColumn dataField="roles" dataSort={true}>Account Type</TableHeaderColumn>
-                <TableHeaderColumn dataField="_id" dataFormat={this.editFormatter}>Action</TableHeaderColumn> 
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="username" dataSort={true}>User Name</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="roles" dataSort={true}>Account Type</TableHeaderColumn>
+                <TableHeaderColumn className="bsTableHeader" dataField="_id" dataFormat={this.editFormatter}>Action</TableHeaderColumn> 
               </BootstrapTable>
           </div>)
           

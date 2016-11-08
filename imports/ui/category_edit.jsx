@@ -53,6 +53,13 @@ class Category extends TrackerReact(React.Component) {
       ReactDOM.findDOMNode(this.refs.textName).value = this.props.category_data[0].name;
       ReactDOM.findDOMNode(this.refs.textAreaDescription).value = this.props.category_data[0].description;
     }
+
+    if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Operator'])) {
+        document.getElementById("incidentTypeForm").disabled = false;
+    }
+    else {
+        document.getElementById("incidentTypeForm").disabled = true;
+    }
   }
 
   componentWillUnmount() {
@@ -62,19 +69,22 @@ class Category extends TrackerReact(React.Component) {
   render() {     
     return (<div>
                 <form name="incidentTypeForm" onSubmit={this.handleSubmit.bind(this)} >
-                <table width="100%">
-                    <tr>
-                        <td width="15%">Name:</td> 
-                        <td><input type="text" ref="textName" placeholder="Name"/></td>
-                    </tr>
-                    <tr>
-                        <td>Description:</td>
-                        <td><textarea ref="textAreaDescription" placeholder="Description"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input width="50%" type="submit" value="Update"/></td>
-                    </tr>
-                </table>
+                  <fieldset id="incidentTypeForm">
+
+                    <table width="100%">
+                        <tr>
+                            <td width="15%">Name:</td> 
+                            <td><input type="text" size="40" ref="textName" placeholder="Name" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td><textarea rows="4" cols="40" ref="textAreaDescription" placeholder="Description" required/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><input width="50%" type="submit" value="Update"/></td>
+                        </tr>
+                    </table>
+                  </fieldset>
                 </form>
           {this.state.ready ? this.renderIncidentTypeData() : null}
           <br/>

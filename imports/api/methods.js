@@ -50,7 +50,7 @@ Meteor.methods({
   },
 
     // database methods for report object
-  'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status) {
+  'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status, handledBy) {
     check(title, String);
     Reports_db.insert({
        title,
@@ -61,20 +61,29 @@ Meteor.methods({
        lat,
        long,
        status,
+       handledBy,
        createdAt: new Date(),
      });
    },
    'reports.remove'(reportId) {
      Reports_db.remove(reportId);
    },
-   'reports.update'(reportId, newTitle, newDescription, newIncidentType_id, newLocationName, newLat, newLong, newStatus) {
+   'reports.update'(reportId, newTitle, newDescription, newIncidentType_id, newLocationName, newLat, newLong, newStatus, newHandledBy) {
      Reports_db.update(reportId, {$set: {title: newTitle, description: newDescription,
-       incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong, status:newStatus}});
+       incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong, status:newStatus, handledBy: newHandledBy}});
    },
- 
+
+   'reports.getByType'(t) {
+     var result = Meteor.call('incidentType.findByType', t)
+      var result1 = Meteor.call('reports.find', result)
+        return result1
+   },
+
+   'reports.find'(id) {
+      return Reports_db.find({incidentType_id: id}).fetch()
+   },
    // aux methods
    'userAux.find'(userId) {
-     console.log(userId)
      return Meteor.users.find(userId).fetch();
    },
  
@@ -105,7 +114,7 @@ Meteor.methods({
      return UserData_db.find({type: filter}).fetch()
    },
  
-   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName) {
+   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName, newPhone) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
         UserData_db.insert({
           originalUserId: userId,
@@ -113,11 +122,12 @@ Meteor.methods({
           email: newEmail,
           type: newType,
           agencyName: newAgencyName,
+          phone: newPhone,
           createdAt: new Date(),
        })
      }
      else {
-      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName}});
+      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName, phone: newPhone}});
      }
    },
 
@@ -141,7 +151,8 @@ Meteor.methods({
     IncidentType_db.insert({
        name,
        description,
-       subscribers: [],
+       emailSubscribers: [],
+       smsSubscribers: [],
        createdAt: new Date(),
      });
    },
@@ -151,8 +162,20 @@ Meteor.methods({
    'incidentType.update'(incidentTypeId, newName, newDescription) {
      IncidentType_db.update(incidentTypeId, {$set: {name: newName, description: newDescription}});
    },
-   'incidentType.addSubscriber'(incidentType_id, userId) {
-     IncidentType_db.update(incidentType_id, {$addToSet: {subscribers: userId}})
+   'incidentType.addSubscriber'(incidentType_id, userId, type) {
+     if(type == "SMS")
+      IncidentType_db.update(incidentType_id, {$addToSet: {smsSubscribers: userId}})
+    else if(type == "EMAIL")
+     IncidentType_db.update(incidentType_id, {$addToSet: {emailSubscribers: userId}})
+
+   },
+'incidentType.find'(id) {
+     return IncidentType_db.find(id).fetch()[0]
+
+   },
+   
+   'incidentType.findByType'(type) {
+     return IncidentType_db.find({name: type}).fetch()[0]._id
    },
   'postTweet': function (text) {
         if(Meteor.user())
@@ -170,13 +193,13 @@ Meteor.methods({
   });
 
   },
-  'postToFacebook': function(text) {
+  'postToFacebook': function(text, link) {
     var wallPost = {
       message: text,
       privacy: {value: "EVERYONE"},
       // message: "We do not remember days, we remember moments",
       // caption: 'This is my wall post example',
-      link: 'https://www.facebook.com/gbbpentium?fref=ts'
+      link: link
     };
     if(Meteor.user()) {
       graph.setAccessToken("EAAFd7VBDCW8BALEhRl0ke94mPKKkivs2ZCQqT3LRH691aLIDIi3zblDOfUt5ZCY6QxSv8QePlr8L87wmqTtdcJdx5GqhYbzrxZBtr58R7J7rpYFTGgyZBWWsbnXSTtaVbjIwHOpZAqXuJZCDnJ7RyXlL1NURxVZAhsZD");
