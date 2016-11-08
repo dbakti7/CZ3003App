@@ -73,7 +73,10 @@ class Category extends TrackerReact(React.Component) {
 
               {Roles.userIsInRole(Meteor.userId(), ['Admin']) ?
               <button className="delete" onClick={function() {
-                IncidentType_db.remove(cell);
+                if(confirm("Are you sure you want to delete this?")){
+                  IncidentType_db.remove(cell);
+                }
+                
               }} >Delete</button> : null}
             </div>;
   }

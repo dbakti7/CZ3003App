@@ -41,7 +41,9 @@ class Reports_View extends TrackerReact(React.Component) {
               <Link to = {`/report/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? "Edit" : "View"}</button></Link>
               {Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? 
               <button className="delete" onClick={function() {
-                Reports_db.remove(cell);
+                if(confirm("Are you sure you want to delete this?")){
+                  Reports_db.remove(cell);
+                }
               }} >Delete</button> : null}
             </div>;
   }

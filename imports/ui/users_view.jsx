@@ -39,7 +39,9 @@ class Users_View extends TrackerReact(React.Component) {
     return  <div>
               <Link to = {`/user/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
               <button className="delete" onClick={function() {
-                Meteor.call('userData.remove', cell);
+                if(confirm("Are you sure you want to delete this?")){
+                   Meteor.call('userData.remove', cell);
+                }
               }} >Delete</button>
             </div>;
   }
