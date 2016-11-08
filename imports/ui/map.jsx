@@ -78,6 +78,7 @@ class GoogleMap extends React.Component {
       var mapi;
       var PSIMarkers = null;
       var WeatherMarkers = null;
+      
       var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
       var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 
@@ -225,12 +226,12 @@ class GoogleMap extends React.Component {
               '<tr>' +
                 '<td>24-hr PSI</td>'+
                 '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][1] + '</td>' +
+                '<td class="mapContent">' + markerlist[i][3] + '</td>' +
               '</tr>' +
               '<tr>' +
                 '<td>3-hr PSI</td>'+
                 '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][2] + '</td>' +
+                '<td class="mapContent">' + markerlist[i][4] + '</td>' +
               '</tr>' +
               '<tr>' +
                 '<td>1-hr NO2 concentration</td>'+
@@ -268,29 +269,24 @@ class GoogleMap extends React.Component {
                 '<td class="mapContent">' + markerlist[i][11] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>NO2 sub-index</td>'+
+                '<td>O3 sub-index</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][12] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>O3 sub-index</td>'+
+                '<td>PM10 sub-index</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][13] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>PM10 sub-index</td>'+
+                '<td>PM2.5 sub-index</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][14] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>PM2.5 sub-index</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][15] + '</td>' +
-              '</tr>' +
-              '<tr>' +
                 '<td>SO2 sub-index</td>'+
                 '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][16] + '</td>' +
+                '<td class="mapContent">' + markerlist[i][15] + '</td>' +
               '</tr>' +
             '</table>'+
 
