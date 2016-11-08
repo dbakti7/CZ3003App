@@ -33,18 +33,17 @@ class User extends Component {
  
     // Find the text field via the React ref
     const userName = ReactDOM.findDOMNode(this.refs.textUserName).value.trim();
-    var type = "Public"
     if(this.props.newUser) {
       var password = ReactDOM.findDOMNode(this.refs.textPassword).value.trim();
-      type = ReactDOM.findDOMNode(this.refs.textType).value;
+      
     }
     const fullName = ReactDOM.findDOMNode(this.refs.textFullName).value.trim();
     const email = ReactDOM.findDOMNode(this.refs.textEmail).value.trim();
     const phone = ReactDOM.findDOMNode(this.refs.textPhone).value.trim();
-    
+    const type = ReactDOM.findDOMNode(this.refs.textType).value;
     const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
 
-    if(type == "Admin" || type == "Operator")
+    if(type != "Agency")
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = true;
     else
       ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
@@ -151,8 +150,6 @@ class User extends Component {
 updateValues() {
     var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
     var data = this.props.user_data;
-    if(!this.props.newUser)
-    console.log(this.props.currentActiveUserId)
     var self = this
     Meteor.call('userAux.find', this.props.currentActiveUserId, function(err, result) {
        ReactDOM.findDOMNode(self.refs.textUserName).value = result[0].username;
@@ -167,13 +164,15 @@ updateValues() {
         ReactDOM.findDOMNode(this.refs.textFullName).value = data.fullName;
       if (data.agencyName != undefined)
         ReactDOM.findDOMNode(this.refs.AgencyName).value = data.agencyName;
-      if (data.type != "Select Type")
-        ReactDOM.findDOMNode(this.refs.textType).value = data.type;
+      ReactDOM.findDOMNode(this.refs.textType).value = data.type;
     }
     else {
       ReactDOM.findDOMNode(this.refs.textEmail).value = "";
       ReactDOM.findDOMNode(this.refs.textFullName).value = "";
-      ReactDOM.findDOMNode(this.refs.textType).value = "Select Type";
+      if(!this.props.newUser)
+        ReactDOM.findDOMNode(this.refs.textType).value = "PublicUser";
+      else
+        ReactDOM.findDOMNode(this.refs.textType).value = "Admin";
     }
 
     if (ReactDOM.findDOMNode(this.refs.textType).value == "Agency") {
@@ -191,6 +190,8 @@ updateValues() {
     }
     var loggedOut = (!currentUser && userDataAvailable);
     var loggedIn = (currentUser && userDataAvailable);
+    var initial = "initial"
+    var noneStr = "none"
     return (<div>User ID: {this.props.params.user_id} <br/> Edit (True/False): 
     {this.props.params.edit}
     
@@ -217,14 +218,14 @@ updateValues() {
                     <td>Phone Number:</td> 
                     <td><input type="tel" ref="textPhone" placeholder="Phone Number"/><br/></td>
                   </tr>
-                  <tr style="display: {this.props.newUser}">
+                  <tr style={{display: (this.props.newUser ? "initial" : "none")}}>
                     <td>Type:</td> 
                     <td>
                       <select name="UserType" ref="textType">
-                        <option value="Select Type" selected disabled>Select Type</option>
                         <option value="Admin">Admin</option>
                         <option value="Operator">Operator</option>
                         <option value="Agency">Agency</option>
+                        <option value="PublicUser">Public User</option>
                   </select><br/></td>
                   </tr>
                   <tr>
