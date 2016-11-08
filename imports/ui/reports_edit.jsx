@@ -65,11 +65,14 @@ class Reports_Edit extends TrackerReact(React.Component) {
 
     if(this.props.report_item.length > 0) {
       var reportArray = this.props.report_item;
-      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status, handledBy);
+      if(status == "Resolved")
+        resolvedTime = new Date()
+        console.log(resolvedTime)
+      Meteor.call('reports.update', reportArray[0]._id, title, description, incidentType_id, locationName, lat, lng, status, handledBy, resolvedTime);
     }
     else {
       var empty = ""      
-      Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status, empty);
+      Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status, empty, new Date("January 1, 2015 00:00:00"));
       Meteor.call('getNearestShelter', lat, lng, function(err,result) {
         // get the nearest civil defense
           console.log(result.name)
@@ -104,7 +107,7 @@ development of incidents! &lt;website link&gt;</div>"
         if(!result.smsSubscribers[i])
             continue;
         subUser = UserData_db.find({originalUserId: result.smsSubscribers[i]}).fetch()[0]
-        Meteor.call("sendSMS", twitTemplate, subUser.phone)
+        // Meteor.call("sendSMS", twitTemplate, subUser.phone)
       }
       })
     }

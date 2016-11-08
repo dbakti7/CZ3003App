@@ -50,7 +50,7 @@ Meteor.methods({
   },
 
     // database methods for report object
-  'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status, handledBy) {
+  'reports.insert'(title, reportedBy, description, incidentType_id, locationName, lat, long, status, handledBy, handledTime) {
     check(title, String);
     Reports_db.insert({
        title,
@@ -62,15 +62,16 @@ Meteor.methods({
        long,
        status,
        handledBy,
+       handledTime,
        createdAt: new Date(),
      });
    },
    'reports.remove'(reportId) {
      Reports_db.remove(reportId);
    },
-   'reports.update'(reportId, newTitle, newDescription, newIncidentType_id, newLocationName, newLat, newLong, newStatus, newHandledBy) {
+   'reports.update'(reportId, newTitle, newDescription, newIncidentType_id, newLocationName, newLat, newLong, newStatus, newHandledBy, newHandledTime) {
      Reports_db.update(reportId, {$set: {title: newTitle, description: newDescription,
-       incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong, status:newStatus, handledBy: newHandledBy}});
+       incidentType_id: newIncidentType_id, locationName: newLocationName, lat: newLat, long:newLong, status:newStatus, handledBy: newHandledBy, handledTime: newHandledTime}});
    },
 
    'reports.getByType'(t) {
@@ -211,7 +212,9 @@ Meteor.methods({
       return false;
     }
   },
-
+  'getAllShelter'() {
+    return CDShelter_db.find({}).fetch()
+  },
   'getNearestShelter': function(lat, lng) {
     var min = 1000000000;
     var cursor = CDShelter_db.find();

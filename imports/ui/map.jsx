@@ -44,7 +44,6 @@ class MyTestMap extends React.Component {
       loaded: GoogleMaps.loaded(),
       reports: Reports_db.find({}).fetch(),
       mapOptions: GoogleMaps.loaded() && this._mapOptions(),
-
     };
   };
   //focus center of map and detail zoom of the map
@@ -78,10 +77,11 @@ class GoogleMap extends React.Component {
       var mapi;
       var PSIMarkers = null;
       var WeatherMarkers = null;
+      var ShelterMarkers = null;
       
-      var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
       var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 
+      var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
       var xmlHttp = new XMLHttpRequest();
       var self = this;
       xmlHttp.onreadystatechange = function() { 
@@ -110,13 +110,19 @@ class GoogleMap extends React.Component {
       }
       xmlHttpWeather.open("GET", urlWeather, true); // true for asynchronous 
       xmlHttpWeather.send(null);
-
+      Meteor.call('getAllShelter', function(error, result) {
+        self.setState({
+              shelters: result
+            }) 
+      })
       this.state = {
         ready : false,
         PSIReadings: null,
         weatherReadings: null,
+        shelters: null,
         PSIToggle: true,
         weatherToggle: true,
+        shelterToggle: true,
       }
        
     }
@@ -126,15 +132,20 @@ class GoogleMap extends React.Component {
         this.props.options);
     PSIMarkers = null;
     WeatherMarkers = null;
+    ShelterMarkers = null;
     var self = this;
     var PSIControlDiv = document.createElement('div');
     var PSIControl = new this.PSIControl(PSIControlDiv, mapi, self, "PSI");
     var WeatherControlDiv = document.createElement('div');
     var WeatherControl = new this.PSIControl(WeatherControlDiv, mapi, self, "Weather");
+    var ShelterControlDiv = document.createElement('div');
+    var ShelterControl = new this.PSIControl(ShelterControlDiv, mapi, self, "Shelter");
     PSIControlDiv.index = 1;
     WeatherControlDiv.index = 1;
+    ShelterControlDiv.index = 1;
     mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(PSIControlDiv);
     mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(WeatherControlDiv);
+    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(ShelterControlDiv);
     this.setState({
           ready : true
         })
@@ -177,6 +188,13 @@ class GoogleMap extends React.Component {
           controlUI.addEventListener('click', function() {
             self.setState({
                 weatherToggle: !self.state.weatherToggle,
+              })
+          });
+        }
+        else if(title == "Shelter") {
+          controlUI.addEventListener('click', function() {
+            self.setState({
+                shelterToggle: !self.state.shelterToggle,
               })
           });
         }
@@ -320,7 +338,70 @@ class GoogleMap extends React.Component {
     }
     PSIMarkers = arrayofMarkers;
   }
+renderShelterMarkers() {
+  if(ShelterMarkers != null) {
+      for(i=0;i<ShelterMarkers.length;++i) {
+        if(this.state.shelterToggle)
+          ShelterMarkers[i].setMap(mapi);
+        else
+          ShelterMarkers[i].setMap(null);
+      }
+      return;
+    }
+    var markerlist = []
 
+    
+    shelterList =this.state.shelters 
+    for(i=0;i<shelterList.length;++i) {
+      var temp = []
+      temp.push(shelterList[i].name)
+      temp.push(shelterList[i].address)
+      temp.push(shelterList[i].lat)
+      temp.push(shelterList[i].lng)
+      markerlist.push(temp)
+    }
+      var arrayofMarkers = []
+    var icon = {
+        url: 'images/logo.png',
+        scaledSize: new google.maps.Size(30,30),
+        origin: new google.maps.Point(0,0),
+        anchor: new google.maps.Point(0,0)}
+    for(i = 0; i<markerlist.length; i++){
+      //content for each pop ups
+      var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<div id="firstHeading">'+
+            '<h3>' + markerlist[i][0] + '</h3>' +
+            '<div id="bodyContent">'+
+            '<table>'+
+              '<tr>' +
+                '<td>Address</td>'+
+                '<td>:</td>'+
+                '<td class="mapContent">' + markerlist[i][1] + '</td>' +
+              '</tr></table>' +
+              '<a href=https://www.google.com.sg/maps/place/"' +markerlist[i][1]+ '" target ="_blank"> <i>Go To</i> </a>'+
+            '</div></div>';
+      //detail of each marker
+      // icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
+      var  marker = new google.maps.Marker({
+          position: new google.maps.LatLng(markerlist[i][2],markerlist[i][3]),
+          map: mapi,
+          title: markerlist[i][0],
+          icon: icon,
+          detail: contentString,
+        });
+
+      arrayofMarkers.push(marker);
+      //link the pop ups with the marker 
+      arrayofMarkers[i].addListener('click', function() {
+        var marker = this;
+          infowindow.setContent(marker.detail);
+          infowindow.open(mapi, marker);
+        });
+    }
+    ShelterMarkers = arrayofMarkers;
+}
 
   renderWeatherMarkers() {
     if(WeatherMarkers != null) {
@@ -546,6 +627,7 @@ class GoogleMap extends React.Component {
       {this.state.ready ? this.renderMarkers(): null}
       {this.state.PSIReadings != null ? (this.state.PSIToggle ? this.renderPSIMarkers(): this.renderPSIMarkers()) : null}
       {this.state.weatherReadings != null ? (this.state.weatherToggle ? this.renderWeatherMarkers(): this.renderWeatherMarkers()) : null}
+      {this.state.shelters != null ? (this.state.shelterToggle ? this.renderShelterMarkers(): this.renderShelterMarkers()) : null}
       </div>);
   };
  
