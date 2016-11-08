@@ -41,6 +41,7 @@ class Users_View extends TrackerReact(React.Component) {
               <button className="delete" onClick={function() {
                 if(confirm("Are you sure you want to delete this?")){
                    Meteor.call('userData.remove', cell);
+                   Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
                 }
               }} >Delete</button>
             </div>;
