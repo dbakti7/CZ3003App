@@ -71,15 +71,15 @@ constructor() {
         <br/>
         <br/>
         <br/>
-        <table>
-          <tr>
-            <td></td>
-            <td>
+
+        <table width="100%">
+          <tr width="100%">
+            <td colspan="3" className="subscribe" align="center">
               <Link to =  "https://www.facebook.com/profile.php?id=100013904162136&fref=ts" target="_blank" activeClassName="active"><img className="subscribeButton"/></Link>
               &nbsp;&nbsp;
               <Link to =  "https://twitter.com/cmssingapore" target="_blank" activeClassName="active"><img className="followButton"/></Link>
             </td>
-            <td></td>
+ 
           </tr>
         </table>
         
