@@ -8,13 +8,15 @@ import {Meteor} from 'meteor/meteor';
 Meteor.setInterval(function() {
     console.log("INSIDE INTERVAL")
     incidentTypes = ["Fire", "Gas Leak"]
+    counter = {"Fire":{"Active":0, "Handled":0, "Resolved":0}, "Gas Leak":{"Active":0, "Handled":0, "Resolved":0}}
+    email = "<div><h2 style='color:#056571;'>Summary</h2><table style='width:700px; font-family:roboto, sans-serif; color:#414141;'><tr><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='20%'>Category</th><th  style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff; 'width='50%'>Active</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Handled</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Resolved</th></tr>"
     incidents = "<div>"
     for(i = 0;i<incidentTypes.length;++i) {
         var reports =Meteor.call('reports.getByType', incidentTypes[i])
         incidents = incidents + "<h2 style='color:#056571;'>" + incidentTypes[i] + "</h2>"
         incidents = incidents + "<table style='width:700px; font-family:roboto, sans-serif; color:#414141;'><tr><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='20%'>Title</th><th  style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff; 'width='50%'>Location</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Status</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Handled By</th></tr>"
         for(j=0;j<reports.length;++j) {
-            console.log("INSIDE")
+            counter[incidentTypes[i]][reports[j].status] += 1
             incidents = incidents + "<tr><td>" + reports[j].title + "</td><td>" + reports[j].locationName + "</td><td>" + reports[j].status + "</td>"
             if(reports[j].status != "Active")
                 incidents = incidents + "<td>" + reports[j].handledBy + "</td>"
@@ -23,11 +25,14 @@ Meteor.setInterval(function() {
             incidents = incidents + "</tr>" 
         }
         incidents = incidents + "</table>"
+        email = email + "<tr><td>" + incidentTypes[i] + "</td><td>" + counter[incidentTypes[i]]["Active"] + "</td><td>" + counter[incidentTypes[i]]["Handled"] + "</td><td>" + counter[incidentTypes[i]]["Resolved"] + "</td></tr>"
     }
+    email = email + "</div>"
     incidents = incidents + "</div>"
-    console.log(incidents)
 
-    // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", incidents);
+    // console.log(incidents)
+
+    // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", email + incidents);
     // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", incidents);
 }, 5000);
 function GetMinuteDiff(a, b) {
