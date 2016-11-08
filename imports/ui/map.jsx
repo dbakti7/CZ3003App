@@ -330,7 +330,7 @@ class GoogleMap extends React.Component {
     else if(hour > 12 && hour < 18)
       weathers = this.state.weatherReadings["weatherAfternoon"][0]
     else 
-      weathers = this.state.weatherReadings["weatherNight"]
+      weathers = this.state.weatherReadings["weatherNight"][0]
     
       var temp = []
       temp.push(weathers.getElementsByTagName("wxeast")[0].innerHTML)
