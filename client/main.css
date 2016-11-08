@@ -315,6 +315,7 @@ select {
     background-color: #056571;
     font-weight:bold;
     color:#ffffff;
+    cursor:pointer;
 }
 
 .sublist {

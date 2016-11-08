@@ -107,12 +107,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
   }
 
   renderReportItem() {
-    if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator'])) {
-        document.getElementById("reportCaseFieldSet").disabled = false;
-    }
-    else {
-        document.getElementById("reportCaseFieldSet").disabled = true;
-    }
+    
     if(this.props.report_item.length > 0) {
       var report = this.props.report_item[0];      
       var textRB = ReactDOM.findDOMNode(this.refs.textReportedBy);
@@ -166,31 +161,30 @@ class Reports_Edit extends TrackerReact(React.Component) {
     var reportedByUser = this.props.reportedByUser;
     var report_item = this.props.report_item;
 
-    
-    
-    return (<div>
+    if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Operator'])) {
+        return (<div>
       <h2>Report Page</h2> 
       <form name="reportCase" onSubmit={this.handleSubmit.bind(this)}>
         <fieldset id="reportCaseFieldSet">
             <table width="100%" border="0">
             <tr>
                 <td width="15%">Title:</td> 
-                <td><input type="text" ref="textTitle" placeholder="Type to add new tasks" required/><br/></td>
+                <td><input type="text" size="40" ref="textTitle" placeholder="Type to add new tasks" required/><br/></td>
             </tr>
             <tr>
                 <td>Reported By:</td>
-                <td><input type="text" ref="textReportedBy" disabled = "true"/><br/></td>
+                <td><input type="text" size="40" ref="textReportedBy" disabled = "true"/><br/></td>
             </tr>
             <tr>
                 <td>Location:</td> 
-                <td><input type="text" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} required/><br/></td>
+                <td><input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} required/><br/></td>
             </tr>
             <tr>
                 <td>Description:</td> 
-                <td><textarea ref="textAreaDescription" placeholder="Description" required/><br/></td>
+                <td><textarea cols="40" rows="4" ref="textAreaDescription" placeholder="Description" required/><br/></td>
             </tr>
             <tr>
-                <td>Incident Type</td>
+                <td>Incident Type:</td>
                 <td>
                     <select ref="incidentType" defaultValue="" required>
                         <option value="" disabled>Incident Type</option>
@@ -204,7 +198,7 @@ class Reports_Edit extends TrackerReact(React.Component) {
                 </td>
             </tr>
             <tr>
-                <td>Status</td>
+                <td>Status:</td>
                 <td>
                     <select ref="status" defaultValue="" required>
                         <option value="Active">Active</option>
@@ -226,8 +220,89 @@ class Reports_Edit extends TrackerReact(React.Component) {
           {this.state.ready ? this.renderReportItem() : null}
           <br/>
           <Link to =  "/reports/view" activeClassName="active">← Back to list of reports</Link>
+      </div>)
+    }
+    else {
+        return (<div>
+      <h2>Report Page</h2> 
+      <form name="reportCase" onSubmit={this.handleSubmit.bind(this)}>
+        <fieldset id="reportCaseFieldSet">
+            <table width="100%" border="0">
+            <tr>
+                <td width="15%">Title:</td> 
+                <td><input type="text" size="40" ref="textTitle" placeholder="Type to add new tasks" disabled="true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Reported By:</td>
+                <td><input type="text" size="40" ref="textReportedBy" disabled = "true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Location:</td> 
+                <td><input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete} disabled="true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Description:</td> 
+                <td><textarea cols="40" rows="4" ref="textAreaDescription" placeholder="Description" disabled="true"/><br/></td>
+            </tr>
+            <tr>
+                <td>Incident Type:</td>
+                <td>
+                    <select ref="incidentType" defaultValue="" disabled="true">
+                        <option value="" disabled>Incident Type</option>
+                        {
+                        this.props.incidentTypeList.map(function(incidentType) {
+                            return <option key={incidentType._id}
+                            value={incidentType._id}>{incidentType.name}</option>;
+                        })
+                        }
+                    </select><br/>
+                </td>
+            </tr>
+
+            {(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency']))
+                ? (
+                 <tr>
+                  <td>Status:</td>
+                  <td>
+                    <select ref="status" defaultValue="" required>
+                        <option value="Active">Active</option>
+                        <option value="Handled">Handled</option>
+                        <option value="Resolved">Resolved</option>
+                    </select><br/>
+                  </td>
+                </tr>
+                )
+                : (
+                  <tr>
+                    <td>Status:</td>
+                    <td>
+                        <select ref="status" defaultValue="" disabled="true">
+                            <option value="Active">Active</option>
+                            <option value="Handled">Handled</option>
+                            <option value="Resolved">Resolved</option>
+                        </select><br/>
+                    </td>
+                  </tr>
+                )
+            }
+                        
+            {(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']))
+                ? (
+                <tr>
+                    <td colspan="2"><input width="50%"type="submit" value="Report" id="submitButton"/></td>
+                </tr>)
+                : null
+            }
+            </table>
+        </fieldset>
+      </form>
+          {this.state.ready ? this.renderReportItem() : null}
+          <br/>
+          <Link to =  "/reports/view" activeClassName="active">← Back to list of reports</Link>
       </div>
     )
+    }
+    
           
   }
 }
