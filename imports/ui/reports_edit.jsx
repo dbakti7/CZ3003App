@@ -234,7 +234,7 @@ development of incidents! &lt;website link&gt;</div>"
       </form>
           {this.state.ready ? this.renderReportItem() : null}
           <br/>
-          <Link to =  "/reports/view" activeClassName="active">← Back to list of reports</Link>
+          <Link to =  "/reports/view" activeClassName="active">← Back to list of incidents</Link>
       </div>)
     }
     else {
