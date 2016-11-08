@@ -33,8 +33,9 @@ constructor() {
   render() {
     return (
       <div>
-      <h2>Home Page</h2>
+      <br/>
       <AccountsUIWrapper />
+      <br/><br/>
       {this.renderUser()}
       {this.state.ready ? this.checkUser() : null}
       </div>);
