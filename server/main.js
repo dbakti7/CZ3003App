@@ -25,7 +25,7 @@ Meteor.setInterval(function() {
         incidents = incidents + "</table>"
     }
     incidents = incidents + "</div>"
-    console.log(incidents)
+    // console.log(incidents)
 
     // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", incidents);
     // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", incidents);
