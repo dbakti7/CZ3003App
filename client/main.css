@@ -311,4 +311,26 @@ select {
     padding-right: 80px;
 }
 
+#thisImage {
+    visibility: visible;
+    width: 500 !important;
+    height: 500 !important; 
+    display:block !important; 
+}
+
+.homeTable{
+    width: 100%;
+}
+
+.cellTable{
+     border-right: solid 3px #555; 
+  border-left: solid 3px #555;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.rest{
+    padding-left: 50px;
+    padding-right: 50px;
+}
 stack{display:block;margin:0;padding:0;border:0;}

@@ -40,4 +40,3 @@ Meteor.startup(() => {
 ), document.getElementById('container'));
 
 });
-

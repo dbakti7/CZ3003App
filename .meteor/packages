@@ -37,3 +37,5 @@ ui
 accounts-facebook
 accounts-twitter
 msavin:mongol
+dispatch:banner
+johannesma:meteor-flexslider
