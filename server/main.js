@@ -11,8 +11,8 @@ Meteor.setInterval(function() {
     incidents = "<div>"
     for(i = 0;i<incidentTypes.length;++i) {
         var reports =Meteor.call('reports.getByType', incidentTypes[i])
-        incidents = incidents + "<h2>" + incidentTypes[i] + "</h2>"
-        incidents = incidents + "<table><tr><th>Title</th><th>Location></th><th>Status</th><th>Handled By</th></tr>"
+        incidents = incidents + "<h2 style='color:#056571;'>" + incidentTypes[i] + "</h2>"
+        incidents = incidents + "<table style='width:700px; font-family:roboto, sans-serif; color:#414141;'><tr><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='20%'>Title</th><th  style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff; 'width='50%'>Location</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Status</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Handled By</th></tr>"
         for(j=0;j<reports.length;++j) {
             console.log("INSIDE")
             incidents = incidents + "<tr><td>" + reports[j].title + "</td><td>" + reports[j].locationName + "</td><td>" + reports[j].status + "</td>"
@@ -26,7 +26,9 @@ Meteor.setInterval(function() {
     }
     incidents = incidents + "</div>"
     console.log(incidents)
+
     // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", incidents);
+    // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", incidents);
 }, 5000);
 function GetMinuteDiff(a, b) {
     var diff = a - b;
