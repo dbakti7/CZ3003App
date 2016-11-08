@@ -335,6 +335,7 @@ class GoogleMap extends React.Component {
     else 
       weathers = this.state.weatherReadings["weatherNight"]
     
+    console.log(weathers);
     for(i=0;i<weathers.length;++i) {
       var temp = []
       temp.push(weathers[i].getElementsByTagName("wxeast")[0].innerHTML)
@@ -363,6 +364,7 @@ class GoogleMap extends React.Component {
       markerlist.push(temp)
     }
     
+    //PC, TL weather???
     var weatherList = {'BR': ['haze.png', 'Mist'], 'CL': ['cloudy.png', 'Cloudy'], 'FA': ['sunny.png', 'Fair (Day)'], 
   'FN': ['sunny.png', 'Fair (Night)']}
     var arrayofMarkers = []
