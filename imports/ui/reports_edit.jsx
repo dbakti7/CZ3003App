@@ -176,7 +176,7 @@ development of incidents! &lt;website link&gt;</div>"
 
     if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Operator'])) {
         return (<div>
-      <h2>Report Page</h2> 
+      <h2>Incident Page</h2> 
       <form name="reportCase" onSubmit={this.handleSubmit.bind(this)}>
         <fieldset id="reportCaseFieldSet">
             <table width="100%" border="0">
@@ -312,7 +312,7 @@ development of incidents! &lt;website link&gt;</div>"
       </form>
           {this.state.ready ? this.renderReportItem() : null}
           <br/>
-          <Link to =  "/reports/view" activeClassName="active">← Back to list of reports</Link>
+          <Link to =  "/reports/view" activeClassName="active">← Back to list of incidents</Link>
       </div>
     )
     }

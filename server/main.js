@@ -9,7 +9,16 @@ Meteor.setInterval(function() {
     console.log("INSIDE INTERVAL")
     incidentTypes = ["Fire", "Gas Leak"]
     counter = {"Fire":{"Active":0, "Handled":0, "Resolved":0}, "Gas Leak":{"Active":0, "Handled":0, "Resolved":0}}
-    email = "<div><h2 style='color:#056571;'>Summary</h2><table style='width:700px; font-family:roboto, sans-serif; color:#414141;'><tr><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='20%'>Category</th><th  style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff; 'width='50%'>Active</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Handled</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Resolved</th></tr>"
+    email = "<p>Dear Mr Prime Minister, <br/><br/><br/>"+
+            "The following is the latest development on the current incidents in Singapore.<br/><br/></p>"+
+            "<div>"+
+            "<h2 style='color:#056571;'>Summary</h2>"+
+            "<table style='width:700px; font-family:roboto, sans-serif; color:#414141;'>"+
+            "<tr>"+
+            "<th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='20%'>Category</th>"+
+            "<th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff; 'width='15%'>Active</th>"+
+            "<th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Handled</th>"+
+            "<th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Resolved</th></tr>"
     incidents = "<div>"
     for(i = 0;i<incidentTypes.length;++i) {
         var reports =Meteor.call('reports.getByType', incidentTypes[i])
@@ -30,10 +39,14 @@ Meteor.setInterval(function() {
     email = email + "</div>"
     incidents = incidents + "</div>"
 
+    incidents = incidents + "<br/><p>We hope the information we provided could help you monitor the status of incidents and therefore make informed decisions accordingly.<br/></p>"+
+            "<p>That is the end of our half-hourly report summary.</p>"+
+            "<p>Should you need further information for any purposes, you may navigate to our website, cacadcmssingapore.scalingo.io<br/></p>"+
+            "<p>Thank you very much.<br/><br/>Best regards,<br/>CMS Singapore"
     // console.log(incidents)
 
     // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", email + incidents);
-    // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", incidents);
+    // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", email + incidents);
 }, 5000);
 function GetMinuteDiff(a, b) {
     var diff = a - b;

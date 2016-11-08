@@ -161,13 +161,14 @@ class GoogleMap extends React.Component {
     DengueControlDiv.index = 1;
     TrafficControlDiv.index = 1;
     GasControlDiv.index = 1;
-    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(PSIControlDiv);
-    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(WeatherControlDiv);
-    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(ShelterControlDiv);
-    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(FireControlDiv);
-    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(DengueControlDiv);
-    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(TrafficControlDiv);
-    mapi.controls[google.maps.ControlPosition.TOP_CENTER].push(GasControlDiv);
+    
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(PSIControlDiv);
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(WeatherControlDiv);
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(ShelterControlDiv);
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(DengueControlDiv);
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(TrafficControlDiv);
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(FireControlDiv);
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(GasControlDiv);
     this.setState({
           ready : true
         })
@@ -182,9 +183,9 @@ class GoogleMap extends React.Component {
         controlUI.style.borderRadius = '3px';
         controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
         controlUI.style.cursor = 'pointer';
-        controlUI.style.marginBottom = '22px';
+        controlUI.style.marginBottom = '3px';
         controlUI.style.textAlign = 'center';
-        controlUI.title = 'Click to show PSI Markers';
+        controlUI.title = 'Click to show markers';
         controlDiv.appendChild(controlUI);
 
         // Set CSS for the control interior.
@@ -312,62 +313,16 @@ class GoogleMap extends React.Component {
                 '<td class="mapContent">' + markerlist[i][4] + '</td>' +
               '</tr>' +
               '<tr>' +
-                '<td>1-hr NO2 concentration</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][5] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>24-hrs PM10 concentration</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][6] + '</td>' +
-              '</tr>' +
-              '<tr>' +
                 '<td>24-hrs PM2.5 concentration</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][7] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>24-hrs SO2 concentration</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][8] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>8-hrs CO concentration</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][9] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>8-hrs O3 concentration</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][10] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>CO sub-index</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][11] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>O3 sub-index</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][12] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>PM10 sub-index</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][13] + '</td>' +
               '</tr>' +
               '<tr>' +
                 '<td>PM2.5 sub-index</td>'+
                 '<td>:</td>'+
                 '<td class="mapContent">' + markerlist[i][14] + '</td>' +
               '</tr>' +
-              '<tr>' +
-                '<td>SO2 sub-index</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][15] + '</td>' +
-              '</tr>' +
             '</table>'+
-
             '</div>'+
             '</div>';
       //detail of each marker
@@ -412,7 +367,7 @@ renderShelterMarkers() {
     }
       var arrayofMarkers = []
     var icon = {
-        url: 'images/logo.png',
+        url: 'images/shelter.png',
         scaledSize: new google.maps.Size(30,30),
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(0,0)}
