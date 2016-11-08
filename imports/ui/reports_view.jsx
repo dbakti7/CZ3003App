@@ -36,11 +36,11 @@ class Reports_View extends TrackerReact(React.Component) {
   }
     
     statusFormatter(cell,row){
-        if(cell="Active"){
+        if(cell=="Active"){
             return <h4><Label bsStyle="danger">Active</Label></h4>
-        } else if(cell="Resolved") {
+        } else if(cell=="Resolved") {
             return <h4><Label bsStyle="success">Resolved</Label></h4>   
-        } else if(cell="Handled") {
+        } else if(cell=="Handled") {
             return <h4><Label bsStyle="warning">Handled</Label></h4>  
         }
     }
