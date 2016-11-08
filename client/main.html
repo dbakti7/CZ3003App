@@ -79,6 +79,7 @@
                         {{/if}}
                     </ul>
                 </li>
+                {{#if isInRole 'Admin'}}
                 <li>
                     <a href="#">USERS</a>
                     <ul type="disc">
@@ -86,6 +87,7 @@
                         <li class="sublist"><a href="/user/0/0">NEW</a></li>
                     </ul>
                 </li>
+                {{/if}}
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
