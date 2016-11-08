@@ -55,22 +55,26 @@ class Category extends TrackerReact(React.Component) {
     var email = "EMAIL"
     var sms = "SMS"
     return  <div>
+              {Roles.userIsInRole(Meteor.userId(), ['PublicUser', 'Agency']) ?
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, email)
                 //alert("Subscribed!")
                 Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
-              }} >SUBSCRIBE EMAIL</button>
+              }} >SUBSCRIBE EMAIL</button> : null}
 
+              {Roles.userIsInRole(Meteor.userId(), ['PublicUser', 'Agency']) ?
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
                 //alert("Subscribed!")
                 Bert.alert( 'Subscribed!', 'success', 'fixed-top', 'fa-check' );
-              }} >SUBSCRIBE SMS</button>
+              }} >SUBSCRIBE SMS</button> : null}
 
-              <Link to = {`/category/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
+              <Link to = {`/category/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin']) ? "Edit" : "View"}</button></Link>
+
+              {Roles.userIsInRole(Meteor.userId(), ['Admin']) ?
               <button className="delete" onClick={function() {
                 IncidentType_db.remove(cell);
-              }} >Delete</button>
+              }} >Delete</button> : null}
             </div>;
   }
 

@@ -61,15 +61,15 @@
                         <li class="sublist"><a href="/dengue">DENGUE CLUSTERS</a></li>
                     </ul>
                 </li>
-                {{#if isInRole 'Admin, Operator'}}
                 <li>
                     <a href="#">CATEGORIES</a>
                     <ul type="disc">
                         <li class="sublist"><a href="/category/view">VIEW</a></li>
+                        {{#if isInRole 'Admin'}}
                         <li class="sublist"><a href="/category/0/0">NEW</a></li>
+                        {{/if}}
                     </ul>
                 </li>
-                {{/if}}
                 <li>
                     <a href="#">REPORTS</a>
                     <ul type="disc">

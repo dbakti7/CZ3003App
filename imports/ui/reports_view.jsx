@@ -38,10 +38,11 @@ class Reports_View extends TrackerReact(React.Component) {
   editFormatter(cell, row){
     // console.log("HAHAHA",cell);
     return  <div>
-              <Link to = {`/report/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
+              <Link to = {`/report/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? "Edit" : "View"}</button></Link>
+              {Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? 
               <button className="delete" onClick={function() {
                 Reports_db.remove(cell);
-              }} >Delete</button>
+              }} >Delete</button> : null}
             </div>;
   }
   
@@ -62,7 +63,7 @@ class Reports_View extends TrackerReact(React.Component) {
           
   }
 }
-
+// hidden={!Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator'])}
 Reports_View.propTypes = {
   reports: PropTypes.array.isRequired,
 };
