@@ -73,24 +73,20 @@ class Reports_Edit extends TrackerReact(React.Component) {
     else {
       var empty = ""      
       Meteor.call('reports.insert', title, Meteor.userId(), description, incidentType_id, locationName, lat, lng, status, empty, new Date("January 1, 2015 00:00:00"));
-      Meteor.call('getNearestShelter', lat, lng, function(err,result) {
+      Meteor.call('getNearestShelter', lat, lng, function(err,shelterList) {
         // get the nearest civil defense
-          console.log(result.name)
-      })
+          console.log(shelterList.name)
+          Meteor.call('incidentType.find', incidentType_id, function(err, result) {
+            var facebookTemplate = "Warning! A case of "+ result.name + " has been reported in " + locationName+". Please evacuate the location \
+                                    immediately and act accordingly. You can go to the nearest shelter at " + shelterList.address + " Click on the following link to get further information on the latest \
+                                    development of incidents! \"cacadcmssingapore.scalingo.io/map\""
+            var twitTemplate = "A case of " + result.name + " has been reported in " + locationName + ". Please evacuate \
+                                immediately and act accordingly."
+            var emailTemplate = "<div>Warning! A case of " + result.name + "has been reported in " + locationName +". Please evacuate the location\
+                                immediately and act accordingly." + "You can go to the nearest shelter at " + shelterList.address + "Click on the following link to get further information on the latest\
+                                development of incidents! cacadcmssingapore.scalingo.io/map</div>"
 
-      
-
-      Meteor.call('incidentType.find', incidentType_id, function(err, result) {
-          var facebookTemplate = "Warning! A case of "+ result.name + " has been reported in " + locationName+". Please evacuate the location \
-      immediately and act accordingly. Click on the following link to get further information on the latest \
-      development of incidents! \"google.com\""
-
-      var twitTemplate = "A case of " + result.name + " has been reported in " + locationName+". Please evacuate \
-immediately and act accordingly."
-        var emailTemplate = "<div>Warning! A case of &lt;incident type&gt; has been reported in &lt;location&gt;. Please evacuate the location\
-immediately and act accordingly. Click on the following link to get further information on the latest\
-development of incidents! &lt;website link&gt;</div>"
-          Meteor.call('postToFacebook', title + ":" + facebookTemplate, "google.com")
+          Meteor.call('postToFacebook', title + ":" + facebookTemplate, "cacadcmssingapore.scalingo.io/map")
           Meteor.call('postTweet', title + ":" + twitTemplate);
           for(i=0;i<result.emailSubscribers.length;++i) {
               if(!result.emailSubscribers[i])
@@ -110,6 +106,11 @@ development of incidents! &lt;website link&gt;</div>"
         // Meteor.call("sendSMS", twitTemplate, subUser.phone)
       }
       })
+      })
+
+      
+
+      
     }
     browserHistory.push('/reports/view')
   }

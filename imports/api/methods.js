@@ -115,7 +115,7 @@ Meteor.methods({
      return UserData_db.find({type: filter}).fetch()
    },
  
-   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName, newPhone) {
+   'userData.update'(userId, newFullName, newEmail, newType, newAgencyName, newPhone, newRegion, newLat, newLng) {
      if(UserData_db.find({originalUserId: userId}).count() == 0) {
         UserData_db.insert({
           originalUserId: userId,
@@ -124,11 +124,14 @@ Meteor.methods({
           type: newType,
           agencyName: newAgencyName,
           phone: newPhone,
+          region: newRegion,
+          lat: newLat,
+          lng: newLng,
           createdAt: new Date(),
        })
      }
      else {
-      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName, phone: newPhone}});
+      UserData_db.update({originalUserId: userId}, {$set: {fullName: newFullName, email: newEmail, type: newType, agencyName: newAgencyName, phone: newPhone, region:newRegion, lat:newLat, lng:newLng}});
      }
    },
 
