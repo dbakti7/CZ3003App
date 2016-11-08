@@ -189,8 +189,6 @@ class Reports_Edit extends TrackerReact(React.Component) {
     var reportedByUser = this.props.reportedByUser;
     var report_item = this.props.report_item;
 
-    console.log("FUCK", report_item);
-
     if(Roles.userIsInRole(Meteor.userId(), ['Admin', 'Operator'])) {
         return (<div>
       <h2>Incident Page</h2> 
@@ -229,22 +227,30 @@ class Reports_Edit extends TrackerReact(React.Component) {
             </tr>
             <tr>
                 <td>Status:</td>
-                <td>{(report_item[0].status == "Active")?(
+                <td>{(report_item[0]==null)?(
                         <select ref="status" defaultValue="" required>
                             <option value="Active">Active</option>
                             <option value="Handled">Handled</option>
                             <option value="Resolved">Resolved</option>
                         </select>
                     ):(
-                        (report_item[0].status == "Handled")?(
+                        (report_item[0].status == "Active")?(
                             <select ref="status" defaultValue="" required>
+                                <option value="Active">Active</option>
                                 <option value="Handled">Handled</option>
                                 <option value="Resolved">Resolved</option>
                             </select>
                         ):(
-                            <select ref="status" defaultValue="" required>
-                                <option value="Resolved">Resolved</option>
-                            </select>
+                            (report_item[0].status == "Handled")?(
+                                <select ref="status" defaultValue="" required>
+                                    <option value="Handled">Handled</option>
+                                    <option value="Resolved">Resolved</option>
+                                </select>
+                            ):(
+                                <select ref="status" defaultValue="" required>
+                                    <option value="Resolved">Resolved</option>
+                                </select>
+                            )
                         )
                     )}
                     <br/>
@@ -307,22 +313,30 @@ class Reports_Edit extends TrackerReact(React.Component) {
                  <tr>
                   <td>Status:</td>
                   <td>
-                  {(report_item[0].status == "Active")?(
+                  {(report_item[0]==null)?(
                         <select ref="status" defaultValue="" required>
                             <option value="Active">Active</option>
                             <option value="Handled">Handled</option>
                             <option value="Resolved">Resolved</option>
                         </select>
                     ):(
-                        (report_item[0].status == "Handled")?(
+                        (report_item[0].status == "Active")?(
                             <select ref="status" defaultValue="" required>
+                                <option value="Active">Active</option>
                                 <option value="Handled">Handled</option>
                                 <option value="Resolved">Resolved</option>
                             </select>
                         ):(
-                            <select ref="status" defaultValue="" required>
-                                <option value="Resolved">Resolved</option>
-                            </select>
+                            (report_item[0].status == "Handled")?(
+                                <select ref="status" defaultValue="" required>
+                                    <option value="Handled">Handled</option>
+                                    <option value="Resolved">Resolved</option>
+                                </select>
+                            ):(
+                                <select ref="status" defaultValue="" required>
+                                    <option value="Resolved">Resolved</option>
+                                </select>
+                            )
                         )
                     )}
                     <br/>
