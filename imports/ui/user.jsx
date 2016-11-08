@@ -8,9 +8,9 @@ import {browserHistory } from 'react-router'
 class User extends Component {
   constructor() {
       super();
-      var lat = 0;
-      var lng = 0;
-      var locationName = "";
+      lat = 0;
+      lng = 0;
+      locationName = "";
       
       const userSubscription = Meteor.subscribe('userData',{onReady: function() {
         this.setState({
@@ -223,9 +223,7 @@ autocomplete() {
     var loggedIn = (currentUser && userDataAvailable);
     var initial = "initial"
     var noneStr = "none"
-    return (<div>User ID: {this.props.params.user_id} <br/> Edit (True/False): 
-    {this.props.params.edit}
-    
+    return (<div>
               <form name="userForm" onSubmit={this.handleSubmit.bind(this)} >
                 <table width="100%">
                   <tr>
