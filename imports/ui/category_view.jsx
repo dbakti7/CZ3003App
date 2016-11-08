@@ -52,23 +52,61 @@ class Category extends TrackerReact(React.Component) {
 
 
   editFormatter(cell, row, UserID){
+    isInside = function(curID, subscribers){
+      isIn = false;
+      for (i = 0; i < subscribers.length; i++){
+        if(curID == subscribers[i]){
+          isIn = true;
+          break;
+        }
+      }
+      return isIn
+    }
+
     var email = "EMAIL"
     var sms = "SMS"
     return  <div>
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null)?
+<<<<<<< HEAD
               <button className="subscribe"onClick={function() {
                 Meteor.call('incidentType.addSubscriber', cell, UserID, email)
                 Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
               // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
               }}> SUBSCRIBE EMAIL </button> : null}
+=======
+                (isInside(UserID,row.emailSubscribers)?(
+                  <button className="subscribe"onClick={function() {
+                    Meteor.call('incidentType.removeSubscriber', cell, UserID, email)
+                    //alert("Subscribed!")
+                    Bert.alert( 'Unsubscribed', 'success', 'fixed-top', 'fa-check' );
+                  // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
+                  }}> UNSUBSCRIBE EMAIL </button>
+                ):(
+                  <button className="subscribe"onClick={function() {
+                    Meteor.call('incidentType.addSubscriber', cell, UserID, email)
+                    //alert("Subscribed!")
+                    Bert.alert( 'Subscribed', 'success', 'fixed-top', 'fa-check' );
+                  // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
+                  }}> SUBSCRIBE EMAIL </button>
+                )) : null}
+>>>>>>> ebe0e570dd39cc7284771e7205e02fc822690cfb
 
               {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
-              <button className="subscribe"onClick={function() {
-                Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
-                //alert("Subscribed!")
-                Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
-              // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
-              }} >SUBSCRIBE SMS</button> : null}
+                (isInside(UserID,row.smsSubscribers)?(
+                  <button className="subscribe"onClick={function() {
+                    Meteor.call('incidentType.removeSubscriber', cell, UserID, sms)
+                    //alert("Subscribed!")
+                    Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
+                  // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
+                  }} >UNSUBSCRIBE SMS</button>
+                ):(
+                  <button className="subscribe"onClick={function() {
+                    Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
+                    //alert("Subscribed!")
+                    Bert.alert( 'Successful', 'success', 'fixed-top', 'fa-check' );
+                  // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
+                  }} >SUBSCRIBE SMS</button>
+                )) : null}
 
               <Link to = {`/category/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin']) ? "Edit" : "View"}</button></Link>
 
