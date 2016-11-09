@@ -128,6 +128,7 @@ class GoogleMap extends React.Component {
         DengueToggle: true,
         TrafficToggle: true,
         GasToggle: true,
+        MRTToggle: true,
       }
        
     }
@@ -154,6 +155,8 @@ class GoogleMap extends React.Component {
     var TrafficControl = new this.PSIControl(TrafficControlDiv, mapi, self, "Traffic");
     var GasControlDiv = document.createElement('div');
     var GasControl = new this.PSIControl(GasControlDiv, mapi, self, "Gas");
+    var MRTControlDiv = document.createElement('div');
+    var MRTControl = new this.PSIControl(GasControlDiv, mapi, self, "MRT");
     PSIControlDiv.index = 1;
     WeatherControlDiv.index = 1;
     ShelterControlDiv.index = 1;
@@ -161,6 +164,7 @@ class GoogleMap extends React.Component {
     DengueControlDiv.index = 1;
     TrafficControlDiv.index = 1;
     GasControlDiv.index = 1;
+    MRTControlDiv.index = 1;
     
     mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(PSIControlDiv);
     mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(WeatherControlDiv);
@@ -169,6 +173,7 @@ class GoogleMap extends React.Component {
     mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(TrafficControlDiv);
     mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(FireControlDiv);
     mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(GasControlDiv);
+    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(MRTControlDiv);
     this.setState({
           ready : true
         })
@@ -246,6 +251,13 @@ class GoogleMap extends React.Component {
           controlUI.addEventListener('click', function() {
             self.setState({
                 GasToggle: !self.state.GasToggle,
+              })
+          });
+        }
+        else if(title == "MRT") {
+          controlUI.addEventListener('click', function() {
+            self.setState({
+                MRTToggle: !self.state.MRTToggle,
               })
           });
         }
@@ -531,7 +543,7 @@ renderShelterMarkers() {
         for(i = 0;i<ReportedMarkers.length;++i)
           ReportedMarkers[i].setMap(null);
       }
-        var toggles = {"Fire":this.state.FireToggle, "Gas Leak": this.state.GasToggle, "Traffic Accident": this.state.TrafficToggle, "Dengue":this.state.DengueToggle}
+        var toggles = {"Fire":this.state.FireToggle, "Gas Leak": this.state.GasToggle, "Traffic Accident": this.state.TrafficToggle, "Dengue":this.state.DengueToggle, "MRT Breakdown": this.state.MRTToggle}
     var markerlist = []
     for(var i =0;i<this.props.reports.length;++i) {
       if(this.props.reports[i].status == "Resolved")
@@ -636,7 +648,7 @@ renderShelterMarkers() {
   render() {
     return (<div className="map-container">
       {this.textFunction()}
-      {this.state.ready ? ((this.state.FireToggle || this.state.GasToggle || this.state.TrafficToggle || this.state.DengueToggle) ? this.renderMarkers(): this.renderMarkers()) : null}
+      {this.state.ready ? ((this.state.FireToggle || this.state.GasToggle || this.state.TrafficToggle || this.state.DengueToggle || this.state.MRTToggle) ? this.renderMarkers(): this.renderMarkers()) : null}
       {this.state.PSIReadings != null ? (this.state.PSIToggle ? this.renderPSIMarkers(): this.renderPSIMarkers()) : null}
       {this.state.weatherReadings != null ? (this.state.weatherToggle ? this.renderWeatherMarkers(): this.renderWeatherMarkers()) : null}
       {this.state.shelters != null ? (this.state.shelterToggle ? this.renderShelterMarkers(): this.renderShelterMarkers()) : null}
