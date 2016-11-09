@@ -238,7 +238,7 @@ class GoogleMap extends React.Component {
         else if(title == "Traffic") {
           controlUI.addEventListener('click', function() {
             self.setState({
-                TrafficControl: !self.state.TrafficControl,
+                TrafficToggle: !self.state.TrafficToggle,
               })
           });
         }
