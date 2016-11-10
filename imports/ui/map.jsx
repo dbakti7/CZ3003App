@@ -9,9 +9,12 @@ import {Reports_db} from '../api/report.js';
 import {IncidentType_db} from '../api/incidentType.js';
 import Time from 'react-time'
 
-class MyTestMap extends React.Component {
+// Get Google Map API
+class GoMap extends React.Component {
 	constructor() {
 		super();
+
+		// subscribe to necessary database tables / collections
 		const reportSubscription = Meteor.subscribe('reports', {onReady: function() {
 			this.setState({
 				ready : reportSubscription.ready() && incidentTypeSubscription.ready()
@@ -23,10 +26,14 @@ class MyTestMap extends React.Component {
 				ready : reportSubscription.ready() && incidentTypeSubscription.ready()
 			})
 		}.bind(this)})
+
 		this.state = {
 			ready : reportSubscription.ready() && incidentTypeSubscription.ready(),
+			reportSubscription: reportSubscription,
+			incidentTypeSubscription: incidentTypeSubscription
 		}
 	}
+	
 	//initialized data when the map is called
 	componentDidMount() {
 		//api key
@@ -65,8 +72,9 @@ class MyTestMap extends React.Component {
 	}
 }
 
-reactMixin(MyTestMap.prototype, ReactMeteorData);
+reactMixin(GoMap.prototype, ReactMeteorData);
 
+// Google Map Rendering
 class GoogleMap extends React.Component {
 	constructor() {
 		super();
@@ -75,10 +83,14 @@ class GoogleMap extends React.Component {
 		var WeatherMarkers = null;
 		var ShelterMarkers = null;
 		var ReportedMarkers = null;
+
+
 		var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 		var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 		var xmlHttp = new XMLHttpRequest();
 		var self = this;
+
+		
 		xmlHttp.onreadystatechange = function() { 
 			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             xmlDoc = new DOMParser().parseFromString(xmlHttp.responseText, 'text/xml');
@@ -126,7 +138,8 @@ class GoogleMap extends React.Component {
 			MRTToggle: true,
 		}
 	}
-  
+	
+	// initialize all toggle buttons
 	componentDidMount() {
 		mapi = new google.maps.Map(ReactDOM.findDOMNode(this),this.props.options);
 		PSIMarkers = null;
@@ -197,7 +210,7 @@ class GoogleMap extends React.Component {
         controlText.innerHTML = title;
         controlUI.appendChild(controlText);
 
-        // Setup the click event listeners: simply set the map to Chicago.
+        // Setup the click event listeners for toggle buttons of each type of marker
         if(title == "PSI") {
 			controlUI.addEventListener('click', function() {
 				self.setState({
@@ -256,7 +269,9 @@ class GoogleMap extends React.Component {
 		}
 	}
 	
+	// render markers for PSI information
 	renderPSIMarkers() {
+		// show/hide markers if already exist
 		if(PSIMarkers != null) {
 			for(i=0;i<PSIMarkers.length;++i) {
 				if(this.state.PSIToggle)
@@ -266,8 +281,12 @@ class GoogleMap extends React.Component {
 			}
 			return;
 		}
+
+		// render markers for the first time
 		var markerlist = []
 		regions = this.state.PSIReadings
+
+		// parse the reading from API request
     	for(i=0;i<regions.length;++i) {
 			var temp = []
       		var regionName = regions[i].getElementsByTagName("id")[0].innerHTML
@@ -290,6 +309,8 @@ class GoogleMap extends React.Component {
 				}
 			markerlist.push(temp);
 		}
+
+		// setup the markers
 		PSIMarkers = markerlist;
 		var arrayofMarkers = []
 		var icon = {
@@ -298,7 +319,7 @@ class GoogleMap extends React.Component {
 			origin: new google.maps.Point(0,0),
 			anchor: new google.maps.Point(0,0)}
 			for(i = 0; i<markerlist.length; i++){
-      //content for each pop ups
+      			//content for each pop ups
 				var contentString = '<div id="content">'+
 					'<div id="siteNotice">'+
             		'</div>'+
@@ -346,10 +367,13 @@ class GoogleMap extends React.Component {
 					infowindow.open(mapi, marker);
 				});
 			}
+		// assign to global varible to avoid rendering the markers multiple times
 		PSIMarkers = arrayofMarkers;
 	}
 	
+	// render the markers for Civil Defense Shelters
 	renderShelterMarkers() {
+		// show/hide markers if already exist
 		if(ShelterMarkers != null) {
 			for(i=0;i<ShelterMarkers.length;++i) {
 				if(this.state.shelterToggle)
@@ -360,8 +384,10 @@ class GoogleMap extends React.Component {
 			return;
 		}
 		
+		// render the markers for the first time
 		var markerlist = []
 		
+		// parse the readings from API request
 		shelterList =this.state.shelters
 		for(i=0;i<shelterList.length;++i) {
 			var temp = []
@@ -377,6 +403,7 @@ class GoogleMap extends React.Component {
 			scaledSize: new google.maps.Size(30,30),
 			origin: new google.maps.Point(0,0),
 			anchor: new google.maps.Point(0,0)}
+
 		for(i = 0; i<markerlist.length; i++){
 			//content for each pop ups
 			var contentString = '<div id="content">'+
@@ -395,7 +422,6 @@ class GoogleMap extends React.Component {
 				'</div></div>';
 			
 			//detail of each marker
-			// icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
 			var  marker = new google.maps.Marker({
 				position: new google.maps.LatLng(markerlist[i][2],markerlist[i][3]),
 				map: mapi,
@@ -412,10 +438,13 @@ class GoogleMap extends React.Component {
 				infowindow.open(mapi, marker);
 			});
 		}
+		// assign to global varible to avoid rendering the markers multiple times
 		ShelterMarkers = arrayofMarkers;
 	}
 
+	// render markers for weather condition for each region in Singapore
 	renderWeatherMarkers() {
+		// show / hide markers if already exist
 		if(WeatherMarkers != null) {
 			for(i=0;i<WeatherMarkers.length;++i) {
 				if(this.state.weatherToggle)
@@ -425,7 +454,10 @@ class GoogleMap extends React.Component {
 			}
 			return;
 		}
+
+		// render the markers for the first time
 		var markerlist = []
+
 		hour = new Date().getHours()
 		if(hour >= 6 && hour <= 12)
 			weathers = this.state.weatherReadings["weatherMorn"][0]
@@ -433,6 +465,7 @@ class GoogleMap extends React.Component {
 			weathers = this.state.weatherReadings["weatherAfternoon"][0]
 		else weathers = this.state.weatherReadings["weatherNight"][0]
 		
+		// parse readings from API request
 		var temp = []
 		temp.push(weathers.getElementsByTagName("wxeast")[0].innerHTML)
 		temp.push(1.35735)
@@ -459,7 +492,7 @@ class GoogleMap extends React.Component {
 		temp.push(103.82000)
 		markerlist.push(temp)
 
-		
+		// dictionary to retrieve the icon for each weather type
 		var weatherList = {
 			'BR': ['haze.png', 'Mist'], 
 			'CL': ['cloudy.png', 'Cloudy'], 
@@ -496,7 +529,7 @@ class GoogleMap extends React.Component {
 			'WS': ['windy.png', 'Windy, Showers'], 
 		}
   
-		
+		// setup the markers		
 		var arrayofMarkers = []
 		var icon = {
 			url: 'images/logo.png',
@@ -529,15 +562,19 @@ class GoogleMap extends React.Component {
 				infowindow.open(mapi, marker);
 			});
 		}
+		// assign to global varible to avoid rendering the markers multiple times
 		WeatherMarkers = arrayofMarkers;
 	}
 
+	// render markers for reported incidents
 	renderMarkers() {
+		// clear all previous markers to avoid duplicates
 		if(ReportedMarkers != null) {
 			for(i = 0;i<ReportedMarkers.length;++i)
 				ReportedMarkers[i].setMap(null);
 		}
 		
+		// retrieved on/off toggle from react tracker for each type of incident category
 		var toggles = {"Fire":this.state.FireToggle, "Gas Leak": this.state.GasToggle, "Traffic Accident": this.state.TrafficToggle, "Dengue":this.state.DengueToggle, "MRT Breakdown": this.state.MRTToggle}
 		var markerlist = []
 		for(var i =0;i<this.props.reports.length;++i) {
@@ -569,7 +606,6 @@ class GoogleMap extends React.Component {
 			anchor: new google.maps.Point(0,0),
 		}
       
-    
 		var i;
 		var arrayofMarkers =[];
 
@@ -619,6 +655,7 @@ class GoogleMap extends React.Component {
 					detail: contentString,
 				});
 			arrayofMarkers.push(marker);
+
 			//link the pop ups with the marker 
 			arrayofMarkers[arrayofMarkers.length-1].addListener('click', function() {
 				var marker = this;
@@ -627,25 +664,26 @@ class GoogleMap extends React.Component {
 			});
 		};
 		ReportedMarkers = arrayofMarkers;
-	}//);
-  // };
-  //
-  
+	}
+
+	// stop listening from Google Map
 	componentWillUnmount() {
 		if (GoogleMaps.maps[this.props.name]) {
 			google.maps.event.clearInstanceListeners(GoogleMaps.maps[this.props.name].instance);
 			delete GoogleMaps.maps[this.props.name];
 		} 
 	};
-  
-	textFunction() {
+	
+	// show or hide map
+	showMap() {
 		document.getElementById('map-container').style.visibility = "hidden";
 		document.getElementById('root').style.height = "100%";
 	};
-  
+	
+	// render the map, re-render each marker if there is a change on its on/off toggle
 	render() {
 		return (<div className="map-container">
-				{this.textFunction()}
+				{this.showMap()}
 				{this.state.ready ? ((this.state.FireToggle || this.state.GasToggle || this.state.TrafficToggle || this.state.DengueToggle || this.state.MRTToggle) ? this.renderMarkers(): this.renderMarkers()) : null}
 				{this.state.PSIReadings != null ? (this.state.PSIToggle ? this.renderPSIMarkers(): this.renderPSIMarkers()) : null}
 				{this.state.weatherReadings != null ? (this.state.weatherToggle ? this.renderWeatherMarkers(): this.renderWeatherMarkers()) : null}
@@ -656,19 +694,20 @@ class GoogleMap extends React.Component {
 
 }
 
-
 //data type for googleMaps
 GoogleMap.propTypes  ={
 	name: React.PropTypes.string.isRequired,
 	options: React.PropTypes.object.isRequired,
 };
 
+// render the map on client side
 if (Meteor.isClient) {
 	Meteor.startup(function() {
-		render(<MyTestMap />, document.getElementById('root'));
+		render(<GoMap />, document.getElementById('root'));
 	});
 }
 
+// return map-container to contain the map
 export default React.createClass({
 	render() {
 		return <div id="map-container"></div>

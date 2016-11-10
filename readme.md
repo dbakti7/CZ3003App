@@ -1,4 +1,23 @@
-# Crisis Management System
+# CACAD-CMS: Crisis Management System
+Welcome to CACAD-CMS!
+A crisis management system whereby you can report incidents around you and
+get real-time updates from the system (including PSI and Weather condition).
+
+## System
+You can access the system from: https://cacadcmssingapore.scalingo.io/
+
+## Team Members
+Team CACAD:
+* Andre Culham
+* Dian Bakti
+* Gede Bagus Bayu Pentium
+* Hartono
+* Jason Susanto
+* Joshua Martin Tjahjadi
+* Kelvin Chandra
+* Marcellino
+* Natalia Darmaja
+* Steve Alexander Prasetya
 
 ## Dependencies
 If you encounter any error while trying to run the app, try to run
