@@ -7,68 +7,66 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import UserInstance from './user_instance.jsx';
 
 class Users_View extends TrackerReact(React.Component) {
-  constructor() {
-      super();
-      const userAuxSubscription = Meteor.subscribe('userAux',{onReady: function() {
+	constructor() {
+		super();
+		const userAuxSubscription = Meteor.subscribe('userAux',{onReady: function() {
         this.setState({
-          ready : userSubscription.ready() && userAuxSubscription.ready()
-        });
-      }.bind(this)});
+			ready : userSubscription.ready() && userAuxSubscription.ready()
+		});
+		}.bind(this)});
 
-      const userSubscription = Meteor.subscribe('userData',{onReady: function() {
-        this.setState({
-          ready : userSubscription.ready() && userAuxSubscription.ready()
-        });
-      }.bind(this)});
+		const userSubscription = Meteor.subscribe('userData',{onReady: function() {
+			this.setState({
+				ready : userSubscription.ready() && userAuxSubscription.ready()
+			});
+		}.bind(this)});
 
-      this.state = {
-        ready : userSubscription.ready() && userAuxSubscription.ready()
-      }
-    }
+		this.state = {
+			ready : userSubscription.ready() && userAuxSubscription.ready()
+		}
+	}
 
 
-  renderUsers() {
-      const userList = Meteor.users.find({}).fetch()  
-    return userList.map((user) => (
-      <UserInstance key={user._id} user={user} />
-    ));
-  }
+	renderUsers() {
+		const userList = Meteor.users.find({}).fetch()
+		return userList.map((user) => (
+			<UserInstance key={user._id} user={user} />
+		));
+	}
 
-  editFormatter(cell, row){
-    // console.log("HAHAHA",cell);
-    return  <div>
-              <Link to = {`/user/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
-              <button className="delete" onClick={function() {
-                if(confirm("Are you sure you want to delete this?")){
-                   Meteor.call('userData.remove', cell);
-                   Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
-                }
-              }} >Delete</button>
+	editFormatter(cell, row){
+		return  
+			<div>
+			<Link to = {`/user/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
+				<button className="delete" onClick={function() {
+					if(confirm("Are you sure you want to delete this?")){
+						Meteor.call('userData.remove', cell);
+						Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
+					}
+				}} >Delete</button>
             </div>;
-  }
+	}
 
-  render() {
-    // {this.state.ready ? this.renderUsers() : null}
-    userData = Meteor.users.find({}).fetch();
-    // console.log("ASS", userData);
-    return (<div>
-              <BootstrapTable data={userData} striped={true} hover={true} pagination={true} search={true}>
-                <TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
+	render() {
+		userData = Meteor.users.find({}).fetch();
+		return (<div>
+				<BootstrapTable data={userData} striped={true} hover={true} pagination={true} search={true}>
+				<TableHeaderColumn className="bsTableHeader" dataField="_id" isKey={true} hidden={true}>ID</TableHeaderColumn>
                 <TableHeaderColumn className="bsTableHeader" dataField="username" dataSort={true}>User Name</TableHeaderColumn>
                 <TableHeaderColumn className="bsTableHeader" dataField="roles" dataSort={true}>Account Type</TableHeaderColumn>
                 <TableHeaderColumn className="bsTableHeader" dataField="_id" dataFormat={this.editFormatter}>Action</TableHeaderColumn> 
-              </BootstrapTable>
-          </div>)
-          
-  }
+				</BootstrapTable>
+				</div>
+			   )
+	}
 }
 
+
 Users_View.propTypes = {
-  users: PropTypes.array.isRequired,
+	users: PropTypes.array.isRequired,
 };
 
 export default createContainer(({params}) => {
-  
-  return {
-  };
+	return {
+	};
 }, Users_View);
