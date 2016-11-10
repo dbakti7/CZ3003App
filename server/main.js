@@ -7,8 +7,10 @@ import '../imports/api/incidentType.js';
 import {Meteor} from 'meteor/meteor';
 Meteor.setInterval(function() {
     console.log("INSIDE INTERVAL")
-    incidentTypes = ["Fire", "Gas Leak"]
-    counter = {"Fire":{"Active":0, "Handled":0, "Resolved":0}, "Gas Leak":{"Active":0, "Handled":0, "Resolved":0}}
+    incidentTypes = ["Fire", "Gas Leak", "MRT Breakdown", "Traffic Accident", "Dengue"]
+    counter = {"Fire":{"Active":0, "Handled":0, "Resolved":0}, "Gas Leak":{"Active":0, "Handled":0, "Resolved":0},
+"MRT Breakdown":{"Active":0, "Handled":0, "Resolved":0}, "Traffic Accident":{"Active":0, "Handled":0, "Resolved":0}, 
+"Dengue":{"Active":0, "Handled":0, "Resolved":0}}
     email = "<p style='color:#414141;'>Dear Mr Prime Minister, <br/><br/><br/>"+
             "The following is the latest development on the current incidents in Singapore.<br/><br/></p>"+
             "<div>"+
@@ -47,7 +49,7 @@ Meteor.setInterval(function() {
 
     // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", email + incidents);
     // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", email + incidents);
-}, 5000);
+}, 10000);
 function GetMinuteDiff(a, b) {
     var diff = a - b;
     return Math.round(((diff % 86400000) % 3600000) / 60000);
