@@ -52,6 +52,8 @@ class Category extends TrackerReact(React.Component) {
     editFormatter(cell, row, UserID){
         // check whether user has already subscribed to email or sms
         isInside = function(curID, subscribers) {
+            if (subscribers == undefined || subscribers == null)
+                return false;
             isIn = false;
             for (i = 0; i < subscribers.length; i++){
                 if(curID == subscribers[i]){
@@ -65,50 +67,44 @@ class Category extends TrackerReact(React.Component) {
         var email = "EMAIL"
         var sms = "SMS"
         return  <div>
-                {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null)?
-                    (isInside(UserID,row.emailSubscribers)?(
-                    <button className="unsubscribe"onClick={function() {
-                        Meteor.call('incidentType.removeSubscriber', cell, UserID, email)
-                        //alert("Subscribed!")
-                        Bert.alert( 'Unsubscribed', 'success', 'fixed-top', 'fa-check' );
-                    // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
-                    }}> UNSUBSCRIBE EMAIL </button>
-                    ):(
-                    <button className="subscribe"onClick={function() {
-                        Meteor.call('incidentType.addSubscriber', cell, UserID, email)
-                        //alert("Subscribed!")
-                        Bert.alert( 'Subscribed', 'success', 'fixed-top', 'fa-check' );
-                    // }}> {Meteor.call('incidentType.checkSubscribers', cell, UserID, email) ? "SUBSCRIBE EMAIL" : "UNSUBSCRIBE EMAIL"} </button> : null}  
-                    }}> SUBSCRIBE EMAIL </button>
-                    )) : null}
+                    {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
+                        (isInside(UserID,row.emailSubscribers) ?
+                            (<button className="unsubscribe"onClick={function() {
+                                Meteor.call('incidentType.removeSubscriber', cell, UserID, email)
+                                Bert.alert( 'Unsubscribed', 'success', 'fixed-top', 'fa-check' );
+                            }}> UNSUBSCRIBE EMAIL </button>)
+                        :
+                            (<button className="subscribe"onClick={function() {
+                                Meteor.call('incidentType.addSubscriber', cell, UserID, email)
+                                Bert.alert( 'Subscribed', 'success', 'fixed-top', 'fa-check' );
+                            }}> SUBSCRIBE EMAIL </button>)
+                        ) 
+                    : null}
 
-                {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
-                    (isInside(UserID,row.smsSubscribers)?(
-                    <button className="unsubscribe"onClick={function() {
-                        Meteor.call('incidentType.removeSubscriber', cell, UserID, sms)
-                        //alert("Subscribed!")
-                        Bert.alert( 'Unsubscribed', 'success', 'fixed-top', 'fa-check' );
-                    // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
-                    }} >UNSUBSCRIBE SMS</button>
-                    ):(
-                    <button className="subscribe"onClick={function() {
-                        Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
-                        //alert("Subscribed!")
-                        Bert.alert( 'Subscribed', 'success', 'fixed-top', 'fa-check' );
-                    // }} >{Meteor.call('incidentType.checkSubscribers', cell, UserID, sms) ? "SUBSCRIBE SMS" : "UNSUBSCRIBE SMS"}</button> : null}
-                    }} >SUBSCRIBE SMS</button>
-                    )) : null}
+                    {(!Roles.userIsInRole(Meteor.userId(), ['Operator', 'Admin']) && Meteor.user() != null) ?
+                        (isInside(UserID,row.smsSubscribers) ?
+                            (<button className="unsubscribe"onClick={function() {
+                                Meteor.call('incidentType.removeSubscriber', cell, UserID, sms)
+                                Bert.alert( 'Unsubscribed', 'success', 'fixed-top', 'fa-check' );
+                            }} >UNSUBSCRIBE SMS</button>)
+                        :
+                            (<button className="subscribe"onClick={function() {
+                                Meteor.call('incidentType.addSubscriber', cell, UserID, sms)
+                                Bert.alert( 'Subscribed', 'success', 'fixed-top', 'fa-check' );
+                            }} >SUBSCRIBE SMS</button>)
+                        ) 
+                    : null}
 
-                <Link to = {`/category/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin']) ? "Edit" : "View"}</button></Link>
+                    <Link to = {`/category/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin']) ? "Edit" : "View"}</button></Link>
 
-                {Roles.userIsInRole(Meteor.userId(), ['Admin']) ?
-                <button className="delete" onClick={function() {
-                    if(confirm("Are you sure you want to delete this?")){
-                    IncidentType_db.remove(cell);
-                    Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
-                    }
-                    
-                }} >Delete</button> : null}
+                    {Roles.userIsInRole(Meteor.userId(), ['Admin']) ?
+                        <button className="delete" onClick={function() {
+                            if(confirm("Are you sure you want to delete this?")){
+                                IncidentType_db.remove(cell);
+                                Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
+                            }
+                        }}>Delete</button> 
+                    : null}
                 </div>;
     }
 
