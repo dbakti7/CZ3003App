@@ -4,11 +4,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import {IndexLink, Link } from 'react-router'
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import UserInstance from './user_instance.jsx';
 
+// this component is used to render page to view all users
 class Users_View extends TrackerReact(React.Component) {
 	constructor() {
 		super();
+		
+		// subscribe to necessary database tables / collections
 		const userAuxSubscription = Meteor.subscribe('userAux',{onReady: function() {
         this.setState({
 			ready : userSubscription.ready() && userAuxSubscription.ready()
@@ -21,19 +23,15 @@ class Users_View extends TrackerReact(React.Component) {
 			});
 		}.bind(this)});
 
+		// react tracker state to manage callback when subscription is ready
 		this.state = {
-			ready : userSubscription.ready() && userAuxSubscription.ready()
+			ready : userSubscription.ready() && userAuxSubscription.ready(),
+			userAuxSubscription: userAuxSubscription,
+			userSubscription: userSubscription
 		}
 	}
 
-
-	renderUsers() {
-		const userList = Meteor.users.find({}).fetch()
-		return userList.map((user) => (
-			<UserInstance key={user._id} user={user} />
-		));
-	}
-
+	// render action buttons
 	editFormatter(cell, row){
 		return  
 			<div>
@@ -47,6 +45,13 @@ class Users_View extends TrackerReact(React.Component) {
             </div>;
 	}
 
+	// stop subscription
+    componentWillUnmount() {
+        this.state.userAuxSubscription.stop();
+		this.state.userSubscription.stop();
+    }
+
+	// page rendering
 	render() {
 		userData = Meteor.users.find({}).fetch();
 		return (<div>
@@ -61,11 +66,7 @@ class Users_View extends TrackerReact(React.Component) {
 	}
 }
 
-
-Users_View.propTypes = {
-	users: PropTypes.array.isRequired,
-};
-
+// return Users_View components to be rendered
 export default createContainer(({params}) => {
 	return {
 	};

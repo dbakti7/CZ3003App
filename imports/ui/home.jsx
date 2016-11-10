@@ -6,9 +6,12 @@ import {Link} from 'react-router'
 import {IncidentType_db} from '../api/incidentType.js';
 import {UserData_db} from '../api/userData.js';
 
+// this component is used to render home page
 class Home extends Component {
 	constructor() {
 		super();
+
+		// subscribe to necessary database tables / collections
 		const userSubscription = Meteor.subscribe('userData',{onReady: function() {
 			this.setState({
 				ready : userSubscription.ready() && userAuxSubscription.ready()
@@ -23,13 +26,23 @@ class Home extends Component {
 			})
 		}.bind(this)})
 
-      
+		// react tracker state to manage callback when subscription is ready
 		this.state = {
-			ready : userSubscription.ready() && userAuxSubscription.ready()
+			ready : userSubscription.ready() && userAuxSubscription.ready(),
+			userSubscription: userSubscription,
+			subscription: subscription,
+			userAuxSubscription: userAuxSubscription
 		}
 	}
 
-	
+	// stop subscription
+    componentWillUnmount() {
+        this.state.userAuxSubscription.stop();
+		this.state.subscription.stop();
+		this.state.userSubscription.stop();
+    }
+
+	// page rendering
 	render() {
 		return (
 			<div>
@@ -43,7 +56,8 @@ class Home extends Component {
 			</div>
 		);
 	}
-
+	
+	// UI Rendering
 	renderUser() {
 		return (
 			<div>
@@ -83,6 +97,7 @@ class Home extends Component {
 		}
 	}
 
+// return Home components to be rendered
 export default createContainer(() => {
 	return {
 	};
