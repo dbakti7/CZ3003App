@@ -2,7 +2,6 @@ import React, { Component, PropTypes, componentWillReceiveProps, componentDidMou
 import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import {Reports_db} from '../api/report.js';
-import Report from './report.jsx';
 import { Meteor } from 'meteor/meteor';
 import {IndexLink, Link } from 'react-router'
 import TrackerReact from 'meteor/ultimatejs:tracker-react';

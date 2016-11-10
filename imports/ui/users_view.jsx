@@ -33,8 +33,7 @@ class Users_View extends TrackerReact(React.Component) {
 
 	// render action buttons
 	editFormatter(cell, row){
-		return  
-			<div>
+		return (<div>
 			<Link to = {`/user/${cell}/0`} activeClassName="active"><button >Edit</button></Link>
 				<button className="delete" onClick={function() {
 					if(confirm("Are you sure you want to delete this?")){
@@ -42,7 +41,7 @@ class Users_View extends TrackerReact(React.Component) {
 						Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
 					}
 				}} >Delete</button>
-            </div>;
+            </div>);
 	}
 
 	// stop subscription

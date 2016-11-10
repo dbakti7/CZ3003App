@@ -2,7 +2,6 @@ import React, { Component, PropTypes, componentWillReceiveProps, componentDidMou
 import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import {Reports_db} from '../api/report.js';
-import Report from './report.jsx';
 import { Meteor } from 'meteor/meteor';
 import {IndexLink, Link } from 'react-router'
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
@@ -43,7 +42,7 @@ class Reports_View extends TrackerReact(React.Component) {
     
     // render action buttons for BootstrapTable
     editFormatter(cell, row){
-        return  <div>
+        return  (<div>
                 <Link to = {`/report/${cell}/0`} activeClassName="active"><button >{Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? "Edit" : "View"}</button></Link>
                 {Roles.userIsInRole(Meteor.userId(), ['Admin', 'Agency', 'Operator']) ? 
                 <button className="delete" onClick={function() {
@@ -52,7 +51,7 @@ class Reports_View extends TrackerReact(React.Component) {
                     Bert.alert( 'Deleted!', 'success', 'fixed-top', 'fa-check' );
                     }
                 }} >Delete</button> : null}
-                </div>;
+                </div>);
     }
     
     // stop subscription

@@ -13,11 +13,11 @@
             var dropdownListLogout = document.createElement("a");
             var logoutButton = document.createTextNode("Sign Out");
 			
-			/**
-			If user is logged in, user will be greeted by the username.
-			Else, It will just display "Hi There!"
-			Will be displayed on the top right corner button 
-			**/
+			/*
+                If user is logged in, user will be greeted by the username.
+                Else, It will just display "Hi There!"
+                Will be displayed on the top right corner button 
+			*/
             if (Meteor.user()) {
                 profileDisplay = "Hi, " + Meteor.user().username + " ▼";
                 dropdownListLogout.setAttribute("id", "signOutButton");

@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import {IndexLink, Link } from 'react-router'
-import IncidentType from './incidentType.jsx';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 // this component is used to render page to list all incident categories

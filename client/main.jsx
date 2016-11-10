@@ -18,19 +18,18 @@ import '../imports/startup/accounts-config.js'; // for account configuration
 
 // configure the URLs with react-router
 Meteor.startup(() => {
-  render((
-  <Router history={browserHistory}>
-    <Route path="/" component={Home}/> 
-    <Route path="/user/:user_id/:edit" component={User}/>
-    <Route path="/user/new" component={User_New}/>
-    <Route path="/users/view" component={UsersView}/>
-    <Route path="/map" component={Map}/>
-    <Route path="/category/:incidentType_id/:edit" component={Category_Edit}/>
-    <Route path="/category/view" component={Category_View}/>
-    <Route path="/report/:report_id/:edit" component={Report_Edit}/>
-    <Route path="/reports/view" component={Report_View}/>
-    <Route path="/forgot_password" component={ForgotPassword}/>
-    <Route path="/reset_password/:user_id" component={ResetPassword}/>
-  </Router>
-), document.getElementById('container'));
+    render((
+        <Router history={browserHistory}>
+        <Route path="/" component={Home}/> 
+        <Route path="/user/:user_id/:edit" component={User}/>
+        <Route path="/users/view" component={UsersView}/>
+        <Route path="/map" component={Map}/>
+        <Route path="/category/:incidentType_id/:edit" component={Category_Edit}/>
+        <Route path="/category/view" component={Category_View}/>
+        <Route path="/report/:report_id/:edit" component={Report_Edit}/>
+        <Route path="/reports/view" component={Report_View}/>
+        <Route path="/forgot_password" component={ForgotPassword}/>
+        <Route path="/reset_password/:user_id" component={ResetPassword}/>
+        </Router>
+    ), document.getElementById('container'));
 });
