@@ -5,12 +5,17 @@ import '../imports/api/cdShelter.js';
 import '../imports/api/methods.js';
 import '../imports/api/incidentType.js';
 import {Meteor} from 'meteor/meteor';
+
+// background service to send report to prime minister every 30 minutes
 Meteor.setInterval(function() {
-    console.log("INSIDE INTERVAL")
     incidentTypes = ["Fire", "Gas Leak", "MRT Breakdown", "Traffic Accident", "Dengue"]
+
+    // count occurence of each status for each type of incident
     counter = {"Fire":{"Active":0, "Handled":0, "Resolved":0}, "Gas Leak":{"Active":0, "Handled":0, "Resolved":0},
-"MRT Breakdown":{"Active":0, "Handled":0, "Resolved":0}, "Traffic Accident":{"Active":0, "Handled":0, "Resolved":0}, 
-"Dengue":{"Active":0, "Handled":0, "Resolved":0}}
+                "MRT Breakdown":{"Active":0, "Handled":0, "Resolved":0}, "Traffic Accident":{"Active":0, "Handled":0, "Resolved":0}, 
+                "Dengue":{"Active":0, "Handled":0, "Resolved":0}}
+
+    // email template
     email = "<p style='color:#414141;'>Dear Mr Prime Minister, <br/><br/><br/>"+
             "The following is the latest development on the current incidents in Singapore.<br/><br/></p>"+
             "<div>"+
@@ -21,11 +26,14 @@ Meteor.setInterval(function() {
             "<th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff; 'width='15%'>Active</th>"+
             "<th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Handled</th>"+
             "<th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Resolved</th></tr>"
+
+    // get incidents details        
     incidents = "<div>"
     for(i = 0;i<incidentTypes.length;++i) {
         var reports =Meteor.call('reports.getByType', incidentTypes[i])
         incidents = incidents + "<h2 style='color:#056571;'>" + incidentTypes[i] + "</h2>"
         incidents = incidents + "<table style='width:700px; font-family:roboto, sans-serif; color:#414141;'><tr><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='20%'>Title</th><th  style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff; 'width='50%'>Location</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Status</th><th style='text-align: left; background-color: #056571; font-weight:bold; color:#ffffff;' width='15%'>Handled By</th></tr>"
+
         for(j=0;j<reports.length;++j) {
             counter[incidentTypes[i]][reports[j].status] += 1
             incidents = incidents + "<tr><td>" + reports[j].title + "</td><td>" + reports[j].locationName + "</td><td>" + reports[j].status + "</td>"
@@ -45,18 +53,19 @@ Meteor.setInterval(function() {
             "<p style='color:#414141;'><br/>That is the end of our half-hourly report summary.</p>"+
             "<p style='color:#414141;'>Should you need further information for any purposes, you may navigate to our website, cacadcmssingapore.scalingo.io<br/></p>"+
             "<p style='color:#414141;'><br/>Thank you very much.<br/><br/>Best regards,<br/>CMS Singapore"
-    // console.log(incidents)
 
-    // Meteor.call('sendEmail', "dbakti1605@gmail.com", "PM Update", email + incidents);
-    // Meteor.call('sendEmail', "jm.joshua.martin@gmail.com", "PM Update", email + incidents);
-}, 10000);
+    // send the email to prime minister
+    // note: the following line is commented to avoid spamming
+    // Meteor.call('sendEmail', "email@sample.com", "PM Update", email + incidents);
+}, 1800000); // set the time interval here, in miliseconds
+
+// utility function to get difference between 2 time object
 function GetMinuteDiff(a, b) {
     var diff = a - b;
     return Math.round(((diff % 86400000) % 3600000) / 60000);
 }
 
-    
-
+// utility function for API calling
 function Get(Url) {
     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xhr = new XMLHttpRequest();
@@ -65,8 +74,8 @@ function Get(Url) {
     return xhr.responseText;
 }
 
+// get Civil Defense Shelters information with API request
 try {
-
     var CDSUrl = "https://data.gov.sg/api/action/datastore_search?resource_id=4ee17930-4780-403b-b6d4-b963c7bb1c09&q=CD+Shelter"
     var data = JSON.parse(Get(CDSUrl));
     var latitude = [1.3499993, 1.376443, 1.3812742, 1.3504867, 1.3592214, 1.4306003, 1.3741089, 1.3533537, 1.348784, 1.366819, 1.3640057, 1.2749238, 1.3424396, 1.3498125, 1.3048947, 1.3121862, 1.3374034, 1.3865405, 1.378325];

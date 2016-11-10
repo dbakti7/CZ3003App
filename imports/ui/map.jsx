@@ -83,26 +83,10 @@ class GoogleMap extends React.Component {
 		var WeatherMarkers = null;
 		var ShelterMarkers = null;
 		var ReportedMarkers = null;
-
-
-		var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
-		var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
-		var xmlHttp = new XMLHttpRequest();
 		var self = this;
 
-		
-		xmlHttp.onreadystatechange = function() { 
-			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            xmlDoc = new DOMParser().parseFromString(xmlHttp.responseText, 'text/xml');
-            regions = xmlDoc.getElementsByTagName("region");
-            self.setState({
-				PSIReadings: regions
-			})
-			}
-		}
-		xmlHttp.open("GET", urlPSI, true); // true for asynchronous 
-		xmlHttp.send(null);
-		
+		// get weather conditions for 5 regions in Singapore
+		var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
 		var xmlHttpWeather = new XMLHttpRequest();
 		xmlHttpWeather.onreadystatechange = function() {
 			if (xmlHttpWeather.readyState == 4 && xmlHttpWeather.status == 200) {
@@ -115,14 +99,32 @@ class GoogleMap extends React.Component {
 			})
 			}
 		}
-		xmlHttpWeather.open("GET", urlWeather, true); // true for asynchronous 
+		xmlHttpWeather.open("GET", urlWeather, true); 
 		xmlHttpWeather.send(null);
+
+		// get PSI readings for 5 regions in Singapore
+		var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function() { 
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            xmlDoc = new DOMParser().parseFromString(xmlHttp.responseText, 'text/xml');
+            regions = xmlDoc.getElementsByTagName("region");
+            self.setState({
+				PSIReadings: regions
+			})
+			}
+		}
+		xmlHttp.open("GET", urlPSI, true); 
+		xmlHttp.send(null);
+		
+		// Get all Civil Defense Shelters locations
 		Meteor.call('getAllShelter', function(error, result) {
 			self.setState({
 				shelters: result
 			})
 		})
 		
+		// react tracker state to manage callback when subscription is ready
 		this.state = {
 			ready : false,
 			PSIReadings: null,
