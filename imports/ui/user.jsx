@@ -5,14 +5,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import {browserHistory } from 'react-router'
 
+// this component is used to render user profile page
 class User extends Component {
 	constructor() {
 		super();
 		lat = 0;
 		lng = 0;
 		locationName = "";
-      
 		
+		// subscribe to necessary database tables / collections
 		const userSubscription = Meteor.subscribe('userData',{onReady: function() {
 			this.setState({
 				ready : userSubscription.ready() && userAuxSubscription.ready()
@@ -27,14 +28,18 @@ class User extends Component {
 		}.bind(this)})
 
 		this.state = {
-			ready : userSubscription.ready() && userAuxSubscription.ready()
+			ready : userSubscription.ready() && userAuxSubscription.ready(),
+			userSubscription: userSubscription,
+			subscription: subscription,
+			userAuxSubscription: userAuxSubscription
 		} 
 	}
 	
+	// handle form submission
 	handleSubmit(event) {
 		event.preventDefault();
  
-		// Find the text field via the React ref
+		// Find the text fields via the React ref
 		const userName = ReactDOM.findDOMNode(this.refs.textUserName).value.trim();
 		if(this.props.newUser) {
       		var password = ReactDOM.findDOMNode(this.refs.textPassword).value.trim();
@@ -44,6 +49,8 @@ class User extends Component {
 		const phone = ReactDOM.findDOMNode(this.refs.textPhone).value.trim();
 		const type = ReactDOM.findDOMNode(this.refs.textType).value;
 		const agencyName = ReactDOM.findDOMNode(this.refs.AgencyName).value.trim();
+
+		// some access controls
 		returnFlag = false
       	if(ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden == true)
         	returnFlag = true
@@ -58,7 +65,7 @@ class User extends Component {
 				return;
 		}
       
-		
+		// if new user, add into database
 		if(this.props.newUser) {
 			Meteor.call('userAux.addUser', userName, password, function(err, result) {
 				Meteor.call('userData.update', result, fullName, email, type, agencyName, phone, locationName, lat, lng, function(err1, result1){
@@ -66,60 +73,18 @@ class User extends Component {
 				})
 			});
 		}
+		// else, update existing data
 		else {
 			Meteor.call('userData.update', this.props.currentActiveUserId, fullName, email, type, agencyName, phone, locationName, lat, lng);
 			Meteor.call('setRole', this.props.currentActiveUserId, type);
 		}
         Bert.alert( 'User data has been updated!', 'success', 'fixed-top', 'fa-check' );
-    // Clear form
+    	
+		// redirect to view page
 		browserHistory.push('/users/view')
 	}
 
-	
-	postTweet(event) {
-		event.preventDefault();
-		Meteor.call("postTweet", this.refs.textTweet.value, function(err,result) {
-			if(!err) {
-				Bert.alert({
-					type: 'TwitterPosted',
-					style: 'growl-top-right',
-					title: 'Tweet Posted!',
-					icon: 'fa-twitter'
-				});
-			}
-		});
-	}
-
-	
-	postFB(event) {
-		event.preventDefault();
-		Meteor.call("postToFacebook", this.refs.textFB.value, function(err,result) {
-			if(!err) {
-				Bert.alert({
-					type: 'FacebookPosted',
-					style: 'growl-top-right',
-					title: 'Posted to Facebook!',
-					icon: 'fa-facebook'
-				});
-			}
-		});
-	}
-
-	sendSMS(event) {
-		event.preventDefault();
-		Meteor.call("sendSMS", this.refs.textSMS.value,this.refs.phone.value, function(err,result) {
-			if(!err) {
-				Bert.alert({
-					type: 'SMSSent',
-					style: 'growl-top-right',
-					title: 'SMS Sent!',
-					icon: 'fa-send'
-				});
-			}
-		});
-	}
-
-  
+	// load data from database and update text fields accordingly
 	updateValues() {
 		var users_data = UserData_db.find({originalUserId: Meteor.userId()}).fetch();
 		var data = this.props.user_data;
@@ -151,6 +116,7 @@ class User extends Component {
 				ReactDOM.findDOMNode(this.refs.textType).value = "Admin";
 		}
 
+		// access control
 		if (ReactDOM.findDOMNode(this.refs.textType).value == "Agency") {
 			ReactDOM.findDOMNode(this.refs.AgencyDiv).hidden = false;
 			ReactDOM.findDOMNode(this.refs.locationDiv).hidden = false;
@@ -159,6 +125,7 @@ class User extends Component {
 		}
 	}
 
+	// autocomplete api from Google for places
 	autocomplete() {
 		if (GoogleMaps.loaded()) {
 			var input = document.getElementById("location");
@@ -172,6 +139,14 @@ class User extends Component {
 		}
 	}
 
+	// stop subscription
+    componentWillUnmount() {
+        this.state.userSubscription.stop();
+		this.state.subscription.stop();
+		this.state.userAuxSubscription.stop();
+    }
+
+	// page rendering
 	render() {
 		var userDataAvailable = true;
 		var currentUser = this.props.currentUser;
@@ -220,7 +195,7 @@ class User extends Component {
                 </table>
 							
 				<div ref="AgencyDiv" hidden><table width="100%"><tr><td width="30%">Agency Name: </td>
-<td><input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></td></tr></table></div>
+				<td><input type="text" ref="AgencyName" placeholder="Agency Name"/><br/></td></tr></table></div>
 				<div ref="locationDiv" hidden><table width="100%"><tr><td width="30%">Location: </td>
 				<td><input type="text" size="40" id="location" ref="textLocation" placeholder="Location" onFocus={this.autocomplete}/><br/></td></tr></table></div>
                 <table width="100%">
@@ -231,13 +206,14 @@ class User extends Component {
 				</form>
 				{this.state.ready ? this.updateValues() : null}
     			</div>);
-}
+	}
 }
 
 User.propTypes = {
 	user_data: PropTypes.array.isRequired,
 };
 
+// return User component to be rendered
 export default createContainer(({params}) => {
 	const user_data = UserData_db.find({originalUserId: params.user_id}).fetch()[0];
 	const currentUser = Meteor.user();
