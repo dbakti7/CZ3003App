@@ -4,7 +4,7 @@ A crisis management system whereby you can report incidents around you and
 get real-time updates from the system (including PSI and Weather condition).
 
 ## System
-You can access the system from: https://cacadcmssingapore.scalingo.io/
+You can access the system from: http://cacadcmssingapore.scalingo.io/
 
 ## Team Members
 Team CACAD:
