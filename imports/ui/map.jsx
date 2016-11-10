@@ -8,180 +8,173 @@ import {ReactMeteorData, createContainer} from 'meteor/react-meteor-data';
 import {Reports_db} from '../api/report.js';
 import {IncidentType_db} from '../api/incidentType.js';
 import Time from 'react-time'
-//React ES6 version
 
 class MyTestMap extends React.Component {
-   constructor() {
-      super();
-      const reportSubscription = Meteor.subscribe('reports', {onReady: function() {
-        this.setState({
-          ready : reportSubscription.ready() && incidentTypeSubscription.ready()
-        });
-        
-      }.bind(this)});
+	constructor() {
+		super();
+		const reportSubscription = Meteor.subscribe('reports', {onReady: function() {
+			this.setState({
+				ready : reportSubscription.ready() && incidentTypeSubscription.ready()
+			});
+		}.bind(this)});
 
-      const incidentTypeSubscription = Meteor.subscribe('incidentType', {onReady: function() {
-        this.setState({
-          ready : reportSubscription.ready() && incidentTypeSubscription.ready()
-        })
-      }.bind(this)})
-      
-      this.state = {
-        ready : reportSubscription.ready() && incidentTypeSubscription.ready(),
-      }
-    }
-  //initialized data when the map is call
-  componentDidMount() {
-    //api key
-    GoogleMaps.load({
-      key: 'AIzaSyAv9ob20h8bWZxSS_Hvxv9OwkYyjW7SMOo',
-      libraries: 'places'
-    });
-  };
-  //get all incident details from mongoDB
-  getMeteorData() {
-    return {
-      loaded: GoogleMaps.loaded(),
-      reports: Reports_db.find({}).fetch(),
-      mapOptions: GoogleMaps.loaded() && this._mapOptions(),
-    };
-  };
-  //focus center of map and detail zoom of the map
-  _mapOptions() {
-    return {
-       center: new google.maps.LatLng(1.352083,103.819836),
-
-      zoom: 12
-    };
-  };
-  //render the map
-  render() {
-    if (this.data.loaded && this.state.ready) {
-      return (
-              //call the GoogleMap and pass the data
-              <GoogleMap name="mymap" options={this.data.mapOptions} reports = {Reports_db.find({}).fetch()}/>
-             
-        );
-    }
-
-    return <div></div>;
-  }
+		const incidentTypeSubscription = Meteor.subscribe('incidentType', {onReady: function() {
+			this.setState({
+				ready : reportSubscription.ready() && incidentTypeSubscription.ready()
+			})
+		}.bind(this)})
+		this.state = {
+			ready : reportSubscription.ready() && incidentTypeSubscription.ready(),
+		}
+	}
+	//initialized data when the map is called
+	componentDidMount() {
+		//api key
+		GoogleMaps.load({
+			key: 'AIzaSyAv9ob20h8bWZxSS_Hvxv9OwkYyjW7SMOo',
+			libraries: 'places'
+		});
+	};
+	
+	//get all incident details from mongoDB
+	getMeteorData() {
+		return {
+			loaded: GoogleMaps.loaded(),
+			reports: Reports_db.find({}).fetch(),
+			mapOptions: GoogleMaps.loaded() && this._mapOptions(),
+		};
+	};
+	
+	//focus center of map and detail zoom of the map
+	_mapOptions() {
+		return {
+			center: new google.maps.LatLng(1.352083,103.819836),
+			zoom: 12
+		};
+	};
+	
+	//render the map
+	render() {
+		if (this.data.loaded && this.state.ready) {
+			return (
+				//call the GoogleMap and pass the data
+				<GoogleMap name="mymap" options={this.data.mapOptions} reports = {Reports_db.find({}).fetch()}/>
+			);
+		}
+	return <div></div>;
+	}
 }
-
 
 reactMixin(MyTestMap.prototype, ReactMeteorData);
 
 class GoogleMap extends React.Component {
-  constructor() {
-      super();
-      var mapi;
-      var PSIMarkers = null;
-      var WeatherMarkers = null;
-      var ShelterMarkers = null;
-      var ReportedMarkers = null;
-      
-      var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
-
-      var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
-      var xmlHttp = new XMLHttpRequest();
-      var self = this;
-      xmlHttp.onreadystatechange = function() { 
-          if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+	constructor() {
+		super();
+		var mapi;
+		var PSIMarkers = null;
+		var WeatherMarkers = null;
+		var ShelterMarkers = null;
+		var ReportedMarkers = null;
+		var urlWeather = "http://api.nea.gov.sg/api/WebAPI/?dataset=24hrs_forecast&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
+		var urlPSI = "http://api.nea.gov.sg/api/WebAPI/?dataset=psi_update&keyref=781CF461BB6606ADC767F3B357E848ED47F0A16C2198F816"
+		var xmlHttp = new XMLHttpRequest();
+		var self = this;
+		xmlHttp.onreadystatechange = function() { 
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             xmlDoc = new DOMParser().parseFromString(xmlHttp.responseText, 'text/xml');
             regions = xmlDoc.getElementsByTagName("region");
             self.setState({
-              PSIReadings: regions
-            }) 
-          }
-      }
-      xmlHttp.open("GET", urlPSI, true); // true for asynchronous 
-      xmlHttp.send(null);
-
-      var xmlHttpWeather = new XMLHttpRequest();
-      xmlHttpWeather.onreadystatechange = function() { 
-          if (xmlHttpWeather.readyState == 4 && xmlHttpWeather.status == 200) {
+				PSIReadings: regions
+			})
+			}
+		}
+		xmlHttp.open("GET", urlPSI, true); // true for asynchronous 
+		xmlHttp.send(null);
+		
+		var xmlHttpWeather = new XMLHttpRequest();
+		xmlHttpWeather.onreadystatechange = function() {
+			if (xmlHttpWeather.readyState == 4 && xmlHttpWeather.status == 200) {
             xmlDoc = new DOMParser().parseFromString(xmlHttpWeather.responseText, 'text/xml');
             weatherNight = xmlDoc.getElementsByTagName("night")
             weatherMorn = xmlDoc.getElementsByTagName("morn")
             weatherAfternoon = xmlDoc.getElementsByTagName("afternoon")
             self.setState({
-              weatherReadings: {weatherNight, weatherMorn, weatherAfternoon}
-            }) 
-          }
-      }
-      xmlHttpWeather.open("GET", urlWeather, true); // true for asynchronous 
-      xmlHttpWeather.send(null);
-      Meteor.call('getAllShelter', function(error, result) {
-        self.setState({
-              shelters: result
-            }) 
-      })
-      this.state = {
-        ready : false,
-        PSIReadings: null,
-        weatherReadings: null,
-        shelters: null,
-        PSIToggle: true,
-        weatherToggle: true,
-        shelterToggle: true,
-        FireToggle: true,
-        DengueToggle: true,
-        TrafficToggle: true,
-        GasToggle: true,
-        MRTToggle: true,
-      }
-       
-    }
+				weatherReadings: {weatherNight, weatherMorn, weatherAfternoon}
+			})
+			}
+		}
+		xmlHttpWeather.open("GET", urlWeather, true); // true for asynchronous 
+		xmlHttpWeather.send(null);
+		Meteor.call('getAllShelter', function(error, result) {
+			self.setState({
+				shelters: result
+			})
+		})
+		
+		this.state = {
+			ready : false,
+			PSIReadings: null,
+			weatherReadings: null,
+			shelters: null,
+			PSIToggle: true,
+			weatherToggle: true,
+			shelterToggle: true,
+			FireToggle: true,
+			DengueToggle: true,
+			TrafficToggle: true,
+			GasToggle: true,
+			MRTToggle: true,
+		}
+	}
   
-  componentDidMount() {
-    mapi = new google.maps.Map(ReactDOM.findDOMNode(this),
-        this.props.options);
-    PSIMarkers = null;
-    WeatherMarkers = null;
-    ShelterMarkers = null;
-    ReportedMarkers = null;
-    var self = this;
-    var PSIControlDiv = document.createElement('div');
-    var PSIControl = new this.PSIControl(PSIControlDiv, mapi, self, "PSI");
-    var WeatherControlDiv = document.createElement('div');
-    var WeatherControl = new this.PSIControl(WeatherControlDiv, mapi, self, "Weather");
-    var ShelterControlDiv = document.createElement('div');
-    var ShelterControl = new this.PSIControl(ShelterControlDiv, mapi, self, "Shelter");
-    var FireControlDiv = document.createElement('div');
-    var FireControl = new this.PSIControl(FireControlDiv, mapi, self, "Fire");
-    var DengueControlDiv = document.createElement('div');
-    var DengueControl = new this.PSIControl(DengueControlDiv, mapi, self, "Dengue");
-    var TrafficControlDiv = document.createElement('div');
-    var TrafficControl = new this.PSIControl(TrafficControlDiv, mapi, self, "Traffic");
-    var GasControlDiv = document.createElement('div');
-    var GasControl = new this.PSIControl(GasControlDiv, mapi, self, "Gas");
-    var MRTControlDiv = document.createElement('div');
-    var MRTControl = new this.PSIControl(GasControlDiv, mapi, self, "MRT");
-    PSIControlDiv.index = 1;
-    WeatherControlDiv.index = 1;
-    ShelterControlDiv.index = 1;
-    FireControlDiv.index = 1;
-    DengueControlDiv.index = 1;
-    TrafficControlDiv.index = 1;
-    GasControlDiv.index = 1;
-    MRTControlDiv.index = 1;
+	componentDidMount() {
+		mapi = new google.maps.Map(ReactDOM.findDOMNode(this),this.props.options);
+		PSIMarkers = null;
+		WeatherMarkers = null;
+		ShelterMarkers = null;
+		ReportedMarkers = null;
+		var self = this;
+    	var PSIControlDiv = document.createElement('div');
+		var PSIControl = new this.PSIControl(PSIControlDiv, mapi, self, "PSI");
+		var WeatherControlDiv = document.createElement('div');
+		var WeatherControl = new this.PSIControl(WeatherControlDiv, mapi, self, "Weather");
+		var ShelterControlDiv = document.createElement('div');
+		var ShelterControl = new this.PSIControl(ShelterControlDiv, mapi, self, "Shelter");
+		var FireControlDiv = document.createElement('div');
+		var FireControl = new this.PSIControl(FireControlDiv, mapi, self, "Fire");
+		var DengueControlDiv = document.createElement('div');
+		var DengueControl = new this.PSIControl(DengueControlDiv, mapi, self, "Dengue");
+		var TrafficControlDiv = document.createElement('div');
+		var TrafficControl = new this.PSIControl(TrafficControlDiv, mapi, self, "Traffic");
+		var GasControlDiv = document.createElement('div');
+		var GasControl = new this.PSIControl(GasControlDiv, mapi, self, "Gas");
+		var MRTControlDiv = document.createElement('div');
+		var MRTControl = new this.PSIControl(GasControlDiv, mapi, self, "MRT");
+		PSIControlDiv.index = 1;
+		WeatherControlDiv.index = 1;
+		ShelterControlDiv.index = 1;
+		FireControlDiv.index = 1;
+		DengueControlDiv.index = 1;
+		TrafficControlDiv.index = 1;
+		GasControlDiv.index = 1;
+		MRTControlDiv.index = 1;
+
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(PSIControlDiv);
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(WeatherControlDiv);
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(ShelterControlDiv);
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(DengueControlDiv);
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(TrafficControlDiv);
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(FireControlDiv);
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(GasControlDiv);
+		mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(MRTControlDiv);
+		this.setState({
+			ready : true
+		})
+	};
     
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(PSIControlDiv);
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(WeatherControlDiv);
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(ShelterControlDiv);
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(DengueControlDiv);
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(TrafficControlDiv);
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(FireControlDiv);
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(GasControlDiv);
-    mapi.controls[google.maps.ControlPosition.RIGHT_CENTER].push(MRTControlDiv);
-    this.setState({
-          ready : true
-        })
-  }
-    ;
-    
-    PSIControl(controlDiv, map, self, title) {
-        // Set CSS for the control border.
+	
+	PSIControl(controlDiv, map, self, title) {
+		// Set CSS for the control border.
         var controlUI = document.createElement('div');
         controlUI.style.backgroundColor = '#fff';
         controlUI.style.border = '2px solid #fff';
@@ -206,470 +199,478 @@ class GoogleMap extends React.Component {
 
         // Setup the click event listeners: simply set the map to Chicago.
         if(title == "PSI") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                PSIToggle: !self.state.PSIToggle,
-              })
-          });
-        }
-        else if(title == "Weather") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                weatherToggle: !self.state.weatherToggle,
-              })
-          });
-        }
-        else if(title == "Shelter") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                shelterToggle: !self.state.shelterToggle,
-              })
-          });
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					PSIToggle: !self.state.PSIToggle,
+				})
+			});
+		}
+		else if(title == "Weather") {
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					weatherToggle: !self.state.weatherToggle,
+				})
+			});
+		}
+		else if(title == "Shelter") {
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					shelterToggle: !self.state.shelterToggle,
+				})
+			});
         }
         else if(title == "Fire") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                FireToggle: !self.state.FireToggle,
-              })
-          });
-        }
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					FireToggle: !self.state.FireToggle,
+				})
+			});
+		}
         else if(title == "Dengue") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                DengueToggle: !self.state.DengueToggle,
-              })
-          });
-        }
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					DengueToggle: !self.state.DengueToggle,
+				})
+			});
+		}
         else if(title == "Traffic") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                TrafficToggle: !self.state.TrafficToggle,
-              })
-          });
-        }
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					TrafficToggle: !self.state.TrafficToggle,
+				})
+			});
+		}
         else if(title == "Gas") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                GasToggle: !self.state.GasToggle,
-              })
-          });
-        }
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					GasToggle: !self.state.GasToggle,
+				})
+			});
+		}
         else if(title == "MRT") {
-          controlUI.addEventListener('click', function() {
-            self.setState({
-                MRTToggle: !self.state.MRTToggle,
-              })
-          });
-        }
-
-      }
-
-  renderPSIMarkers() {
-    if(PSIMarkers != null) {
-      for(i=0;i<PSIMarkers.length;++i) {
-        if(this.state.PSIToggle)
-          PSIMarkers[i].setMap(mapi);
-        else
-          PSIMarkers[i].setMap(null);
-      }
-      return;
-    }
-    var markerlist = []
-    
-    regions = this.state.PSIReadings
-    for(i=0;i<regions.length;++i) {
-      var temp = []
-      var regionName = regions[i].getElementsByTagName("id")[0].innerHTML
-      if(regionName == 'rNO') 
-        temp.push("North Region")
-      else if(regionName == 'rSO')
-        temp.push("South Region")
-      else if(regionName == 'rCE')
-        temp.push("Central Region")
-      else if(regionName == 'rWE')
-        temp.push("West Region")
-      else if(regionName == 'rEA')
-        temp.push("East Region")
-      temp.push(regions[i].getElementsByTagName("latitude")[0].innerHTML)
-      temp.push(regions[i].getElementsByTagName("longitude")[0].innerHTML)
-      var readings = regions[i].getElementsByTagName("reading")
-      
-      for(j=0;j<readings.length;++j) {
-        temp.push(readings[j].getAttribute('value'));
-      }
-      markerlist.push(temp);
-    }
-    PSIMarkers = markerlist;
-    var arrayofMarkers = []
-    var icon = {
-        url: 'images/haze.png',
-        scaledSize: new google.maps.Size(30,30),
-        origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0)}
-    for(i = 0; i<markerlist.length; i++){
+			controlUI.addEventListener('click', function() {
+				self.setState({
+					MRTToggle: !self.state.MRTToggle,
+				})
+			});
+		}
+	}
+	
+	renderPSIMarkers() {
+		if(PSIMarkers != null) {
+			for(i=0;i<PSIMarkers.length;++i) {
+				if(this.state.PSIToggle)
+					PSIMarkers[i].setMap(mapi);
+				else
+					PSIMarkers[i].setMap(null);
+			}
+			return;
+		}
+		var markerlist = []
+		regions = this.state.PSIReadings
+    	for(i=0;i<regions.length;++i) {
+			var temp = []
+      		var regionName = regions[i].getElementsByTagName("id")[0].innerHTML
+      		if(regionName == 'rNO') 
+        		temp.push("North Region")
+      		else if(regionName == 'rSO')
+        		temp.push("South Region")
+      		else if(regionName == 'rCE')
+        		temp.push("Central Region")
+      		else if(regionName == 'rWE')
+        		temp.push("West Region")
+      		else if(regionName == 'rEA')
+        		temp.push("East Region")
+				temp.push(regions[i].getElementsByTagName("latitude")[0].innerHTML)
+				temp.push(regions[i].getElementsByTagName("longitude")[0].innerHTML)
+      			var readings = regions[i].getElementsByTagName("reading")
+				
+				for(j=0;j<readings.length;++j) {
+					temp.push(readings[j].getAttribute('value'));
+				}
+			markerlist.push(temp);
+		}
+		PSIMarkers = markerlist;
+		var arrayofMarkers = []
+		var icon = {
+			url: 'images/haze.png',
+			scaledSize: new google.maps.Size(30,30),
+			origin: new google.maps.Point(0,0),
+			anchor: new google.maps.Point(0,0)}
+			for(i = 0; i<markerlist.length; i++){
       //content for each pop ups
-      var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][0] +'</h3>'+
-            '<div id="bodyContent">'+
-            '<table>'+
-              '<tr>' +
-                '<td>24-hr PSI</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][3] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>3-hr PSI</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][4] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>24-hrs PM2.5 concentration</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][7] + '</td>' +
-              '</tr>' +
-              '<tr>' +
-                '<td>PM2.5 sub-index</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][14] + '</td>' +
-              '</tr>' +
-            '</table>'+
-            '</div>'+
-            '</div>';
-      //detail of each marker
-      var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]-0.0075),
-          map: mapi,
-          title: markerlist[i][0],
-          icon: icon,
-          detail: contentString,
-        });
-      arrayofMarkers.push(marker);
-      //link the pop ups with the marker 
-      arrayofMarkers[i].addListener('click', function() {
-        var marker = this;
-          infowindow.setContent(marker.detail);
-          infowindow.open(mapi, marker);
-        });
-    }
-    PSIMarkers = arrayofMarkers;
-  }
-renderShelterMarkers() {
-  if(ShelterMarkers != null) {
-      for(i=0;i<ShelterMarkers.length;++i) {
-        if(this.state.shelterToggle)
-          ShelterMarkers[i].setMap(mapi);
-        else
-          ShelterMarkers[i].setMap(null);
-      }
-      return;
-    }
-    var markerlist = []
+				var contentString = '<div id="content">'+
+					'<div id="siteNotice">'+
+            		'</div>'+
+					'<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][0] +'</h3>'+
+					'<div id="bodyContent">'+
+					'<table>'+
+					'<tr>' +
+						'<td>24-hr PSI</td>'+
+						'<td>:</td>'+
+						'<td class="mapContent">' + markerlist[i][3] + '</td>' +
+					'</tr>' +
+					'<tr>' +
+                		'<td>3-hr PSI</td>'+
+                		'<td>:</td>'+
+                		'<td class="mapContent">' + markerlist[i][4] + '</td>' +
+              		'</tr>' +
+              		'<tr>' +
+                		'<td>24-hrs PM2.5 concentration</td>'+
+						'<td>:</td>'+
+						'<td class="mapContent">' + markerlist[i][7] + '</td>' +
+              		'</tr>' +
+              		'<tr>' +
+                		'<td>PM2.5 sub-index</td>'+
+                		'<td>:</td>'+
+                		'<td class="mapContent">' + markerlist[i][14] + '</td>' +
+              		'</tr>' +
+            		'</table>'+
+            		'</div>'+
+            		'</div>';
+				
+				//detail of each marker
+				var  marker = new google.maps.Marker({
+					position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]-0.0075),
+					map: mapi,
+					title: markerlist[i][0],
+					icon: icon,
+					detail: contentString,
+				});
+				arrayofMarkers.push(marker);
+				
+				//link the pop ups with the marker 
+				arrayofMarkers[i].addListener('click', function() {
+					var marker = this;
+					infowindow.setContent(marker.detail);
+					infowindow.open(mapi, marker);
+				});
+			}
+		PSIMarkers = arrayofMarkers;
+	}
+	
+	renderShelterMarkers() {
+		if(ShelterMarkers != null) {
+			for(i=0;i<ShelterMarkers.length;++i) {
+				if(this.state.shelterToggle)
+					ShelterMarkers[i].setMap(mapi);
+				else
+					ShelterMarkers[i].setMap(null);
+			}
+			return;
+		}
+		
+		var markerlist = []
+		
+		shelterList =this.state.shelters
+		for(i=0;i<shelterList.length;++i) {
+			var temp = []
+			temp.push(shelterList[i].name)
+			temp.push(shelterList[i].address)
+			temp.push(shelterList[i].lat)
+			temp.push(shelterList[i].lng)
+			markerlist.push(temp)
+		}
+		var arrayofMarkers = []
+		var icon = {
+			url: 'images/shelter.png',
+			scaledSize: new google.maps.Size(30,30),
+			origin: new google.maps.Point(0,0),
+			anchor: new google.maps.Point(0,0)}
+		for(i = 0; i<markerlist.length; i++){
+			//content for each pop ups
+			var contentString = '<div id="content">'+
+				'<div id="siteNotice">'+
+				'</div>'+
+            	'<div id="firstHeading">'+
+            	'<h3>' + markerlist[i][0] + '</h3>' +
+            	'<div id="bodyContent">'+
+            	'<table>'+
+              	'<tr>' +
+                	'<td>Address</td>'+
+                	'<td>:</td>'+
+                	'<td class="mapContent">' + markerlist[i][1] + '</td>' +
+              	'</tr></table>' +
+				'<a href=https://www.google.com.sg/maps/place/"' +markerlist[i][1]+ '" target ="_blank"> <i>Go To</i> </a>'+
+				'</div></div>';
+			
+			//detail of each marker
+			// icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
+			var  marker = new google.maps.Marker({
+				position: new google.maps.LatLng(markerlist[i][2],markerlist[i][3]),
+				map: mapi,
+				title: markerlist[i][0],
+				icon: icon,
+				detail: contentString,
+			});
 
-    
-    shelterList =this.state.shelters 
-    for(i=0;i<shelterList.length;++i) {
-      var temp = []
-      temp.push(shelterList[i].name)
-      temp.push(shelterList[i].address)
-      temp.push(shelterList[i].lat)
-      temp.push(shelterList[i].lng)
-      markerlist.push(temp)
-    }
-      var arrayofMarkers = []
-    var icon = {
-        url: 'images/shelter.png',
-        scaledSize: new google.maps.Size(30,30),
-        origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0)}
-    for(i = 0; i<markerlist.length; i++){
-      //content for each pop ups
-      var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<div id="firstHeading">'+
-            '<h3>' + markerlist[i][0] + '</h3>' +
-            '<div id="bodyContent">'+
-            '<table>'+
-              '<tr>' +
-                '<td>Address</td>'+
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][1] + '</td>' +
-              '</tr></table>' +
-              '<a href=https://www.google.com.sg/maps/place/"' +markerlist[i][1]+ '" target ="_blank"> <i>Go To</i> </a>'+
-            '</div></div>';
-      //detail of each marker
-      // icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
-      var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][2],markerlist[i][3]),
-          map: mapi,
-          title: markerlist[i][0],
-          icon: icon,
-          detail: contentString,
-        });
+			arrayofMarkers.push(marker);
+			//link the pop ups with the marker 
+			arrayofMarkers[i].addListener('click', function() {
+				var marker = this;
+				infowindow.setContent(marker.detail);
+				infowindow.open(mapi, marker);
+			});
+		}
+		ShelterMarkers = arrayofMarkers;
+	}
 
-      arrayofMarkers.push(marker);
-      //link the pop ups with the marker 
-      arrayofMarkers[i].addListener('click', function() {
-        var marker = this;
-          infowindow.setContent(marker.detail);
-          infowindow.open(mapi, marker);
-        });
-    }
-    ShelterMarkers = arrayofMarkers;
-}
+	renderWeatherMarkers() {
+		if(WeatherMarkers != null) {
+			for(i=0;i<WeatherMarkers.length;++i) {
+				if(this.state.weatherToggle)
+					WeatherMarkers[i].setMap(mapi);
+				else
+					WeatherMarkers[i].setMap(null);
+			}
+			return;
+		}
+		var markerlist = []
+		hour = new Date().getHours()
+		if(hour >= 6 && hour <= 12)
+			weathers = this.state.weatherReadings["weatherMorn"][0]
+		else if(hour > 12 && hour < 18)
+			weathers = this.state.weatherReadings["weatherAfternoon"][0]
+		else weathers = this.state.weatherReadings["weatherNight"][0]
+		
+		var temp = []
+		temp.push(weathers.getElementsByTagName("wxeast")[0].innerHTML)
+		temp.push(1.35735)
+		temp.push(103.94000)
+		markerlist.push(temp)
+		temp = []
+		temp.push(weathers.getElementsByTagName("wxwest")[0].innerHTML)
+		temp.push(1.35735)
+		temp.push(103.70000)
+		markerlist.push(temp)
+		temp = []
+		temp.push(weathers.getElementsByTagName("wxnorth")[0].innerHTML)
+		temp.push(1.41803)
+		temp.push(103.82000)
+		markerlist.push(temp)
+		temp = []
+		temp.push(weathers.getElementsByTagName("wxsouth")[0].innerHTML)
+		temp.push(1.29587)
+		temp.push(103.82000)
+		markerlist.push(temp)
+		temp = []
+		temp.push(weathers.getElementsByTagName("wxcentral")[0].innerHTML)
+		temp.push(1.35735)
+		temp.push(103.82000)
+		markerlist.push(temp)
 
-  renderWeatherMarkers() {
-    if(WeatherMarkers != null) {
-      for(i=0;i<WeatherMarkers.length;++i) {
-        if(this.state.weatherToggle)
-          WeatherMarkers[i].setMap(mapi);
-        else
-          WeatherMarkers[i].setMap(null);
-      }
-      return;
-    }
-    var markerlist = []
-    
-    hour = new Date().getHours()
-    if(hour >= 6 && hour <= 12)
-      weathers = this.state.weatherReadings["weatherMorn"][0]
-    else if(hour > 12 && hour < 18)
-      weathers = this.state.weatherReadings["weatherAfternoon"][0]
-    else 
-      weathers = this.state.weatherReadings["weatherNight"][0]
-    
-      var temp = []
-      temp.push(weathers.getElementsByTagName("wxeast")[0].innerHTML)
-      temp.push(1.35735)
-      temp.push(103.94000)
-      markerlist.push(temp)
-      temp = []
-      temp.push(weathers.getElementsByTagName("wxwest")[0].innerHTML)
-      temp.push(1.35735)
-      temp.push(103.70000)
-      markerlist.push(temp)
-      temp = []
-      temp.push(weathers.getElementsByTagName("wxnorth")[0].innerHTML)
-      temp.push(1.41803)
-      temp.push(103.82000)
-      markerlist.push(temp)
-      temp = []
-      temp.push(weathers.getElementsByTagName("wxsouth")[0].innerHTML)
-      temp.push(1.29587)
-      temp.push(103.82000)
-      markerlist.push(temp)
-      temp = []
-      temp.push(weathers.getElementsByTagName("wxcentral")[0].innerHTML)
-      temp.push(1.35735)
-      temp.push(103.82000)
-      markerlist.push(temp)
-        
-    var weatherList = {
-      'BR': ['haze.png', 'Mist'], 
-      'CL': ['cloudy.png', 'Cloudy'], 
-      'DR': ['rain.png', 'Drizzle'], 
-      'FA': ['sunny.png', 'Fair (Day)'], 
-      'FG': ['haze.png', 'Fog'], 
-      'FN': ['sunny.png', 'Fair (Night)'], 
-      'FW': ['sunny.png', 'Fair and Warm'],
-      'HG': ['storm.png', 'Heavy Thundery Showers with Gusty Winds'],
-      'HR': ['rain.png', 'Heavy Rain'],
-      'HS': ['rain.png', 'Heavy Showers'],
-      'HT': ['storm.png', 'Heavy Thundery Showers'], 
-      'HZ': ['haze.png', 'Hazy'],
-      'LH': ['haze.png', 'Slightly Hazy'],
-      'LR': ['rain.png', 'Light Rain'],
-      'LS': ['rain.png', 'Light Showers'],
-      'OC': ['cloudy.png', 'Overcast'],
-      'PC': ['cloudy.png', 'Partly Cloudy (Day)'], 
-      'PN': ['cloudy.png', 'Partly Cloudy (Night)'],
-      'PS': ['rain.png', 'Passing Showers'],
-      'RA': ['rain.png', 'Moderate Rain'],
-      'SH': ['rain.png', 'Showers'],
-      'SK': ['rain.png', 'Strong Wind, Showers'],
-      'SN': ['snowflake.png', 'Snow'],
-      'SR': ['rain.png', 'Strong Wing, Rains'],
-      'SS': ['snowflake.png', 'Snow Showers'],
-      'SU': ['sunny.png', 'Sunny'],
-      'SW': ['windy.png', 'Strong Winds'],
-      'TL': ['storm.png', 'Thundery Showers'],
-      'WC': ['windy.png', 'Windy, Cloudy'], 
-      'WD': ['windy.png', 'Windy'], 
-      'WF': ['windy.png', 'Windy, Fair'], 
-      'WR': ['windy.png', 'Windy, Rain'], 
-      'WS': ['windy.png', 'Windy, Showers'], 
-  }
+		
+		var weatherList = {
+			'BR': ['haze.png', 'Mist'], 
+			'CL': ['cloudy.png', 'Cloudy'], 
+			'DR': ['rain.png', 'Drizzle'], 
+			'FA': ['sunny.png', 'Fair (Day)'], 
+			'FG': ['haze.png', 'Fog'], 
+			'FN': ['sunny.png', 'Fair (Night)'], 
+			'FW': ['sunny.png', 'Fair and Warm'],
+			'HG': ['storm.png', 'Heavy Thundery Showers with Gusty Winds'],
+			'HR': ['rain.png', 'Heavy Rain'],
+			'HS': ['rain.png', 'Heavy Showers'],
+			'HT': ['storm.png', 'Heavy Thundery Showers'], 
+			'HZ': ['haze.png', 'Hazy'],
+			'LH': ['haze.png', 'Slightly Hazy'],
+			'LR': ['rain.png', 'Light Rain'],
+			'LS': ['rain.png', 'Light Showers'],
+			'OC': ['cloudy.png', 'Overcast'],
+			'PC': ['cloudy.png', 'Partly Cloudy (Day)'], 
+			'PN': ['cloudy.png', 'Partly Cloudy (Night)'],
+			'PS': ['rain.png', 'Passing Showers'],
+			'RA': ['rain.png', 'Moderate Rain'],
+			'SH': ['rain.png', 'Showers'],
+			'SK': ['rain.png', 'Strong Wind, Showers'],
+			'SN': ['snowflake.png', 'Snow'],
+			'SR': ['rain.png', 'Strong Wing, Rains'],
+			'SS': ['snowflake.png', 'Snow Showers'],
+			'SU': ['sunny.png', 'Sunny'],
+			'SW': ['windy.png', 'Strong Winds'],
+			'TL': ['storm.png', 'Thundery Showers'],
+			'WC': ['windy.png', 'Windy, Cloudy'], 
+			'WD': ['windy.png', 'Windy'], 
+			'WF': ['windy.png', 'Windy, Fair'], 
+			'WR': ['windy.png', 'Windy, Rain'], 
+			'WS': ['windy.png', 'Windy, Showers'], 
+		}
   
-    var arrayofMarkers = []
-    var icon = {
-        url: 'images/logo.png',
-        scaledSize: new google.maps.Size(30,30),
-        origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0)}
-    for(i = 0; i<markerlist.length; i++){
-      //content for each pop ups
-      var contentString = '<div id="content">'+
+		
+		var arrayofMarkers = []
+		var icon = {
+			url: 'images/logo.png',
+			scaledSize: new google.maps.Size(30,30),
+			origin: new google.maps.Point(0,0),
+			anchor: new google.maps.Point(0,0)}
+		for(i = 0; i<markerlist.length; i++){
+			//content for each pop ups
+			var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
             '<div id="firstHeading">'+
             '<h3>' + weatherList[markerlist[i][0]][1] + '</h3>'
             '</div>';
-      //detail of each marker
-      icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
-      var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]+0.00075),
-          
-          map: mapi,
-          title: markerlist[i][0],
-          icon: icon,
-          detail: contentString,
-        });
+			//detail of each marker
+			icon['url'] = 'images/' + weatherList[markerlist[i][0]][0]
+			var  marker = new google.maps.Marker({
+				position: new google.maps.LatLng(markerlist[i][1],markerlist[i][2]+0.00075),
+				map: mapi,
+				title: markerlist[i][0],
+				icon: icon,
+				detail: contentString,
+			});
 
-      arrayofMarkers.push(marker);
-      //link the pop ups with the marker 
-      arrayofMarkers[i].addListener('click', function() {
-        var marker = this;
-          infowindow.setContent(marker.detail);
-          infowindow.open(mapi, marker);
-        });
-    }
-    WeatherMarkers = arrayofMarkers;
-  }
+			arrayofMarkers.push(marker);
+			//link the pop ups with the marker
+			arrayofMarkers[i].addListener('click', function() {
+				var marker = this;
+				infowindow.setContent(marker.detail);
+				infowindow.open(mapi, marker);
+			});
+		}
+		WeatherMarkers = arrayofMarkers;
+	}
 
-    renderMarkers() {
-      if(ReportedMarkers != null) {
-        for(i = 0;i<ReportedMarkers.length;++i)
-          ReportedMarkers[i].setMap(null);
-      }
-        var toggles = {"Fire":this.state.FireToggle, "Gas Leak": this.state.GasToggle, "Traffic Accident": this.state.TrafficToggle, "Dengue":this.state.DengueToggle, "MRT Breakdown": this.state.MRTToggle}
-    var markerlist = []
-    for(var i =0;i<this.props.reports.length;++i) {
-      if(this.props.reports[i].status == "Resolved")
-        continue;
-      var temp = []
-      temp.push(this.props.reports[i].lat)
-      temp.push(this.props.reports[i].long)
-      incidentTypeName = IncidentType_db.find({_id: this.props.reports[i].incidentType_id}).fetch()[0].name;
-      temp.push(incidentTypeName)
-      temp.push(this.props.reports[i].title)
-      temp.push(this.props.reports[i].locationName)
-      temp.push('http://cacadcmssingapore.scalingo.io/reports/view')
-      if(this.props.reports[i].status == "Handled")
-        temp.push("Handled by: " + this.props.reports[i].handledBy)
-      else if(this.props.reports[i].status == "Active")
-        temp.push("Active")
-      markerlist.push(temp)
-    }
+	renderMarkers() {
+		if(ReportedMarkers != null) {
+			for(i = 0;i<ReportedMarkers.length;++i)
+				ReportedMarkers[i].setMap(null);
+		}
+		
+		var toggles = {"Fire":this.state.FireToggle, "Gas Leak": this.state.GasToggle, "Traffic Accident": this.state.TrafficToggle, "Dengue":this.state.DengueToggle, "MRT Breakdown": this.state.MRTToggle}
+		var markerlist = []
+		for(var i =0;i<this.props.reports.length;++i) {
+			if(this.props.reports[i].status == "Resolved")
+				continue;
+			var temp = []
+			temp.push(this.props.reports[i].lat)
+			temp.push(this.props.reports[i].long)
+			incidentTypeName = IncidentType_db.find({_id: this.props.reports[i].incidentType_id}).fetch()[0].name;
+			temp.push(incidentTypeName)
+			temp.push(this.props.reports[i].title)
+			temp.push(this.props.reports[i].locationName)
+			temp.push('http://cacadcmssingapore.scalingo.io/reports/view')
+      		if(this.props.reports[i].status == "Handled")
+        		temp.push("Handled by: " + this.props.reports[i].handledBy)
+      		else if(this.props.reports[i].status == "Active")
+        		temp.push("Active")
+      		markerlist.push(temp)
+		}
     
-    incidentList = {'Gas Leak': 'gasleak.png', 'Traffic Accident': 'caracc.png', 'Dengue': 'dengue.png', 
-  'MRT Breakdown': 'mrtbd.png', 'Fire': 'fire.png'}
-    //marker icon details
-    var icon = {
-        url: 'images/logo.png',
-        scaledSize: new google.maps.Size(30,30),
-        origin: new google.maps.Point(0,0),
-        anchor: new google.maps.Point(0,0),
-      }
+		incidentList = {'Gas Leak': 'gasleak.png', 'Traffic Accident': 'caracc.png', 'Dengue': 'dengue.png', 
+						'MRT Breakdown': 'mrtbd.png', 'Fire': 'fire.png'}
+		
+		//marker icon details
+		var icon = {
+			url: 'images/logo.png',
+			scaledSize: new google.maps.Size(30,30),
+			origin: new google.maps.Point(0,0),
+			anchor: new google.maps.Point(0,0),
+		}
       
     
-    
-    var i;
-    var arrayofMarkers =[];
+		var i;
+		var arrayofMarkers =[];
 
-    //initialize infoWindow for pop ups
-    infowindow = new google.maps.InfoWindow({
-      content: "holding..."
-      });
+		//initialize infoWindow for pop ups
+		infowindow = new google.maps.InfoWindow({
+			content: "holding..."
+		});
 
-    //render all the marker to the map
-    for(i = 0; i<markerlist.length; i++){
-      //content for each pop ups
-      var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][3] +'</h1>'+
-            '<div id="bodyContent">'+
-            '<table>'+
-              '<tr>'+
-                '<td>Accident</td>'+ 
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][2] + '</td>'+
-              '</tr>' +
-              '<tr>'+
-                '<td>Location</td>'+ 
-                '<td>:</td>'+
-                '<td class="mapContent">' + markerlist[i][4] + '</td>'+
-              '</tr>' +
-              '<tr>' +
-                '<td>Status</td>' +
-                '<td>:</td>' +
-                '<td class="mapContent">'+ markerlist[i][6]+ '</td>'+
-              '</tr>'+
-            '</table><br/>'+
-            '<a href="' +markerlist[i][5]+ '" target ="_blank"> <i>Detail here</i> </a>'+
-            '</div>'+
-            '</div>';
-      //detail of each marker
-      if(toggles[markerlist[i][2]] == false)
-        continue
-      icon['url'] = 'images/' + incidentList[markerlist[i][2]]
-      var  marker = new google.maps.Marker({
-          position: new google.maps.LatLng(markerlist[i][0],markerlist[i][1]),
-          map: mapi,
-          icon: icon,
-          title: markerlist[i][2],
-          detail: contentString,
-        });
-      arrayofMarkers.push(marker);
-      //link the pop ups with the marker 
-      arrayofMarkers[arrayofMarkers.length-1].addListener('click', function() {
-        var marker = this;
-          infowindow.setContent(marker.detail);
-          infowindow.open(mapi, marker);
-        });
-
-      };
-      ReportedMarkers = arrayofMarkers;
-    }//);
+		//render all the marker to the map
+		for(i = 0; i<markerlist.length; i++){
+			//content for each pop ups
+			var contentString = '<div id="content">'+
+				'<div id="siteNotice">'+
+				'</div>'+
+				'<h3 id="firstHeading" class="firstHeading">'+ markerlist[i][3] +'</h1>'+
+				'<div id="bodyContent">'+
+				'<table>'+
+              	'<tr>'+
+                	'<td>Accident</td>'+ 
+                	'<td>:</td>'+
+                	'<td class="mapContent">' + markerlist[i][2] + '</td>'+
+				'</tr>' +
+				'<tr>'+
+					'<td>Location</td>'+ 
+					'<td>:</td>'+
+					'<td class="mapContent">' + markerlist[i][4] + '</td>'+
+				'</tr>' +
+				'<tr>' +
+					'<td>Status</td>' +
+					'<td>:</td>' +
+					'<td class="mapContent">'+ markerlist[i][6]+ '</td>'+
+              	'</tr>'+
+            	'</table><br/>'+
+				'<a href="' +markerlist[i][5]+ '" target ="_blank"> <i>Detail here</i> </a>'+
+				'</div>'+
+				'</div>';
+			
+			//detail of each marker
+			if(toggles[markerlist[i][2]] == false)
+				continue
+				icon['url'] = 'images/' + incidentList[markerlist[i][2]]
+				var  marker = new google.maps.Marker({
+					position: new google.maps.LatLng(markerlist[i][0],markerlist[i][1]),
+					map: mapi,
+					icon: icon,
+					title: markerlist[i][2],
+					detail: contentString,
+				});
+			arrayofMarkers.push(marker);
+			//link the pop ups with the marker 
+			arrayofMarkers[arrayofMarkers.length-1].addListener('click', function() {
+				var marker = this;
+				infowindow.setContent(marker.detail);
+				infowindow.open(mapi, marker);
+			});
+		};
+		ReportedMarkers = arrayofMarkers;
+	}//);
   // };
   //
-  componentWillUnmount() {
-    if (GoogleMaps.maps[this.props.name]) {
-      google.maps.event.clearInstanceListeners(GoogleMaps.maps[this.props.name].instance);
-      delete GoogleMaps.maps[this.props.name];
-    } 
-  };
-  textFunction() {
-    document.getElementById('map-container').style.visibility = "hidden";
-    document.getElementById('root').style.height = "100%";
-  };
-  render() {
-    return (<div className="map-container">
-      {this.textFunction()}
-      {this.state.ready ? ((this.state.FireToggle || this.state.GasToggle || this.state.TrafficToggle || this.state.DengueToggle || this.state.MRTToggle) ? this.renderMarkers(): this.renderMarkers()) : null}
-      {this.state.PSIReadings != null ? (this.state.PSIToggle ? this.renderPSIMarkers(): this.renderPSIMarkers()) : null}
-      {this.state.weatherReadings != null ? (this.state.weatherToggle ? this.renderWeatherMarkers(): this.renderWeatherMarkers()) : null}
-      {this.state.shelters != null ? (this.state.shelterToggle ? this.renderShelterMarkers(): this.renderShelterMarkers()) : null}
-      </div>);
-  };
- 
+  
+	componentWillUnmount() {
+		if (GoogleMaps.maps[this.props.name]) {
+			google.maps.event.clearInstanceListeners(GoogleMaps.maps[this.props.name].instance);
+			delete GoogleMaps.maps[this.props.name];
+		} 
+	};
+  
+	textFunction() {
+		document.getElementById('map-container').style.visibility = "hidden";
+		document.getElementById('root').style.height = "100%";
+	};
+  
+	render() {
+		return (<div className="map-container">
+				{this.textFunction()}
+				{this.state.ready ? ((this.state.FireToggle || this.state.GasToggle || this.state.TrafficToggle || this.state.DengueToggle || this.state.MRTToggle) ? this.renderMarkers(): this.renderMarkers()) : null}
+				{this.state.PSIReadings != null ? (this.state.PSIToggle ? this.renderPSIMarkers(): this.renderPSIMarkers()) : null}
+				{this.state.weatherReadings != null ? (this.state.weatherToggle ? this.renderWeatherMarkers(): this.renderWeatherMarkers()) : null}
+      			{this.state.shelters != null ? (this.state.shelterToggle ? this.renderShelterMarkers(): this.renderShelterMarkers()) : null}
+      			</div>
+				);
+	};
+
 }
-// {this.state.PSIReadings != null ? this.renderPSIMarkers() : null}
+
+
 //data type for googleMaps
- GoogleMap.propTypes  ={
-    name: React.PropTypes.string.isRequired,
-    options: React.PropTypes.object.isRequired,
-  };
+GoogleMap.propTypes  ={
+	name: React.PropTypes.string.isRequired,
+	options: React.PropTypes.object.isRequired,
+};
 
 if (Meteor.isClient) {
-  Meteor.startup(function() {
-  	render(<MyTestMap />, document.getElementById('root'));
-  });
+	Meteor.startup(function() {
+		render(<MyTestMap />, document.getElementById('root'));
+	});
 }
+
 export default React.createClass({
-  render() {
-    return <div id="map-container"></div>
-  }
+	render() {
+		return <div id="map-container"></div>
+	}
 })
