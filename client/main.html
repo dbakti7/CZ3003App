@@ -1,17 +1,23 @@
 <head>
-  <title>CMS Singapore - CACAD</title>
-  <link rel="icon" href="/images/icon.png">
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<title>CMS Singapore - CACAD</title>
+	<link rel="icon" href="/images/icon.png">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 
 <body> 
     <script>
         //Check whether user is logged in -> determine the button display on the top right corner
         window.onload = function() {
-            var profileDisplay;
-            var profileDropdown = document.getElementById("profileDropdown");
+			var profileDisplay;
+			var profileDropdown = document.getElementById("profileDropdown");
             var dropdownListLogout = document.createElement("a");
             var logoutButton = document.createTextNode("Sign Out");
+			
+			/**
+			If user is logged in, user will be greeted by the username.
+			Else, It will just display "Hi There!"
+			Will be displayed on the top right corner button 
+			**/
             if (Meteor.user()) {
                 profileDisplay = "Hi, " + Meteor.user().username + " ▼";
                 dropdownListLogout.setAttribute("id", "signOutButton");
@@ -21,7 +27,7 @@
             } else {
                 profileDisplay = "Hi There! ▼";
             }
-            //Show username greeting or default button display
+            //Display the HTML Element content
             document.getElementById("profileButton").innerHTML = profileDisplay;
         }
         
@@ -29,7 +35,8 @@
             Meteor.logout();
             setTimeout(function() { redirect(); }, 1000);
         }
-        
+		
+        //Reload
         function redirect() {
             window.location = "/";   
         }
@@ -46,13 +53,12 @@
     {{> Header}}  
     
     <div id="wrapper" style="width:100%; height:100%;">
-    
-        <!-- Sidebar -->
-       <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li><br></li>
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper">
+			<ul class="sidebar-nav">
+				<li><br></li>
                 <li>
-                    <a href="/">HOME</a>
+					<a href="/">HOME</a>
                 </li>
                 <li>
                     <a href="/map">MAP</a>
@@ -106,16 +112,17 @@
         <tr>
             <th width="88%" align= "left"><a href="#menu-toggle" id="#menu-toggle"><img src="/images/logo.png" height="50px" width="50px"/></a></th>
             <th width="12%" class="th_right" style="text-align: right;">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a  id="profileButton" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi There! <span class="caret"></span></a>
-              <ul id="profileDropdown" class="dropdown-menu">
-                <li><a onclick="userPage()">View Profile</a></li>
-                <li role="separator" class="divider"></li>
-              </ul>
-            </li>
-                </ul>
-            </th> 
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<a  id="profileButton" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi There!<span class="caret"></span>
+						</a>
+						<ul id="profileDropdown" class="dropdown-menu">
+							<li><a onclick="userPage()">View Profile</a></li>
+							<li role="separator" class="divider"></li>
+						</ul>
+					</li>
+				</ul>
+			</th> 
         </tr>
     </table>
 </template>
